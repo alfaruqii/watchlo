@@ -7,6 +7,9 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      magnatbold: ['var(--font-magnatBold)'],
+    },
     extend: {
       colors: {
         background: "var(--background)",
@@ -16,7 +19,7 @@ const config: Config = {
   },
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ["retro", "dracula"]
+    themes: ["garden", "black"]
   }
 };
 export default config;
