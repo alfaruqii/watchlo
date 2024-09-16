@@ -7,9 +7,7 @@ interface ThemeStore {
 }
 
 export const useThemeStore = create<ThemeStore>((set) => ({
-  theme: typeof window !== 'undefined' && localStorage.getItem('theme')
-    ? localStorage.getItem('theme') || 'garden'
-    : 'garden', // Default to 'garden'
+  theme: "black",
 
   setTheme: (theme: string) => {
     // Persist theme in localStorage
