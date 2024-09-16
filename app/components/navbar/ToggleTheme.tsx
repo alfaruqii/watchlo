@@ -17,7 +17,7 @@ export const ToggleTheme = (): JSX.Element => {
 
   // Sync the theme with localStorage and document on mount
   useEffect(() => {
-    const localTheme = localStorage.getItem('theme') ?? 'garden';
+    const localTheme = localStorage.getItem('theme') ?? 'black';
     setTheme(localTheme); // Sync Zustand state with localStorage on mount
   }, [setTheme]);
 
