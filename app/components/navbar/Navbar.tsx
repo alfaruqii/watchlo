@@ -44,8 +44,9 @@ export const Navbar = () => {
           <Link href="/anime">
             <span className="sm:text-lg">Anime</span>
           </Link>
-          <Link href="/manga">
-            <span className="sm:text-lg ">Manga</span>
+          <Link className="pointer-events-none indicator" href="/manga">
+            <span className="sm:text-lg text-gray-500 pr-5">Manga</span>
+            <div className="indicator-item badge rounded indicator-top mt-1 indicator-end text-xs">dev</div>
           </Link>
         </div>
         <div className="flex items-center gap-2">
