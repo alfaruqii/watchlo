@@ -1,9 +1,8 @@
 import { AnimePopular, AnimeTrending, AnimeType } from "@/app/types/anime.type";
+import Link from "next/link";
 
 interface AnimeCardProps {
   anime: AnimeType;
-  isTrending?: boolean;
-  isPopular?: boolean;
 }
 
 export const AnimeCard = ({ anime }: AnimeCardProps) => {
@@ -23,28 +22,41 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
     ? anime.coverImage.large // Use the large image for popular anime
     : anime.image; // For trending or other types, use the image field
 
+  const determineRoutes = (anime: AnimeType): {} | string => {
+    // condition where the anime is trending anime 
+    if ("episodeNumber" in anime) {
+      return ({ pathname: `/anime/watch/${anime.episodeId}`, query: { animeId: anime.id, ep: anime.episodeNumber } })
+    }
+    // condition where the anime is popular anime 
+    return `/anime/detail/${anime.id}`
+  }
+
   return (
-    <div key={anime.id} className="group relative transition-transform duration-300 ease-out transform group-hover:scale-105 group-hover:drop-shadow-xl">
-      <div className="card mb-1 max-h-44 min-h-44 min-w-32 overflow-hidden rounded sm:max-h-72 sm:min-h-72 sm:min-w-52">
-        <figure className="relative w-full h-full overflow-hidden">
-          <img
-            className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
-            src={animeImage}
-            alt={animeTitle}
-          />
-        </figure>
-      </div>
-      <p className="line-clamp-2 text-sm font-bold">{animeTitle}</p>
+    <>
+      <Link href={determineRoutes(anime)}>
 
-      {/* Dynamically show episode number for trending, status for popular */}
-      {isTrendingAnime(anime) && (
-        <p className="text-xs">Episode {anime.episodeNumber}</p>
-      )}
+        <div key={anime.id} className="group relative transition-transform duration-300 ease-out transform group-hover:scale-105 group-hover:drop-shadow-xl">
+          <div className="card mb-1 max-h-44 min-h-44 min-w-32 overflow-hidden rounded sm:max-h-72 sm:min-h-72 sm:min-w-52">
+            <figure className="relative w-full h-full overflow-hidden">
+              <img
+                className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
+                src={animeImage}
+                alt={animeTitle}
+              />
+            </figure>
+          </div>
+          <p className="line-clamp-2 text-sm font-bold">{animeTitle}</p>
 
-      {isPopularAnime(anime) && (
-        <p className="text-xs">Status: {anime.status}</p>
-      )}
-    </div>
+          {isTrendingAnime(anime) && (
+            <p className="text-xs">Episode {anime.episodeNumber}</p>
+          )}
+
+          {isPopularAnime(anime) && (
+            <p className="text-xs">Status: {anime.status}</p>
+          )}
+        </div>
+      </Link>
+    </>
   );
 };
 
