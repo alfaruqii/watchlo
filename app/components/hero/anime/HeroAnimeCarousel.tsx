@@ -6,7 +6,7 @@ import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect } from "react";
 import HeroAnime from "./HeroAnime";
-import { Anime } from "@/app/types/anime.type";
+import { Anime, Title } from "@/app/types/anime.type";
 
 // Define the specific props that HeroAnime expects
 type Props = {
@@ -29,7 +29,7 @@ export default function HeroAnimeCarousel({ animes }: Props) {
           <HeroAnime
             key={anime.id}
             id={anime.id}
-            title={anime.title}
+            title={anime.title as Title}
             description={anime.description}
             genres={anime.genres}
             bannerImage={anime.bannerImage}
