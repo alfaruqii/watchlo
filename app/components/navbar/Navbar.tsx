@@ -39,14 +39,14 @@ export const Navbar = () => {
         </div>
         <div className={`drop-shadow-lg hidden sm:flex gap-10 font-normal ${theme === "black" ? "text-white" : "text-black"}`}>
           <Link href="/">
-            <span className="sm:text-lg">All</span>
+            <span className="">All</span>
           </Link>
           <Link href="/anime">
-            <span className="sm:text-lg">Anime</span>
+            <span className="">Anime</span>
           </Link>
           <Link className="pointer-events-none indicator" href="/manga">
-            <span className="sm:text-lg text-gray-500 pr-5">Manga</span>
-            <div className="indicator-item badge rounded indicator-top mt-1 indicator-end text-xs">dev</div>
+            <span className="text-gray-500 pr-5">Manga</span>
+            <div className={`indicator-item badge rounded indicator-top mt-1 indicator-end text-xs ${theme === "black" ? "border-gray-400" : "border-gray-400"}`}>🛠️</div>
           </Link>
         </div>
         <div className="flex items-center gap-2">
