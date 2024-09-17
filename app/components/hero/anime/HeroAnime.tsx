@@ -3,14 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import parse from 'html-react-parser';
+import { CoverImage, Title } from "@/app/types/anime.type";
 
 type HeroAnimeProps = {
   id: number;
-  title: { userPreferred: string };
+  title: Title;
   description: string;
   genres?: string[];
   bannerImage?: string;
-  coverImage: { extraLarge: string };
+  coverImage: CoverImage;
 };
 
 
@@ -32,9 +33,12 @@ function HeroAnime({ id, title, description, bannerImage, coverImage, genres }: 
             <h1 className="line-clamp-1 font-magnatbold font-bold drop-shadow sm:text-xl md:text-3xl">
               {title.userPreferred}
             </h1>
-            <h1 className="font-bold text-xs sm:text-sm line-clamp-2">
-              {parse(cleanDesc ?? "Description unknown")}
-            </h1>
+            {
+              description &&
+              <h1 className="font-bold text-xs sm:text-sm line-clamp-2">
+                {parse(cleanDesc ?? "")}
+              </h1>
+            }
             <div className="flex gap-1 sm:gap-3">
               {genres?.slice(0, 3).map((genre, index) => (
                 <span
