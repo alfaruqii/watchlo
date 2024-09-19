@@ -1,4 +1,3 @@
-// components/hero/anime/HeroAnimeCarousel.tsx (Client Component)
 "use client";
 
 import useEmblaCarousel from "embla-carousel-react";
@@ -8,7 +7,6 @@ import { useEffect } from "react";
 import HeroAnime from "./HeroAnime";
 import { Anime, Title } from "@/app/types/anime.type";
 
-// Define the specific props that HeroAnime expects
 type Props = {
   animes: Anime[];
 };
