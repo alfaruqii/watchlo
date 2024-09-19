@@ -25,7 +25,7 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
   const determineRoutes = (anime: AnimeType): {} | string => {
     // condition where the anime is trending anime 
     if ("episodeNumber" in anime) {
-      return ({ pathname: `/anime/watch/${anime.episodeId}`, query: { animeId: anime.id, ep: anime.episodeNumber } })
+      return ({ pathname: `/anime/watch/${anime.episodeId}`, query: { animeTitle: anime.id, ep: anime.episodeNumber } })
     }
     // condition where the anime is popular anime 
     return `/anime/detail/${anime.id}`
