@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import parse from 'html-react-parser';
 import { CoverImage, Title } from "@/app/types/anime.type";
+import Genre from "../../genre/Genre";
 
 type HeroAnimeProps = {
   id: number;
@@ -41,17 +42,12 @@ function HeroAnime({ id, title, description, bannerImage, coverImage, genres }: 
             }
             <div className="flex gap-1 sm:gap-3">
               {genres?.slice(0, 3).map((genre, index) => (
-                <span
-                  key={index}
-                  className="rounded border border-gray-400 bg-gray-800 p-2 text-xs sm:text-base"
-                >
-                  {genre}
-                </span>
+                <Genre index={index} genre={genre} />
               ))}
             </div>
           </div>
           <div className="btn btn-sm w-fit md:text-lg font-bold rounded">
-            <Link href={`/anime/series/${id}/1`}>Watch</Link>
+            <Link href={`/anime/detail/${id}`}>Watch</Link>
           </div>
         </div>
       </div>
