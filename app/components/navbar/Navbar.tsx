@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ToggleTheme } from "./ToggleTheme";
-import { useThemeStore } from "@/app/store/themeStore";
+import { useThemeStore } from "@/store/themeStore";
 import ToggleSearch from "./ToggleSearch";
 
 export const Navbar = () => {
@@ -46,7 +46,7 @@ export const Navbar = () => {
           </Link>
           <Link className="pointer-events-none indicator" href="/manga">
             <span className="text-gray-500 pr-5">Manga</span>
-            <div className={`indicator-item badge rounded indicator-top mt-1 indicator-end text-xs ${theme === "black" ? "border-gray-400" : "border-gray-400"}`}>🛠️</div>
+            <div className={`indicator-item font-bold px-1 w-fit badge rounded indicator-top mt-1 indicator-end text-xs ${theme === "black" ? "border-gray-400" : "border-gray-400"}`}>DEV</div>
           </Link>
         </div>
         <div className="flex items-center gap-2">
