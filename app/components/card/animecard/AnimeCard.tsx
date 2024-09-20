@@ -1,8 +1,17 @@
-import { AnimePopular, AnimeTrending, AnimeType } from "@/app/types/anime.type";
+import { AnimePopular, AnimeTrending, AnimeType } from "@/types/anime.type";
 import Link from "next/link";
+import Image from 'next/image'
 
 interface AnimeCardProps {
   anime: AnimeType;
+}
+
+interface Routes {
+  pathname: string,
+  query: {
+    animeTitle: string | number;
+    ep: number;
+  }
 }
 
 export const AnimeCard = ({ anime }: AnimeCardProps) => {
@@ -22,7 +31,7 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
     ? anime.coverImage.large // Use the large image for popular anime
     : anime.image; // For trending or other types, use the image field
 
-  const determineRoutes = (anime: AnimeType): {} | string => {
+  const determineRoutes = (anime: AnimeType): Routes | string => {
     // condition where the anime is trending anime 
     if ("episodeNumber" in anime) {
       return ({ pathname: `/anime/watch/${anime.episodeId}`, query: { animeTitle: anime.id, ep: anime.episodeNumber } })
@@ -35,13 +44,15 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
     <>
       <Link href={determineRoutes(anime)}>
 
-        <div key={anime.id} className="group relative transition-transform duration-300 ease-out transform group-hover:scale-105 group-hover:drop-shadow-xl">
+        <div key={anime.id} className="group relative transform transition-transform duration-300 ease-out group-hover:scale-105 group-hover:drop-shadow-xl">
           <div className="card mb-1 max-h-44 min-h-44 min-w-32 overflow-hidden rounded sm:max-h-72 sm:min-h-72 sm:min-w-52">
-            <figure className="relative w-full h-full overflow-hidden">
-              <img
-                className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
+            <figure className="relative h-full w-full overflow-hidden">
+              <Image
+                className="max-h-44 min-h-44  object-cover transition-transform duration-300 ease-out group-hover:scale-110 sm:min-h-72 sm:min-w-52"
+                width={2000}
+                height={2000}
                 src={animeImage}
-                alt={animeTitle}
+                alt={animeTitle ?? "unknown"}
               />
             </figure>
           </div>
