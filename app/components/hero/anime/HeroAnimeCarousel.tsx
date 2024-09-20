@@ -5,7 +5,7 @@ import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect } from "react";
 import HeroAnime from "./HeroAnime";
-import { Anime, Title } from "@/app/types/anime.type";
+import { Anime, Title } from "@/types/anime.type";
 
 type Props = {
   animes: Anime[];
