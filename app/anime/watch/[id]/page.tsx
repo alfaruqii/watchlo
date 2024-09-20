@@ -1,8 +1,7 @@
-// /anime/watch/[id]/page.tsx
-import EpisodesComponent from '@/app/components/episodes/EpisodesComponent';
-import { Media } from '@/app/components/media/Media';
-import { AnimeServiceV1 } from '@/app/services';
-import { AnimeDetails, StreamInfo } from '@/app/types/anime.type';
+import EpisodesComponent from '@/components/watch/episodes/EpisodesComponent';
+import { Media } from '@/components/media/Media';
+import { AnimeServiceV1 } from '@/services';
+import { AnimeDetails, StreamInfo } from '@/types/anime.type';
 
 type WatchPageParams = {
   params: { id: string };
