@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import parse from 'html-react-parser';
-import { CoverImage, Title } from "@/app/types/anime.type";
+import { CoverImage, Title } from "@/types/anime.type";
 import Genre from "../../genre/Genre";
 
 type HeroAnimeProps = {
@@ -42,7 +42,7 @@ function HeroAnime({ id, title, description, bannerImage, coverImage, genres }: 
             }
             <div className="flex gap-1 sm:gap-3">
               {genres?.slice(0, 3).map((genre, index) => (
-                <Genre index={index} genre={genre} />
+                <Genre key={index} genre={genre} />
               ))}
             </div>
           </div>
