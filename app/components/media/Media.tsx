@@ -1,8 +1,9 @@
 "use client";
-import { StreamInfo } from '@/app/types/anime.type';
+import { StreamInfo } from '@/types/anime.type';
 import { MediaPlayer, MediaPlayerInstance, MediaProvider, Poster } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import { useRef, useState, useEffect } from 'react';
+import Quality from '../quality/Quality';
 
 interface MediaProps extends StreamInfo {
   poster: string;
@@ -15,7 +16,7 @@ export const Media = ({ title, poster, sources }: MediaProps) => {
     (sources.find(source => source.quality === "default") ?? sources[0])?.url || ''
   );
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const [_, setIsReady] = useState<boolean>(false);
+  const [, setIsReady] = useState<boolean>(false);
 
   useEffect(() => {
     const player = playerRef.current;
@@ -37,7 +38,7 @@ export const Media = ({ title, poster, sources }: MediaProps) => {
     }
   }, [vidSrc, currentTime]);
 
-  const handleQualityChange = (newSrc: string) => {
+  const handleQualityChange = (newSrc: string): void => {
     const player = playerRef.current;
     if (player) {
       setCurrentTime(player.currentTime);
@@ -48,9 +49,12 @@ export const Media = ({ title, poster, sources }: MediaProps) => {
 
   return (
     <>
-      <div className="sm:w-1/2">
-        <MediaPlayer ref={playerRef} title={title} src={vidSrc}>
-          <MediaProvider >
+      <div className="lg:w-1/2">
+        <h1 className="text-xl pb-1 font-black drop-shadow-lg text-center sm:text-left line-clamp-1">
+          {title}
+        </h1>
+        <MediaPlayer className="" ref={playerRef} title={title} src={vidSrc}>
+          <MediaProvider>
             <Poster
               className="vds-poster"
               src={`${poster}`}
@@ -59,18 +63,7 @@ export const Media = ({ title, poster, sources }: MediaProps) => {
           </MediaProvider>
           <DefaultVideoLayout thumbnails={poster} icons={defaultLayoutIcons} />
         </MediaPlayer>
-      </div>
-      <div className="dropdown dropdown-bottom">
-        <div tabIndex={0} role="button" className="btn m-1">Quality video</div>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-full p-2 shadow">
-          {
-            sources.map((source) => (
-              <li key={source.quality} onClick={() => handleQualityChange(source.url)}>
-                <a>{source.quality}</a>
-              </li>
-            ))
-          }
-        </ul>
+        <Quality handleQualityChange={handleQualityChange} sources={sources} />
       </div>
     </>
   );
