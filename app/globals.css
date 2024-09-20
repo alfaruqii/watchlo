@@ -9,6 +9,7 @@
 }
 
 .embla__container {
+  backface-visibility: hidden;
   display: flex;
 }
 
@@ -32,4 +33,13 @@
     scrollbar-width: none;
     /* Firefox */
   }
+}
+
+.vds-volume-popup {
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  background-color: rgb(209 213 219) !important;
+}
+
+.vds-slider-thumb {
+  background-color: rgb(31 41 55) !important;
 }
