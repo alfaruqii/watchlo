@@ -1,4 +1,4 @@
-import { useThemeStore } from '@/app/store/themeStore';
+import { useThemeStore } from '@/store/themeStore';
 import React from 'react'
 
 function ToggleSearch() {
