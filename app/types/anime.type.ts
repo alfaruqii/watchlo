@@ -66,7 +66,7 @@ export type Anime = {
   averageScore: number;
   popularity: number;
   nextAiringEpisode: NextAiringEpisode | null;
-  mediaListEntry: any;  // Adjust if you know the exact type
+  mediaListEntry: unknown;  // Adjust if you know the exact type
   studios: Studios;
 };
 
