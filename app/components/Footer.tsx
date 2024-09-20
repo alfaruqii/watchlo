@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState, useMemo } from "react"
 
 export type PatternCell = "0" | "1" | "2" | "3"
 type Pattern = PatternCell[][]
@@ -41,6 +41,7 @@ const normalizeText = (text: string, minSpacing: number = 3): string => {
   return spacedText
 }
 
+// This function turns text into a pattern of lights
 // This function turns text into a pattern of lights
 const textToPattern = (
   text: string,
@@ -139,32 +140,20 @@ function Footer({
   controlledHoverState,
   onHoverStateChange,
 }: LightBoardProps) {
-  // We decide how many rows and columns of lights we need
   const containerRef = useRef<HTMLDivElement>(null)
   const [columns, setColumns] = useState(0)
-  const mergedColors = { ...defaultColors, ...colors }
+  const mergedColors = useMemo(() => ({ ...defaultColors, ...colors }), [colors])
 
-  // We choose which font to use for our text
   const selectedFont = font === "default" ? defaultFont : sevenSegmentFont
-  // We keep track of whether the mouse is over our board
-
-  // We keep track of whether we're drawing on the board
   const [isDrawing, setIsDrawing] = useState(false)
-  // Use controlled state if provided, otherwise use local state
   const [internalHoverState, setInternalHoverState] = useState(false)
-  // This is the brightness of the lights we're drawing (0 to 3)
 
-  // This is our pattern of lights that make up the text
   const [basePattern, setBasePattern] = useState<Pattern>(() => {
     return textToPattern(normalizeText(text), rows, columns, selectedFont)
   })
-  // This helps us move the text across the board
   const [offset, setOffset] = useState(0)
-  // This is how we draw on our light board (it's like a special piece of paper)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  // This remembers where we last drew on the board
   const lastDrawnPosition = useRef<{ x: number; y: number } | null>(null)
-  // This helps us know when to update our animation
   const [lastUpdateTime, setLastUpdateTime] = useState(0)
 
   const drawState =
@@ -175,7 +164,6 @@ function Footer({
       ? controlledHoverState
       : internalHoverState
 
-  // Calculate the number of columns based on container width
   useEffect(() => {
     const calculateColumns = () => {
       if (containerRef.current) {
@@ -190,7 +178,6 @@ function Footer({
     return () => window.removeEventListener("resize", calculateColumns)
   }, [lightSize, gap])
 
-  // This function draws all our lights on the board
   const drawToCanvas = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -221,13 +208,11 @@ function Footer({
     })
   }, [basePattern, offset, columns, lightSize, gap, mergedColors])
 
-  // This makes our text move across the board
   useEffect(() => {
     let animationFrameId: number
 
     const animate = () => {
       if (!isHovered) {
-        // If the mouse isn't over the board, we move the text
         setOffset((prevOffset) => (prevOffset + 1) % basePattern[0].length)
       }
       drawToCanvas()
@@ -236,18 +221,15 @@ function Footer({
 
     animationFrameId = requestAnimationFrame(animate)
 
-    // We clean up our animation when we're done
     return () => cancelAnimationFrame(animationFrameId)
   }, [basePattern, isHovered, drawToCanvas])
 
-  // This updates our light pattern when the text changes
   useEffect(() => {
     setBasePattern(
       textToPattern(normalizeText(text), rows, columns, selectedFont)
     )
   }, [text, rows, columns, selectedFont])
 
-  // This is another way we make our text move
   const animate = useCallback(() => {
     const currentTime = Date.now()
     if (currentTime - lastUpdateTime >= updateInterval && !isHovered) {
@@ -257,7 +239,6 @@ function Footer({
     drawToCanvas()
   }, [updateInterval, isHovered, basePattern, drawToCanvas, lastUpdateTime])
 
-  // This keeps our animation going
   useEffect(() => {
     let animationFrameId: number
 
@@ -268,11 +249,9 @@ function Footer({
 
     animationFrameId = requestAnimationFrame(loop)
 
-    // We clean up our animation when we're done
     return () => cancelAnimationFrame(animationFrameId)
   }, [animate])
 
-  // This function helps us draw a line on our light board
   const drawLine = useCallback(
     (startX: number, startY: number, endX: number, endY: number) => {
       const canvas = canvasRef.current
@@ -281,32 +260,25 @@ function Footer({
       const ctx = canvas.getContext("2d")
       if (!ctx) return
 
-      // We figure out which direction we're drawing
       const dx = Math.abs(endX - startX)
       const dy = Math.abs(endY - startY)
       const sx = startX < endX ? 1 : -1
       const sy = startY < endY ? 1 : -1
       let err = dx - dy
 
-      // We keep drawing until we reach the end of our line
       while (true) {
-        // We figure out which light we're on
         const colIndex = Math.floor(startX / (lightSize + gap))
         const rowIndex = Math.floor(startY / (lightSize + gap))
 
-        // If we're still on the board...
         if (
           rowIndex >= 0 &&
           rowIndex < rows &&
           colIndex >= 0 &&
           colIndex < columns
         ) {
-          // We figure out which light to change in our pattern
           const actualColIndex = (colIndex + offset) % basePattern[0].length
 
-          // If this light isn't already the brightness we want...
           if (basePattern[rowIndex][actualColIndex] !== drawState) {
-            // We update our pattern of lights
             setBasePattern((prevPattern) => {
               const newPattern = [...prevPattern]
               newPattern[rowIndex] = [...newPattern[rowIndex]]
@@ -314,7 +286,6 @@ function Footer({
               return newPattern
             })
 
-            // We draw the new light on our board
             ctx.fillStyle = getLightColor(drawState, mergedColors)
 
             ctx.beginPath()
@@ -329,10 +300,8 @@ function Footer({
           }
         }
 
-        // If we've reached the end of our line, we stop
         if (startX === endX && startY === endY) break
 
-        // We figure out where to draw next
         const e2 = 2 * err
         if (e2 > -dy) {
           err -= dy
@@ -344,19 +313,8 @@ function Footer({
         }
       }
     },
-    [
-      basePattern,
-      columns,
-      drawState,
-      gap,
-      lightSize,
-      offset,
-      rows,
-      mergedColors,
-    ]
+    [basePattern, columns, drawState, gap, lightSize, offset, rows, mergedColors]
   )
-
-  // _________DRAWING HANDLING_________
 
   const handleInteractionStart = useCallback(
     (x: number, y: number) => {
@@ -386,7 +344,6 @@ function Footer({
     lastDrawnPosition.current = null
   }, [])
 
-  // This happens when we press the mouse button to start drawing
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLCanvasElement>) => {
       const canvas = event.currentTarget
@@ -439,7 +396,6 @@ function Footer({
 
   const handleTouchEnd = handleInteractionEnd
 
-  // Update hover state
   const updateHoverState = useCallback(
     (newState: boolean) => {
       if (controlledHoverState === undefined) {
@@ -482,6 +438,8 @@ function Footer({
 }
 
 export { Footer }
+
+// ... (sevenSegmentFont and defaultFont remain unchanged)
 
 const sevenSegmentFont: { [key: string]: Pattern } = {
   "0": [
