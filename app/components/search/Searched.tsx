@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { AnimeServiceV2 } from "@/services";
+'use client';
+
+import { useEffect, useState, useCallback } from "react";
 import SearchedResult from "./SearchedResult";
 import SkeletonSearch from "../skeleton/SkeletonSearch";
 import { SearchedAnime } from "@/types/anime.type";
 
 interface SearchedProps {
-  searchedText?: string;
+  searchedText: string;
 }
 
 function Searched({ searchedText }: SearchedProps) {
@@ -13,42 +14,46 @@ function Searched({ searchedText }: SearchedProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchSearchResults = async () => {
-      if (searchedText) {
-        setIsLoading(true);
-        setError(null);
-        try {
-          const { data } = await AnimeServiceV2.searchAnimeV2(searchedText);
-          setSearchedData(data.results); // Assuming data.results contains the anime data
-        } catch (error) {
-          console.error("Failed to fetch search results", error);
-          setError("Failed to fetch search results.");
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
+  const fetchSearchResults = useCallback(async () => {
+    if (!searchedText) return;
 
-    fetchSearchResults();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/anime-search?query=${encodeURIComponent(searchedText)}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch search results')
+      }
+      const data = await response.json()
+      setSearchedData(data.results); // Adjust this based on your API response structure
+    } catch (error) {
+      console.error("Failed to fetch search results", error);
+      setError("Failed to fetch search results.");
+    } finally {
+      setIsLoading(false);
+    }
   }, [searchedText]);
 
-  if (!searchedText) return null; // Render nothing if no search input
+  useEffect(() => {
+    fetchSearchResults();
+  }, [fetchSearchResults]);
+
+  if (!searchedText) return null;
 
   return (
     <div className="flex flex-col">
-      {isLoading && <SkeletonSearch />} {/* Show loading skeleton */}
-      {error && <p>{error}</p>} {/* Display error if exists */}
+      {isLoading && <SkeletonSearch />}
+      {error && <p>{error}</p>}
       {!isLoading && searchedData.length > 0 ? (
         searchedData.map((anime) => (
-          <SearchedResult key={anime.id} {...anime} /> // Render each search result
+          <SearchedResult key={anime.id} {...anime} />
         ))
       ) : (
-        !isLoading && <p>No results found.</p> // Show message when no results are found
+        !isLoading && <p>No results found.</p>
       )}
     </div>
   );
 }
 
 export default Searched;
-
