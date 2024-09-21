@@ -1,3 +1,4 @@
 export interface AnimeRecQueryParams {
-  id: string;
+  id?: string;
+  q?: string;
 }
