@@ -9,6 +9,7 @@ import SkeletonEpisodes from '@/components/skeleton/SkeletonEpisodes';
 
 import { AnimeServiceV2 } from '@/services';
 import { AnimeInfo } from '@/types/anime.type';
+import RelationComponent from '@/components/detail/relation/RelationComponent';
 
 async function DetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -25,10 +26,11 @@ async function DetailPage({ params }: { params: { id: string } }) {
           <Suspense
             fallback={<SkeletonEpisodes />}>
             {
-              dataInfo.id_provider?.idGogo &&
+              (dataInfo.id_provider?.idGogo || dataInfo.id_provider?.idGogoDub) &&
               <EpisodesContainer {...dataInfo} />
             }
           </Suspense>
+          <RelationComponent relation={dataInfo.relation} />
         </div>
       </div>
     </>
