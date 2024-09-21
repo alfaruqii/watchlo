@@ -48,6 +48,26 @@ export type Tags = {
   name: string;
 }
 
+export type Relation = {
+  id: number;
+  idMal: number;
+  title: Title;
+  coverImage: CoverImage;
+  bannerImage: string;
+  genres: string[];
+  tags: {
+    id: number;
+    name: string;
+  }[];
+  type: string;
+  format: string;
+  status: string;
+  episodes: number | null;
+  duration: number | null;
+  averageScore: number;
+  season: string | null;
+}
+
 // Core Anime type definition
 export type Anime = {
   id: number;
@@ -147,25 +167,7 @@ export interface AnimeInfo extends AnimeBase {
   studios: {
     name: string;
   }[];
-  relation: {
-    id: number;
-    idMal: number;
-    title: Title;
-    coverImage: CoverImage;
-    bannerImage: string;
-    genres: string[];
-    tags: {
-      id: number;
-      name: string;
-    }[];
-    type: string;
-    format: string;
-    status: string;
-    episodes: number | null;
-    duration: number | null;
-    averageScore: number;
-    season: string | null;
-  }[];
+  relation: Relation[];
 }
 
 export interface Episode {
