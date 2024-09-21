@@ -12,7 +12,7 @@ function Infos({ topic, value, customTheme }: Infos) {
           {topic}
         </p>
         <p className={`${customTheme}`}>
-          {value ?? "uknown"}
+          {value ?? "unknown"}
         </p>
       </div>
     </>
