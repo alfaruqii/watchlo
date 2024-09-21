@@ -3,16 +3,17 @@ import { AnimeRecQueryParams } from "../interfaces/anime";
 import { API_V1, API_V2 } from "../lib/api"
 import { AxiosResponse } from 'axios';
 
+const ANIME_PATH = getEnv("ANIME_PATH") || process.env["NEXT_PUBLIC_ANIME_PATH"];
 
 const AnimeServiceV1 = {
   getRecentEpisode: async (): Promise<AxiosResponse> => {
-    return API_V1().get(`${getEnv("ANIME_PATH")}/recent-episodes`);
+    return API_V1().get(`${ANIME_PATH}/recent-episodes`);
   },
   getAnimeStream: async (id: string): Promise<AxiosResponse> => {
-    return API_V1().get(`${getEnv("ANIME_PATH")}/watch/${id}`);
+    return API_V1().get(`${ANIME_PATH}/watch/${id}`);
   },
   getAnimeInfoV1: async (id: string): Promise<AxiosResponse> => {
-    return API_V1().get(`${getEnv("ANIME_PATH")}/info/${id}`);
+    return API_V1().get(`${ANIME_PATH}/info/${id}`);
   },
 }
 
