@@ -11,8 +11,12 @@ export default async function Home() {
     <>
       <div className="flex flex-col gap-4 min-h-fit">
         <HeroAnimeCarousel animes={dataTrending.results} />
-        <AnimeContainerCard containerTitle="Recently Updated 🎬" animes={dataRecent.results} />
-        <AnimeContainerCard containerTitle="Most Popular 💯" animes={dataPopular.results} />
+        <div className="p-4 sm:p-0">
+          <AnimeContainerCard containerTitle="Recently Updated 🎬" animes={dataRecent.results} />
+        </div>
+        <div className="p-4 sm:p-0">
+          <AnimeContainerCard containerTitle="Most Popular 💯" animes={dataPopular.results} />
+        </div>
       </div>
     </>
   );
