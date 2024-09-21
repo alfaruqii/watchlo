@@ -2,20 +2,19 @@
 import { useModalStore } from '@/store/modalStore';
 import SearchIcon from '../icons/SearchIcon';
 import { useThemeStore } from '@/store/themeStore';
-import { useRef, useState } from 'react';
+import { useState, useCallback } from 'react';
 import Searched from './Searched';
+import { useDebounce } from '@/hooks/useDebounce';
 
 function ModalSearch() {
   const { isOpen, closeModal } = useModalStore();
   const { theme } = useThemeStore();
-  const searchedText = useRef<HTMLInputElement>(null); // Correctly typing the ref
-  const [query, setQuery] = useState<string>(''); // State to manage the query
+  const [query, setQuery] = useState<string>('');
+  const debouncedQuery = useDebounce(query, 300);
 
-  const handleSearch = () => {
-    if (searchedText.current) {
-      setQuery(searchedText.current.value);
-    }
-  };
+  const handleSearch = useCallback((value: string) => {
+    setQuery(value);
+  }, []);
 
   return (
     <dialog open={isOpen} className={`z-50 ${isOpen ? "modal modal-middle" : "hidden"}`}>
@@ -26,13 +25,13 @@ function ModalSearch() {
             <input
               type="text"
               placeholder="Search"
-              ref={searchedText}
+              value={query}
+              onChange={(e) => handleSearch(e.target.value)}
               className="input h-full w-full outline-none border-none placeholder-gray-500"
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()} // Trigger search on Enter key
             />
           </label>
         </div>
-        <Searched searchedText={query} /> {/* Passing the query as prop */}
+        <Searched searchedText={debouncedQuery} />
       </div>
       <form method="dialog" className="modal-backdrop">
         <button onClick={closeModal}>close</button>
@@ -42,4 +41,3 @@ function ModalSearch() {
 }
 
 export default ModalSearch;
-
