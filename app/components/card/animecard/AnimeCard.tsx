@@ -45,18 +45,20 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
       <Link href={determineRoutes(anime)}>
 
         <div key={anime.id} className="group relative transform transition-transform duration-300 ease-out group-hover:scale-105 group-hover:drop-shadow-xl">
-          <div className="card mb-1 max-h-44 min-h-44 min-w-32 overflow-hidden rounded sm:max-h-72 sm:min-h-72 sm:min-w-52">
+          <div className="card mb-1 max-h-44 h-44 w-32 overflow-hidden rounded sm:max-h-72 sm:h-72 sm:w-52">
             <figure className="relative h-full w-full overflow-hidden">
               <Image
                 className="max-h-44 min-h-44  object-cover transition-transform duration-300 ease-out group-hover:scale-110 sm:min-h-72 sm:min-w-52"
-                width={2000}
-                height={2000}
+                width={1000}
+                height={1000}
                 src={animeImage}
                 alt={animeTitle ?? "unknown"}
               />
             </figure>
           </div>
-          <p className="line-clamp-2 text-sm font-bold">{animeTitle}</p>
+          <div className="w-32 sm:w-52"> {/* Add a width constraint */}
+            <p className="line-clamp-2 text-sm font-bold">{animeTitle}</p>
+          </div>
 
           {isTrendingAnime(anime) && (
             <p className="text-xs">Episode {anime.episodeNumber}</p>
