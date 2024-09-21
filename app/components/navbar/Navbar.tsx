@@ -28,7 +28,7 @@ export const Navbar = () => {
   return (
     <>
       <div
-        className={`${isScrolled ? theme === "garden" ? "bg-base-100/80 backdrop-blur-lg" : "bg-black/80 backdrop-blur-lg" : "bg-base-100"} sticky top-0 z-50 flex items-center justify-between px-4 py-2 drop-shadow-lg transition-all duration-300
+        className={`${isScrolled ? theme === "garden" ? "bg-base-100/80 backdrop-blur-lg" : "bg-black/80 backdrop-blur-lg" : "bg-base-100"} sticky top-0 z-[90] flex items-center justify-between px-4 py-2 drop-shadow-lg transition-all duration-300
           sm:px-12`}
       >
         <div className={`drop-shadow-lg ${theme === "black" ? "text-white" : "text-black"}`}>
