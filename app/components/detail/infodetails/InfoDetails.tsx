@@ -15,11 +15,11 @@ function InfoDetails({ description, status, score, episodes, duration, format, s
 
   const startDate = startIn && startIn.year && startIn.month && startIn.day
     ? new Date(startIn.year, startIn.month - 1, startIn.day).toLocaleDateString("en-US", dateOptions)
-    : 'Unknown';
+    : 'unknown';
 
   const endDate = endIn && endIn.year && endIn.month && endIn.day
     ? new Date(endIn.year, endIn.month - 1, endIn.day).toLocaleDateString("en-US", dateOptions)
-    : 'Unknown';
+    : 'unknown';
 
 
   const cleanSynopsis = description
@@ -50,7 +50,7 @@ function InfoDetails({ description, status, score, episodes, duration, format, s
             Synopsis
           </p>
           <p className="pt-1 text-justify text-balance text-sm">
-            {parse(cleanSynopsis)}
+            {parse(cleanSynopsis ?? "unknown")}
           </p>
         </div>
       </div >
