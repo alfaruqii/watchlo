@@ -9,16 +9,11 @@ interface AnimeContainerProps {
   containerTitle: string
 }
 
-// Type guard function
-function isRelationArray(arr: AnimeType[] | Relation[]): arr is Relation[] {
-  return 'relation' in arr[0];
-}
-
 export const AnimeContainerCard = ({ animes, containerTitle }: AnimeContainerProps) => {
   const { theme } = useThemeStore();
 
   return (
-    <div className={`overflow-hidden ${isRelationArray(animes) ? "p-4" : "sm:p-4"}`}>
+    <div className="overflow-hidden sm:p-4">
       <p className={`mb-4 pb-2 font-bold border-b ${theme === "garden" ? "border-black" : "border-gray-200"}`}>
         {containerTitle}
       </p>
