@@ -6,13 +6,13 @@ import { AxiosResponse } from 'axios';
 
 const AnimeServiceV1 = {
   getRecentEpisode: async (): Promise<AxiosResponse> => {
-    return API_V1().get(`${getEnv("PUBLIC_ANIME_PATH")}/recent-episodes`);
+    return API_V1().get(`${getEnv("ANIME_PATH")}/recent-episodes`);
   },
   getAnimeStream: async (id: string): Promise<AxiosResponse> => {
-    return API_V1().get(`${getEnv("PUBLIC_ANIME_PATH")}/watch/${id}`);
+    return API_V1().get(`${getEnv("ANIME_PATH")}/watch/${id}`);
   },
   getAnimeInfoV1: async (id: string): Promise<AxiosResponse> => {
-    return API_V1().get(`${getEnv("PUBLIC_ANIME_PATH")}/info/${id}`);
+    return API_V1().get(`${getEnv("ANIME_PATH")}/info/${id}`);
   },
 }
 
@@ -28,6 +28,9 @@ const AnimeServiceV2 = {
   },
   getRecommendationAnime: async (params: AnimeRecQueryParams): Promise<AxiosResponse> => {
     return API_V2().get(`/recommendations/${params.id}`);
+  },
+  searchAnimeV2: async (title?: string): Promise<AxiosResponse> => {
+    return API_V2().get(`/search?q=${title}`);
   },
 }
 
