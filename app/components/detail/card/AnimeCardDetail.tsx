@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from 'next/image'
+import Image from 'next/image';
 
 interface AnimeCardDetailProps {
   animeImage: string;
@@ -14,24 +14,25 @@ export const AnimeCardDetail = ({ animeImage, episodeId, id, episodeNumber }: An
   return (
     <>
       <Link href={route}>
-
-        <div key={id} className="group relative transition-transform duration-300 ease-out transform group-hover:scale-105 group-hover:drop-shadow-xl">
-          <div className="card mb-1 max-h-44 min-h-44 min-w-32 overflow-hidden rounded sm:max-h-72 sm:min-h-72 sm:min-w-52">
+        <div key={id} className="group relative transition-transform duration-300 w-fit ease-out transform group-hover:scale-105 group-hover:drop-shadow-xl">
+          <div className="card mb-1 max-h-44 h-44 w-32 overflow-hidden rounded sm:max-h-72 sm:h-72 sm:w-52">
             <figure className="relative w-full h-full overflow-hidden">
               <Image
                 className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
-                width={2000}
-                height={2000}
                 src={animeImage}
                 alt={id ?? "unknown"}
+                layout="responsive"   // Responsive layout for better scaling
+                width={300}           // The aspect ratio remains as the image scales
+                height={300}
+                quality={100}          // Ensure high quality
+                sizes="(max-width: 768px) 100vw, 33vw"  // Use appropriate sizes for different viewports
               />
             </figure>
           </div>
-          <p className="line-clamp-2 text-sm font-bold">Episode {episodeNumber}</p>
+          <p className="line-clamp-2 text-sm font-bold truncate">Episode {episodeNumber}</p>
         </div>
       </Link>
     </>
   );
 };
-
 
