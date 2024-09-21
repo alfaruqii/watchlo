@@ -43,6 +43,11 @@ export type Studios = {
   edges: StudioEdge[];
 };
 
+export type Tags = {
+  id: number;
+  name: string;
+}
+
 // Core Anime type definition
 export type Anime = {
   id: number;
@@ -184,6 +189,26 @@ export interface AnimeDetails {
   otherName: string;
   episodes: Episode[];  // Array of episode objects
 }
+
+export interface SearchedAnime {
+  id: number,
+  status: string,
+  idMal: number,
+  title: Title,
+  bannerImage: string,
+  coverImage: CoverImage,
+  episodes: number,
+  genres: string[],
+  tags: Tags[],
+  season: string,
+  format: string,
+  type: string,
+  seasonYear: number,
+  averageScore: number,
+  nextAiringEpisode: unknown;
+}
+
+
 
 export interface Source {
   url: string;
