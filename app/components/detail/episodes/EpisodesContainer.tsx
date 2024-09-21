@@ -36,7 +36,7 @@ function EpisodesContainer(anime: AnimeInfo) {
 
   return (
     <div className="overflow-hidden sm:px-4 py-4">
-      <div className="mb-4 flex gap-1">
+      <div className="mb-2 flex gap-1">
         {
           anime.id_provider?.idGogoDub && (
             <button
