@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { AnimeServiceV2 } from "@/services";
 import SearchedResult from "./SearchedResult";
 import SkeletonSearch from "../skeleton/SkeletonSearch";
+import { SearchedAnime } from "@/types/anime.type";
 
 interface SearchedProps {
   searchedText?: string;
 }
 
 function Searched({ searchedText }: SearchedProps) {
-  const [searchedData, setSearchedData] = useState<any[]>([]);
+  const [searchedData, setSearchedData] = useState<SearchedAnime[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
