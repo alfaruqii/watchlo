@@ -1,7 +1,7 @@
-function SkeletonEpisodes() {
+function SkeletonEpisodes({ noMargin }: { noMargin?: boolean } = { noMargin: false }) {
   return (
     <>
-      <div className="p-4 mt-[5rem] sm:mt-[8rem]">
+      <div className={`${noMargin ? "" : "p-4 mt-[5rem] sm:mt-[8rem]"}`}>
         <div className="flex embla__container gap-4 relative w-full overflow-x-scroll no-scrollbar">
           {
             Array(10).fill(0).map((i: number) => (
