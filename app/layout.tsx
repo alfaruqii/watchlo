@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import { DM_Sans } from "next/font/google";
-import { Navbar } from "./components/navbar/Navbar";
-import { Footer } from "./components/Footer";
+import { Navbar } from "@/components/navbar/Navbar";
+import { Footer } from "@/components/Footer";
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
+import ModalSearch from "./components/search/ModalSearch";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({
           font="default"
           updateInterval={1000}
         />
+        <ModalSearch />
       </body>
     </html >
   );
