@@ -4,12 +4,12 @@ import { AnimeInfo } from "@/types/anime.type"
 function CardBanner(anime: AnimeInfo) {
   return (
     <>
-      <div className="absolute flex items-center gap-4 z-20 overflow-hidden top-24 drop-shadow-lg left-5 lg:left-32 lg:top-36">
+      <div className="absolute flex items-center gap-4 z-20 overflow-hidden top-24 drop-shadow-lg left-5 lg:left-32 lg:top-[8.5rem]">
         <Image
           alt={`${anime.title?.userPreferred}`}
           src={`${anime.coverImage?.large ?? ""}`}
-          width={2000}
-          height={2000}
+          width={1000}
+          height={1000}
           className="object-cover w-24 lg:w-40 rounded"
         />
         <div className="flex flex-col gap-1">
