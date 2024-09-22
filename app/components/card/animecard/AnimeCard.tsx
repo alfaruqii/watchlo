@@ -40,6 +40,8 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
     return `/anime/detail/${anime.id}`
   }
 
+  const formattedStatus = isPopularAnime(anime) && anime.status?.replace(/_/g, " ");
+
   return (
     <>
       <Link href={determineRoutes(anime)}>
@@ -65,7 +67,7 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
           )}
 
           {isPopularAnime(anime) && (
-            <p className="text-xs">Status: {anime.status}</p>
+            <p className="text-xs">Status: {formattedStatus}</p>
           )}
         </div>
       </Link>
