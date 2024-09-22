@@ -6,7 +6,11 @@ function RelationComponent({ relation }: { relation: Relation[] }) {
   return (
     <>
       <div>
-        <AnimeContainerCard animes={filteredRelation} containerTitle="Relation 🧩" />
+        {
+          (filteredRelation.length > 0) && (
+            <AnimeContainerCard animes={filteredRelation} containerTitle="Relation 🧩" />
+          )
+        }
       </div>
     </>
   )
