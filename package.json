@@ -16,6 +16,7 @@
     "embla-carousel-autoplay": "^8.3.0",
     "embla-carousel-react": "^8.3.0",
     "embla-carousel-wheel-gestures": "^8.0.1",
+    "hamburger-react": "^2.5.1",
     "html-react-parser": "^5.1.16",
     "lucide-react": "^0.441.0",
     "next": "14.2.8",
