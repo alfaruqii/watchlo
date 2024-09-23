@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Spin as Hamburger } from 'hamburger-react'
+import { usePathname } from "next/navigation"; // Import usePathname hook
+import { Spin as Hamburger } from "hamburger-react";
 import { ToggleTheme } from "./ToggleTheme";
 import { useThemeStore } from "@/store/themeStore";
 import ToggleSearch from "./ToggleSearch";
@@ -12,6 +13,7 @@ export const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
 
   const { theme } = useThemeStore();
+  const pathname = usePathname(); // Get the current pathname
 
   // Add event listener for scroll event
   useEffect(() => {
@@ -29,12 +31,16 @@ export const Navbar = () => {
     };
   }, []);
 
+  // Close the menu when the pathname changes
+  useEffect(() => {
+    setOpen(false); // Close the menu on route (pathname) change
+  }, [pathname]); // Effect runs when pathname changes
+
   return (
     <>
       <Menu isToggled={isOpen} />
       <div
-        className={`${isScrolled ? theme === "garden" ? "bg-base-100/80 backdrop-blur-lg" : "bg-black/80 backdrop-blur-lg" : "bg-base-100"} sticky top-0 z-[90] flex items-center justify-between px-4 sm:py-2 drop-shadow-lg transition-all duration-300
-          sm:px-12`}
+        className={`${isScrolled ? (theme === "garden" ? "bg-base-100/80 backdrop-blur-lg" : "bg-black/80 backdrop-blur-lg") : "bg-base-100"} sticky top-0 z-[90] flex items-center justify-between px-4 sm:py-2 drop-shadow-lg transition-all duration-300 sm:px-12`}
       >
         <div className={`drop-shadow-lg ${theme === "black" ? "text-white" : "text-black"}`}>
           <Link href="/">
