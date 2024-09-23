@@ -48,7 +48,7 @@ export const Navbar = () => {
             <span className="font-magnatbold sm:text-lg">milo</span>
           </Link>
         </div>
-        <div className={`drop-shadow-lg hidden sm:flex gap-10 font-normal ${theme === "black" ? "text-white" : "text-black"}`}>
+        <div className={`drop-shadow-lg hidden sm:flex sm:gap-6 lg:gap-10 font-normal ${theme === "black" ? "text-white" : "text-black"}`}>
           <Link href="/">
             <span className="">Movies</span>
           </Link>
