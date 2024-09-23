@@ -66,7 +66,7 @@ function EpisodesContainer(anime: AnimeInfo) {
       {loading ? (
         <SkeletonEpisodes noMargin />
       ) : episodes ? (
-        <div className="embla__container scrollbar-thumb-rounded-full scrollbar-track-rounded-full relative flex w-full gap-4 overflow-x-scroll pb-2 scrollbar-thin scrollbar-track-gray-300 scrollbar-thumb-gray-800">
+        <div className="embla__container scrollbar-thumb-rounded-full scrollbar-track-rounded-full relative flex w-full gap-4 overflow-x-scroll pb-2 scrollbar-track-gray-300 scrollbar-thumb-gray-800">
           {episodes.episodes.map((episode) => (
             <AnimeCardDetail
               key={episode.id}
