@@ -1,5 +1,5 @@
+import HeroMediaCarousel from "@/components/hero/HeroMediaCarousel";
 import { AnimeContainerCard } from "../components/card/animecard/AnimeContainerCard";
-import HeroAnimeCarousel from "../components/hero/anime/HeroAnimeCarousel";
 import { AnimeServiceV1, AnimeServiceV2 } from "../services";
 
 export default async function Home() {
@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <>
       <div className="flex flex-col gap-4 min-h-fit">
-        <HeroAnimeCarousel animes={dataTrending.results} />
+        <HeroMediaCarousel items={dataTrending.results} />
         <div className="p-4 sm:p-0">
           <AnimeContainerCard containerTitle="Recently Updated 🎬" animes={dataRecent.results} />
         </div>
