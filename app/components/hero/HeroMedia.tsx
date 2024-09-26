@@ -1,0 +1,69 @@
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import parse from 'html-react-parser';
+import Genre from "@/components/genre/Genre";
+import { Title, CoverImage } from "@/types/anime.type";
+import { usePathname } from "next/navigation";
+
+type MediaProps = {
+  id: number;
+  title: string | Title;
+  description: string;
+  genres?: string[];
+  bannerImage?: string;
+  coverImage: string | CoverImage;
+};
+
+function HeroMedia({ id, title, description, bannerImage, coverImage, genres }: MediaProps) {
+  const pathName = usePathname();
+  const pathType = pathName.split('/')[1]; // This gives you either 'movie' or 'tv'
+  const cleanDesc = description?.replace(/<br\s*\/?>/gi, '');
+
+  const displayTitle = typeof title === "string" ? title : title.userPreferred;
+  const displayCoverImage = typeof coverImage === "string" ? coverImage : coverImage.extraLarge;
+
+  const determineNavigateTo = (): string => {
+    if (pathType.toLowerCase() === "anime") return `/anime/detail/${id}`;
+    // NOTE: the hero is only provide the Movie data not the Series
+    if (pathType.toLowerCase() === "series") return `/series/detail/${id}`;
+    return `/movie/detail/${id}`
+  }
+
+  return (
+    <div className="relative w-full embla__slide flex" key={id}>
+      {(bannerImage || displayCoverImage) && (
+        <Image
+          alt={displayTitle}
+          src={bannerImage ?? displayCoverImage ?? '/fallback-banner.webp'} // Add fallback image
+          fill
+          className="inset-0 z-0 h-full w-full object-cover"
+        />
+
+      )}
+      <div className="inset-0 z-10 flex flex-col justify-around gap-4 sm:gap-5 md:gap-6 bg-gradient-to-r from-black/80 via-black/50 to-transparent p-4 text-white sm:p-8 md:p-20">
+        <div className="flex flex-col gap-2">
+          <h1 className="line-clamp-1 font-magnatbold font-bold drop-shadow sm:text-xl md:text-3xl">
+            {displayTitle}
+          </h1>
+          {description && (
+            <p className="font-bold text-xs sm:text-sm line-clamp-2 lg:max-w-[65%]">
+              {parse(cleanDesc ?? "")}
+            </p>
+          )}
+          <div className="flex gap-1 sm:gap-3">
+            {genres?.slice(0, 3).map((genre, index) => (
+              <Genre key={index} genre={genre} />
+            ))}
+          </div>
+        </div>
+        <div className="btn btn-sm w-fit md:text-lg font-bold rounded">
+          <Link href={determineNavigateTo()}>Watch</Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default HeroMedia;
+
