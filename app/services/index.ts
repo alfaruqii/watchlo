@@ -15,6 +15,9 @@ const MovieService = {
   getMoviesById: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/movies/${id}`);
   },
+  getMovieTrailer: async (id: string): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/movies/${id}/videos`);
+  },
   getPopularTV: async (): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/popular`);
   },
@@ -23,6 +26,9 @@ const MovieService = {
   },
   getTvById: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}`);
+  },
+  getTVTrailer: async (id: string): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/tv/${id}/videos`);
   },
   searchMovie: async (title?: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/search?q=${title}`);
