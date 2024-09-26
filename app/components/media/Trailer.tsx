@@ -3,8 +3,13 @@ import { AnimeInfo } from '@/types/anime.type'
 import { useState } from 'react'
 import Image from 'next/image'
 import PlayButton from "./PlayButton";
+import { Video } from '@/types/movies.type';
+import { usePathname } from 'next/navigation';
 
-function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] }) {
+function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
+  const pathName = usePathname();
+  const pathType = pathName.split('/')[1]; // This gives you either 'movie' or 'tv'
+  const isMoviePath = pathType.toLowerCase() === "movie";
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   if (!trailer || !trailer.id) {
@@ -14,7 +19,7 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] }) {
   let videoUrl = '';
   switch (trailer.site.toLowerCase()) {
     case 'youtube':
-      videoUrl = `https://www.youtube.com/embed/${trailer.id}?autoplay=1`;
+      videoUrl = `https://www.youtube.com/embed/${"key" in trailer ? trailer.key : trailer.id ?? "xvFZjo5PgG0"}?autoplay=1`;
       break;
     case 'dailymotion':
       videoUrl = `https://www.dailymotion.com/embed/video/${trailer.id}?autoplay=1`;
@@ -28,10 +33,11 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] }) {
   }
 
   return (
-    <div className="mt-4 flex items-center flex-col">
-      <div className="w-full sm:w-2/5 relative aspect-video drop-shadow-lg rounded overflow-hidden">
+    <div className="mt-4 flex flex-col items-center overflow-hidden">
+      <p className="text-center w-full text-xl mb-2 font-bold">Trailer 💡</p>
+      <div className={`relative aspect-video w-full overflow-hidden rounded drop-shadow-lg ${isMoviePath ? "" : "sm:w-2/5"}`}>
         {!isPlaying ? (
-          <div className="relative w-full h-full cursor-pointer" onClick={handlePlay}>
+          <div className="relative h-full w-full cursor-pointer" onClick={handlePlay}>
             <Image
               src={trailer.thumbnail}
               alt="Video Thumbnail"
@@ -43,10 +49,10 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] }) {
         ) : (
           <iframe
             src={videoUrl}
-            title="Anime Trailer"
+            title={trailer.id}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="w-full h-full"
+            className="h-full w-full rounded"
           ></iframe>
         )}
       </div>
