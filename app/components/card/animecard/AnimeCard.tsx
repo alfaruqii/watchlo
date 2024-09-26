@@ -1,6 +1,5 @@
 import { AnimePopular, AnimeTrending, AnimeType } from "@/types/anime.type";
 import Link from "next/link";
-import Image from 'next/image'
 import CardImage from "../chunk/CardImage";
 import CardTitle from "../chunk/CardTitle";
 
