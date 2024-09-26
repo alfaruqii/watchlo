@@ -11,7 +11,7 @@ function Infos({ topic, value, customTheme }: Infos) {
         <p>
           {topic}
         </p>
-        <p className={`${customTheme}`}>
+        <p className={`${customTheme} capitalize`}>
           {value ?? "unknown"}
         </p>
       </div>
