@@ -41,7 +41,7 @@ function EpisodesContainer(anime: AnimeInfo) {
           anime.id_provider?.idGogoDub && (
             <button
               type="button"
-              className={`${provider === anime.id_provider?.idGogo ? `bg-gray-400 ${theme !== "garden" ? "text-gray-800" : ""}` : ``} btn btn-sm`}
+              className={`${provider === anime.id_provider?.idGogo ? `bg-gray-400 ${theme !== "garden" ? "text-gray-800 hover:text-gray-100" : ""}` : ``} btn btn-sm`}
               onClick={() => setProvider(anime.id_provider?.idGogo)}
               disabled={!anime.id_provider?.idGogo}
             >
@@ -53,7 +53,7 @@ function EpisodesContainer(anime: AnimeInfo) {
           anime.id_provider?.idGogoDub && (
             <button
               type="button"
-              className={`${provider === anime.id_provider?.idGogoDub ? `bg-gray-400 ${theme !== "garden" ? "text-gray-800" : ""}` : ''} btn btn-sm`}
+              className={`${provider === anime.id_provider?.idGogoDub ? `bg-gray-400 ${theme !== "garden" ? "text-gray-800 hover:text-gray-100" : ""}` : ''} btn btn-sm`}
               onClick={() => setProvider(anime.id_provider?.idGogoDub)}
               disabled={!anime.id_provider?.idGogoDub}
             >
