@@ -3,10 +3,17 @@ import { getEnv } from "@/utils/getEnv"
 type EmbededProps = {
   id: string;
   type: string;
+  season?: number;
+  ep?: number;
 }
 
-function Embeded({ id, type }: EmbededProps) {
-  const source = `${(getEnv("WATCHLO_SOURCE_EMBED") ?? process.env["NEXT_PUBLIC_WATCHLO_SOURCE_EMBED"])}/${type}/${id}`
+function Embeded({ id, type, season = 1, ep = 1 }: EmbededProps) {
+  const determinePathQuery = (): string => {
+    if (type.toLowerCase() === "tv") return `/tv?tmdb=${id}&season=${season}&episode=${ep}`
+    return `/movie/${id}`;
+  }
+
+  const source = `${(getEnv("WATCHLO_SOURCE_EMBED") ?? process.env["NEXT_PUBLIC_WATCHLO_SOURCE_EMBED"])}${determinePathQuery()}`
   return (
     <>
       <div className="mt-4 flex flex-col items-center overflow-hidden">
