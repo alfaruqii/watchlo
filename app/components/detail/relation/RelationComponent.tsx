@@ -5,7 +5,7 @@ function RelationComponent({ relation }: { relation: Relation[] }) {
   const filteredRelation = relation.filter((i) => (i.format === "TV" || i.format === "MOVIE" || i.format === "SPECIAL"));
   return (
     <>
-      <div>
+      <div className="pt-4">
         {
           (filteredRelation.length > 0) && (
             <AnimeContainerCard animes={filteredRelation} containerTitle="Relation 🧩" />
