@@ -36,7 +36,7 @@ export default function HeroMediaCarousel({ items }: MediaCarouselProps) {
                 item.title
             }
             description={"description" in item ? item.description : item.overview ?? "unknown description"}
-            bannerImage={"backdrop_path" in item ? item.backdrop_path : item.bannerImage ?? "/fallback-banner.webp"}
+            bannerImage={"backdrop_path" in item ? item.backdrop_path : item.bannerImage ?? item.coverImage.extraLarge ?? "/fallback-banner.webp"}
             coverImage={"poster_path" in item ? item.poster_path : item.coverImage?.extraLarge ?? '/fallback-card.webp'}
             genres={"genre_names" in item ? item.genre_names : item.genres}
           />
