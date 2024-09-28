@@ -50,7 +50,7 @@ function CardBanner({ item }: CardBannerProps) {
 
   return (
     <>
-      <div className="absolute flex items-center gap-3 z-20 overflow-hidden top-24 drop-shadow-lg left-3 lg:left-32 lg:top-[8.5rem]">
+      <div className="absolute flex items-center gap-2 z-20 overflow-hidden top-24 drop-shadow-lg left-3 lg:left-32 lg:top-[8.5rem]">
         <Image
           alt={determineTitle()}
           src={getImageUrl()}
