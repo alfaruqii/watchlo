@@ -27,10 +27,10 @@ const MovieService = {
   getTvById: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}`);
   },
-  getTvSeason: async (id: string, season: number): Promise<AxiosResponse> => {
+  getTvSeason: async (id: string, season: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/season/${season}`);
   },
-  getTvEpisode: async (id: string, season: number, episode: number): Promise<AxiosResponse> => {
+  getTvEpisode: async (id: string, season: string, episode: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/season/${season}/episode/${episode}`);
   },
   getTVTrailer: async (id: string): Promise<AxiosResponse> => {
