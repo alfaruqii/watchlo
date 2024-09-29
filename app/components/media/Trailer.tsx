@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
   const pathName = usePathname();
   const pathType = pathName.split('/')[1]; // This gives you either 'movie' or 'tv'
-  const isMoviePath = pathType.toLowerCase() === "movie";
+  const isMoviePath = pathType.toLowerCase() === "movie" || pathType.toLowerCase() === "series";
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   if (!trailer || !trailer.id) {
@@ -17,7 +17,7 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
   }
 
   let videoUrl = '';
-  switch (trailer.site.toLowerCase()) {
+  switch (trailer.site?.toLowerCase()) {
     case 'youtube':
       videoUrl = `https://www.youtube.com/embed/${"key" in trailer ? trailer.key : trailer.id ?? "xvFZjo5PgG0"}?autoplay=1`;
       break;
