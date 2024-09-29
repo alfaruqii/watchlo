@@ -31,7 +31,7 @@ function HeroMedia({ id, title, description, bannerImage, coverImage, genres }: 
   }
 
   return (
-    <div className="relative w-full embla__slide flex" key={id}>
+    <div className="embla__slide relative flex w-full" key={id}>
       {(bannerImage || displayCoverImage) && (
         <Image
           alt={displayTitle}
@@ -41,13 +41,13 @@ function HeroMedia({ id, title, description, bannerImage, coverImage, genres }: 
         />
 
       )}
-      <div className="inset-0 z-10 flex flex-col justify-around gap-4 sm:gap-5 md:gap-6 bg-gradient-to-r from-black/80 via-black/50 to-transparent p-4 text-white sm:p-8 md:p-20">
+      <div className="inset-0 z-10 flex flex-col justify-around gap-4 bg-gradient-to-r from-black/80 via-black/50 to-transparent p-4 text-white sm:gap-5 sm:p-8 md:gap-6 md:p-20">
         <div className="flex flex-col gap-2">
           <h1 className="line-clamp-1 font-magnatbold font-bold drop-shadow sm:text-xl md:text-3xl">
             {displayTitle}
           </h1>
           {description && (
-            <p className="font-bold text-xs sm:text-sm line-clamp-2 lg:max-w-[65%]">
+            <p className="line-clamp-2 text-xs font-bold sm:text-sm lg:max-w-[65%]">
               {parse(cleanDesc ?? "")}
             </p>
           )}
@@ -57,7 +57,7 @@ function HeroMedia({ id, title, description, bannerImage, coverImage, genres }: 
             ))}
           </div>
         </div>
-        <div className="btn btn-sm w-fit md:text-lg font-bold rounded">
+        <div className="btn btn-sm w-fit rounded font-bold md:text-lg">
           <Link href={determineNavigateTo()}>Watch</Link>
         </div>
       </div>
