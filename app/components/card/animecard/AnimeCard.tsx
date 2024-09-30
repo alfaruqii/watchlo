@@ -2,17 +2,10 @@ import { AnimePopular, AnimeTrending, AnimeType } from "@/types/anime.type";
 import Link from "next/link";
 import CardImage from "../chunk/CardImage";
 import CardTitle from "../chunk/CardTitle";
+import { Routes } from "@/types/global";
 
 interface AnimeCardProps {
   anime: AnimeType;
-}
-
-interface Routes {
-  pathname: string,
-  query: {
-    animeTitle: string | number;
-    ep: number;
-  }
 }
 
 export const AnimeCard = ({ anime }: AnimeCardProps) => {
@@ -35,7 +28,7 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
   const determineRoutes = (anime: AnimeType): Routes | string => {
     // condition where the anime is trending anime 
     if ("episodeNumber" in anime) {
-      return ({ pathname: `/anime/watch/${anime.episodeId}`, query: { animeTitle: anime.id, ep: anime.episodeNumber } })
+      return ({ pathname: `/anime/watch/${anime.episodeId}`, query: { title: anime.id, ep: anime.episodeNumber } })
     }
     // condition where the anime is popular anime 
     return `/anime/detail/${anime.id}`
