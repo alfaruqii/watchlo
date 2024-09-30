@@ -42,6 +42,17 @@ export interface MovieInfo extends BaseMediaInfo {
   video: boolean;
 }
 
+export interface Seasons {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+  vote_average: number;
+}
+
 export interface TVInfo extends BaseMediaInfo {
   created_by: {
     id: number;
@@ -83,16 +94,7 @@ export interface TVInfo extends BaseMediaInfo {
   number_of_seasons: number;
   origin_country: string[];
   original_name: string;
-  seasons: {
-    air_date: string;
-    episode_count: number;
-    id: number;
-    name: string;
-    overview: string;
-    poster_path: string;
-    season_number: number;
-    vote_average: number;
-  }[];
+  seasons: Seasons[];
   type: string;
 }
 
@@ -108,3 +110,48 @@ export interface Video {
   iso_3166_1: string,
   thumbnail: string
 }
+
+export interface CrewMember {
+  id: number;
+  name: string;
+  department: string;
+  job: string;
+}
+
+export interface GuestStar {
+  id: number;
+  name: string;
+  character: string;
+  order: number;
+}
+
+export interface SeriesEpisode {
+  air_date: string;
+  episode_number: number;
+  episode_type: string;
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  runtime: number;
+  season_number: number;
+  show_id: number;
+  still_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  crew: CrewMember[];
+  guest_stars: GuestStar[];
+}
+
+export interface TV {
+  _id: string;
+  air_date: string;
+  episodes: SeriesEpisode[];
+  name: string;
+  overview: string;
+  id: number;
+  poster_path: string | null;
+  season_number: number;
+  vote_average: number;
+}
+
