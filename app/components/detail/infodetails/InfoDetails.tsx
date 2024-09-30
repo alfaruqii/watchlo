@@ -5,6 +5,7 @@ import parse from 'html-react-parser';
 import { useThemeStore } from '@/store/themeStore';
 import { formatDesc, formatDuration, formatDate } from '@/utils/formatted';
 import { MediaItem, getMediaType, isAnimeInfo, isMovieInfo, isTVInfo } from '@/utils/mediaTypeChecker';
+import fallbackDesc from "@/utils/fallbackDesc.json";
 
 type InfoDetailsProps = {
   item: MediaItem;
@@ -31,12 +32,12 @@ const InfoDetails: React.FC<InfoDetailsProps> = ({ item }) => {
     : isTVInfo(item) ? formatDate(item.last_air_date) : 'unknown';
 
 
-  const description = isAnimeInfo(item) ? item.description : item.overview ?? 'No description available';
+  const description = isAnimeInfo(item) ? item.description : item.overview || fallbackDesc;
   const status = item.status?.replace(/_/g, " ") ?? 'unknown';
   const score = isAnimeInfo(item) ? item.score?.decimalScore : item.vote_average ?? "unknown";
   const format = isAnimeInfo(item) ? item.format : mediaType;
   const duration = isAnimeInfo(item) ? item.duration : isMovieInfo(item) ? item.runtime : 0;
-  const episodes = isAnimeInfo(item) ? `${item.episodes} Episodes` : isTVInfo(item) ? `${item.number_of_episodes} Episodes` : "unknown";
+  const episodes = isAnimeInfo(item) ? `${item.episodes ? `${item.episodes} Episodes` : "Unknown"}` : isTVInfo(item) ? `${item.number_of_episodes} Episodes` : "unknown";
   const season = isAnimeInfo(item) ? item.season : isTVInfo(item) ? `${item.number_of_seasons} Seasons` : "?";
   const studios = isAnimeInfo(item) ? item.studios[0]?.name : item.production_companies[0]?.name ?? "unknown";
 
