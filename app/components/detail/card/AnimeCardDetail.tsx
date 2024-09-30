@@ -9,7 +9,7 @@ interface AnimeCardDetailProps {
 }
 
 export const AnimeCardDetail = ({ animeImage, episodeId, id, episodeNumber }: AnimeCardDetailProps) => {
-  const route = { pathname: `/anime/watch/${episodeId}`, query: { animeTitle: id, ep: episodeNumber } };
+  const route = { pathname: `/anime/watch/${episodeId}`, query: { title: id, ep: episodeNumber } };
 
   return (
     <>
