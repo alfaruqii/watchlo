@@ -1,13 +1,14 @@
 // utils/mediaTypeChecker.ts
 
-import { AnimeInfo } from '@/types/anime.type';
-import { MovieInfo, TVInfo } from '@/types/movies.type';
+import { AnimeDetails, AnimeInfo } from '@/types/anime.type';
+import { MovieInfo, TV, TVInfo } from '@/types/movies.type';
 
 /**
  * Represents a union type of all possible media item types in the application.
  * This type is used for functions that can accept any kind of media item.
  */
 export type MediaItem = AnimeInfo | MovieInfo | TVInfo;
+export type EpisodesItem = AnimeDetails | TV;
 
 /**
  * Type guard to check if a media item is of type AnimeInfo.
@@ -22,6 +23,8 @@ export type MediaItem = AnimeInfo | MovieInfo | TVInfo;
  * }
  */
 export const isAnimeInfo = (item: MediaItem): item is AnimeInfo => 'format' in item;
+
+export const isAnimeDetails = (item: EpisodesItem): item is AnimeDetails => 'subOrDub' in item;
 
 /**
  * Type guard to check if a media item is of type MovieInfo.
