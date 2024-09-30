@@ -20,7 +20,7 @@ function SeasonComponent({ data }: { data: TVInfo }) {
   const filteredSeason = data.seasons.filter((season: Seasons) => {
     return (
       season.season_number !== 0 &&
-      season.episode_count >= 0 &&
+      season.episode_count > 0 &&
       (season.air_date ??
         new Date(season.air_date).getTime() < now)
     );
@@ -54,7 +54,7 @@ function SeasonComponent({ data }: { data: TVInfo }) {
                         alreadyReleased(season) ?
                           <>
                             <RatingComponent score={season.vote_average} />
-                            <ButtonWatch text="Watch" />
+                            <ButtonWatch text="Watch" season={season.season_number} ep={1} id={data.id} />
                           </>
                           :
                           <ButtonWatch text="Not Yet Released" />
