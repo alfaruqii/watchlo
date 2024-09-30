@@ -170,7 +170,7 @@ export interface AnimeInfo extends AnimeBase {
   relation: Relation[];
 }
 
-export interface Episode {
+export interface AnimeEpisode {
   id: string;
   number: number;
   url: string;
@@ -189,7 +189,7 @@ export interface AnimeDetails {
   type: string;
   status: string;
   otherName: string;
-  episodes: Episode[];  // Array of episode objects
+  episodes: AnimeEpisode[];  // Array of episode objects
 }
 
 export interface SearchedAnime {
