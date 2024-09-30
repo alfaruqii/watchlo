@@ -1,5 +1,5 @@
 import { getEnv } from "@/utils/getEnv";
-import { AnimeRecQueryParams } from "../interfaces/anime";
+import { AnimeRecQueryParams } from "@/types/global";
 import { API_V0, API_V1, API_V2 } from "../lib/api"
 import { AxiosResponse } from 'axios';
 
@@ -27,7 +27,7 @@ const MovieService = {
   getTvById: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}`);
   },
-  getTvSeason: async (id: string, season: string): Promise<AxiosResponse> => {
+  getTvSeason: async (id: string, season: number): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/season/${season}`);
   },
   getTvEpisode: async (id: string, season: string, episode: string): Promise<AxiosResponse> => {
