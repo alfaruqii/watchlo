@@ -1,5 +1,5 @@
 import Image from "next/image";
-import RatingComponent from "../Rating/RatingComponent";
+import RatingComponent from "../rating/RatingComponent";
 import ButtonWatch from "./ButtonWatch";
 import { formatDesc } from "@/utils/formatted";
 import fallbackDesc from "@/utils/fallbackDesc.json";
