@@ -29,7 +29,7 @@ function CardBanner({ item }: CardBannerProps) {
     if ('poster_path' in item && item.backdrop_path) {
       return item.poster_path;
     }
-    return '/fallback-banner.webp'; // Fallback in case there's no image available
+    return '/fallback-card.webp'; // Fallback in case there's no image available
   };
 
   // Function to get genres (handling both AnimeInfo and MovieInfo)
