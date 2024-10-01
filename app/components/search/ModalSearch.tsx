@@ -1,20 +1,30 @@
 'use client';
+
 import { useModalStore } from '@/store/modalStore';
 import SearchIcon from '../icons/SearchIcon';
 import { useThemeStore } from '@/store/themeStore';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Searched from './Searched';
 import { useDebounce } from '@/hooks/useDebounce';
+import { usePathname } from 'next/navigation'; // Use usePathname to track route changes
 
 function ModalSearch() {
   const { isOpen, closeModal } = useModalStore();
   const { theme } = useThemeStore();
   const [query, setQuery] = useState<string>('');
   const debouncedQuery = useDebounce(query, 300);
+  const pathname = usePathname(); // Get current path
 
   const handleSearch = useCallback((value: string) => {
     setQuery(value);
   }, []);
+
+  // Close the modal when the path changes
+  useEffect(() => {
+    if (isOpen) {
+      closeModal(); // Close modal if the path changes
+    }
+  }, [pathname]); // Depend on the pathname to detect changes
 
   return (
     <dialog open={isOpen} className={`z-50 ${isOpen ? "modal modal-middle" : "hidden"}`}>
@@ -41,3 +51,4 @@ function ModalSearch() {
 }
 
 export default ModalSearch;
+
