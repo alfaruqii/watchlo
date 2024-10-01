@@ -58,7 +58,7 @@ const InfoDetails: React.FC<InfoDetailsProps> = ({ item }) => {
         {(mediaType === 'movie' || mediaType === 'anime') && (
           <Infos
             topic={mediaType === 'movie' ? "Duration" : "Average Episode Duration"}
-            value={formatDuration(duration)}
+            value={formatDuration(duration) || "unknown"}
           />
         )}
         {mediaType !== 'movie' && (
