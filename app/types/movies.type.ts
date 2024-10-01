@@ -174,3 +174,32 @@ export interface Review {
   rating?: number;
 }
 
+export type MediaType = 'movie' | 'tv';
+
+export interface SearchedMovies {
+  backdrop_path: string;
+  id: number;
+  name?: string;  // For TV shows
+  original_name?: string;  // For TV shows
+  title?: string;  // For movies
+  original_title?: string;  // For movies
+  overview: string;
+  poster_path: string;
+  media_type: MediaType;
+  adult: boolean;
+  original_language: string;
+  genre_ids: number[];
+  popularity: number;
+  vote_average: number;
+  vote_count: number;
+  genre_names: string[];
+
+  // Fields specific to TV shows
+  first_air_date?: string;
+  origin_country?: string[];
+
+  // Fields specific to movies
+  release_date?: string;
+  video?: boolean;
+}
+
