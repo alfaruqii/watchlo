@@ -7,9 +7,9 @@ function ButtonWatch({ text, season, ep = 1, id }: { text: string; season?: numb
       {
         id ?
           <Link href={routes}>
-            <button type="button" className="btn btn-sm w-fit rounded bg-gray-400 border-none font-bold text-gray-900 md:text-lg">{text}</button>
+            <button type="button" className="btn btn-sm w-fit rounded border-none font-bold md:text-lg">{text}</button>
           </Link> :
-          <button type="button" className={`btn btn-sm w-fit rounded bg-gray-400 border-none font-bold text-gray-900 md:text-lg ${text.toLowerCase().includes("not yet released") ? "pointer-events-none" : ""}`}>{text}</button>
+          <button type="button" className={`btn btn-sm w-fit rounded border-none font-bold md:text-lg ${text.toLowerCase().includes("not yet released") ? "pointer-events-none" : ""}`}>{text}</button>
       }
     </>
   )
