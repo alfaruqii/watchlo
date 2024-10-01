@@ -1,7 +1,7 @@
 // utils/mediaTypeChecker.ts
 
-import { AnimeDetails, AnimeInfo } from '@/types/anime.type';
-import { MovieInfo, TV, TVInfo } from '@/types/movies.type';
+import { AnimeDetails, AnimeInfo, SearchedAnime } from '@/types/anime.type';
+import { MovieInfo, SearchedMovies, TV, TVInfo } from '@/types/movies.type';
 
 /**
  * Represents a union type of all possible media item types in the application.
@@ -9,6 +9,7 @@ import { MovieInfo, TV, TVInfo } from '@/types/movies.type';
  */
 export type MediaItem = AnimeInfo | MovieInfo | TVInfo;
 export type EpisodesItem = AnimeDetails | TV;
+export type SearchedParams = SearchedMovies | SearchedAnime;
 
 /**
  * Type guard to check if a media item is of type AnimeInfo.
@@ -25,6 +26,36 @@ export type EpisodesItem = AnimeDetails | TV;
 export const isAnimeInfo = (item: MediaItem): item is AnimeInfo => 'format' in item;
 
 export const isAnimeDetails = (item: EpisodesItem): item is AnimeDetails => 'subOrDub' in item;
+
+/**
+ * Type guard to determine if a SearchedParams is SearchedAnime
+ * Checks all properties that are used in the SearchedResult component
+ */
+export const isSearchedAnime = (item: SearchedParams): item is SearchedAnime => {
+  if (!('coverImage' in item)) return false;
+
+  const animeItem = item as SearchedAnime;
+
+  // Check title structure
+  return typeof animeItem.title === 'object' &&
+    animeItem.title !== null &&
+    ('userPreferred' in animeItem.title ||
+      'english' in animeItem.title ||
+      'native' in animeItem.title ||
+      'romaji' in animeItem.title) &&
+    'format' in animeItem &&
+    'seasonYear' in animeItem &&
+    'genres' in animeItem &&
+    Array.isArray(animeItem.genres);
+};
+
+// If you need to check for movies explicitly
+export const isSearchedMovie = (item: SearchedParams): item is SearchedMovies => {
+  return 'poster_path' in item &&
+    typeof item.title === 'string' &&
+    'genres' in item &&
+    Array.isArray(item.genres);
+};
 
 /**
  * Type guard to check if a media item is of type MovieInfo.
