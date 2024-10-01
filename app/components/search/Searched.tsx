@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import SearchedResult from "./SearchedResult";
 import SkeletonSearch from "../skeleton/SkeletonSearch";
+import { usePathname } from "next/navigation";
 import { SearchedAnime } from "@/types/anime.type";
 
 interface SearchedProps {
@@ -10,9 +11,15 @@ interface SearchedProps {
 }
 
 function Searched({ searchedText }: SearchedProps) {
+  const pathName = usePathname();
+  const pathType = pathName.split('/')[1]; // This gives you either 'anime' or other (movie/tv)
   const [searchedData, setSearchedData] = useState<SearchedAnime[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const determineFetchURL = (): string => {
+    if (pathType.toLowerCase() === "anime") return `/api/anime-search?query=${encodeURIComponent(searchedText)}`
+    return `/api/movie-search?query=${encodeURIComponent(searchedText)}`
+  }
 
   const fetchSearchResults = useCallback(async () => {
     if (!searchedText) return;
@@ -21,7 +28,7 @@ function Searched({ searchedText }: SearchedProps) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/anime-search?query=${encodeURIComponent(searchedText)}`)
+      const response = await fetch(determineFetchURL())
       if (!response.ok) {
         throw new Error('Failed to fetch search results')
       }
@@ -46,8 +53,8 @@ function Searched({ searchedText }: SearchedProps) {
       {isLoading && <SkeletonSearch />}
       {error && <p>{error}</p>}
       {!isLoading && searchedData.length > 0 ? (
-        searchedData.map((anime) => (
-          <SearchedResult key={anime.id} {...anime} />
+        searchedData.map((item) => (
+          <SearchedResult key={item.id} {...item} />
         ))
       ) : (
         !isLoading && <p>No results found.</p>
