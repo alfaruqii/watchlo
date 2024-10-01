@@ -7,12 +7,14 @@ import SeasonComponent from '@/components/season/SeasonComponent';
 import { MovieService } from '@/services';
 
 import fallbackTrailer from "@/utils/fallbackTrailer.json";
-import { TVInfo, Video } from '@/types/movies.type';
+import { Review, TVInfo, Video } from '@/types/movies.type';
+import ReviewsComponent from '@/components/reviews/ReviewsComponent';
 
 async function DetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const { data: dataInfo }: { data: TVInfo } = await MovieService.getTvById(id);
   const { data: { results: dataVideos } }: { data: { results: Video[] } } = await MovieService.getTVTrailer(id);
+  const { data: { results: dataReviews } }: { data: { results: Review[] } } = await MovieService.getTVReviews(id);
   const trailerVideo = dataVideos.find(
     (video: Video) => video.type.toLowerCase() === "trailer"
   ) ?? dataVideos.find(
@@ -31,6 +33,10 @@ async function DetailPage({ params }: { params: { id: string } }) {
             <Trailer trailer={trailerVideo ?? trailerFallback} />
             <SeasonComponent data={dataInfo} />
           </div>
+          {
+            dataReviews.length > 0 &&
+            <ReviewsComponent reviews={dataReviews} />
+          }
         </div>
       </div>
     </>
