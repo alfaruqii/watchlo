@@ -210,8 +210,6 @@ export interface SearchedAnime {
   nextAiringEpisode: unknown;
 }
 
-
-
 export interface Source {
   url: string;
   isM3U8: boolean;
