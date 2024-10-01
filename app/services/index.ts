@@ -43,7 +43,7 @@ const MovieService = {
     return API_V0().get(`/tmdb/tv/${id}/reviews`);
   },
   searchMovie: async (title?: string): Promise<AxiosResponse> => {
-    return API_V0().get(`/tmdb/search?q=${title}`);
+    return API_V0().get(`/tmdb/search?query=${title}`);
   },
 }
 
