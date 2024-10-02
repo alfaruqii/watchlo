@@ -8,17 +8,21 @@ import { useThemeStore } from '@/store/themeStore';
 const ModalDocs = () => {
   const { theme } = useThemeStore();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [dontAskAgain, setDontAskAgain] = useState<boolean>(
-    JSON.parse(localStorage.getItem("dontAskAgain") || "false")
-  );
+  const [dontAskAgain, setDontAskAgain] = useState<boolean>(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem("dontAskAgain");
+    if (storedValue) {
+      setDontAskAgain(JSON.parse(storedValue));
+    }
+  }, []);
 
   useEffect(() => {
     // Only show the modal if we're on the home page AND dontAskAgain is false
     if (pathname === "/" && !dontAskAgain) {
       setIsOpen(true);
-    }
-    if (pathname !== "/") {
+    } else if (pathname !== "/") {
       closeModal();
     }
   }, [pathname, dontAskAgain]);
@@ -32,6 +36,7 @@ const ModalDocs = () => {
     setDontAskAgain(newState);
     localStorage.setItem('dontAskAgain', JSON.stringify(newState));
   };
+
   // Checkbox component to reduce redundancy
   const CheckboxComponent = ({ className = "" }) => (
     <div className={`form-control w-fit ${className}`}>
@@ -42,7 +47,7 @@ const ModalDocs = () => {
           className="checkbox checkbox-sm rounded"
           onChange={handleCheckboxChange}
         />
-        <span className="label-text">Don't ask me again</span>
+        <span className="label-text">Don&apos;t ask me again</span>
       </label>
     </div>
   );
@@ -78,3 +83,4 @@ const ModalDocs = () => {
 };
 
 export default ModalDocs;
+
