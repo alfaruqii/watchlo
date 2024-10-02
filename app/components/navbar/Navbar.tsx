@@ -34,7 +34,7 @@ const Navbar = () => {
       disabled: true,
       badge: { text: "DEV", theme }
     },
-    { href: "/", label: "Docs" },
+    { href: "/docs", label: "Docs" },
     {
       href: "https://github.com/alfaruqii/watchlo",
       label: "Github",
