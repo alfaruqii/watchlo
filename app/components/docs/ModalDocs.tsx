@@ -12,20 +12,19 @@ const ModalDocs = () => {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Check localStorage when component mounts
     const storedValue = localStorage.getItem("dontAskAgain");
-    if (storedValue) {
-      setDontAskAgain(JSON.parse(storedValue));
-    }
-  }, []);
+    const shouldNotShow = JSON.parse(storedValue || "false");
+    setDontAskAgain(shouldNotShow);
 
-  useEffect(() => {
-    // Only show the modal if we're on the home page AND dontAskAgain is false
-    if (pathname === "/" && !dontAskAgain) {
+    // Show modal only on root path and when shouldNotShow is false
+    if (pathname === "/" && !shouldNotShow) {
       setIsOpen(true);
-    } else if (pathname !== "/") {
-      closeModal();
+    } else {
+      // Close modal on any other path
+      setIsOpen(false);
     }
-  }, [pathname, dontAskAgain]);
+  }, [pathname]); // This effect runs whenever pathname changes
 
   const closeModal = () => {
     setIsOpen(false);
@@ -37,7 +36,7 @@ const ModalDocs = () => {
     localStorage.setItem('dontAskAgain', JSON.stringify(newState));
   };
 
-  // Checkbox component to reduce redundancy
+  // Rest of the component remains the same...
   const CheckboxComponent = ({ className = "" }) => (
     <div className={`form-control w-fit ${className}`}>
       <label className="label cursor-pointer gap-2 pt-0">
@@ -54,9 +53,10 @@ const ModalDocs = () => {
 
   return (
     <>
-      {isOpen && (
+      {isOpen && pathname === "/" && (
         <dialog id="my_modal_3" className="modal-open modal" open={isOpen}>
           <div className={`modal-box border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} rounded shadow-lg`}>
+            {/* Modal content remains the same */}
             <div className="flex gap-4">
               <div className="w-32">
                 <Image alt="Warning Emoji" src="/warning-emoji.webp" width={100} height={100} />
@@ -83,4 +83,3 @@ const ModalDocs = () => {
 };
 
 export default ModalDocs;
-
