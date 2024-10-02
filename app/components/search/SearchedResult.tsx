@@ -18,10 +18,12 @@ function SearchedResult(props: SearchedParams) {
     ? props.title.userPreferred ?? props.title.english ?? props.title.native ?? props.title.romaji
     : props.title || props.name;
 
+  const format = !isAnime ? props.media_type?.toLowerCase() : "movie";
+
   return (
     <Link
       onClick={closeModal}
-      href={`/${isAnime ? 'anime' : 'movie'}/detail/${props.id}`}
+      href={`/${isAnime ? 'anime' : format === "movie" ? "movie" : "series"}/detail/${props.id}`}
       className={`${theme === "garden" ? "hover:bg-gray-400 " : "hover:bg-gray-800"} rounded p-3`}
     >
       <div className="w-full flex gap-2">
