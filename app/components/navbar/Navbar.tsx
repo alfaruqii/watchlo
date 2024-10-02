@@ -8,7 +8,7 @@ import { useThemeStore } from "@/store/themeStore";
 import ToggleSearch from "./ToggleSearch";
 import Menu from "./Menu";
 
-export const Navbar = () => {
+const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const { theme } = useThemeStore();
@@ -93,3 +93,4 @@ export const Navbar = () => {
     </>
   );
 };
+export default Navbar;

@@ -437,7 +437,7 @@ function Footer({
   )
 }
 
-export { Footer }
+export default Footer;
 
 // ... (sevenSegmentFont and defaultFont remain unchanged)
 
