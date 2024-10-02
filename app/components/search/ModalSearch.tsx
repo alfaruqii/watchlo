@@ -27,8 +27,8 @@ function ModalSearch() {
   }, [pathname]); // Depend on the pathname to detect changes
 
   return (
-    <dialog open={isOpen} className={`z-50 ${isOpen ? "modal modal-middle" : "hidden"}`}>
-      <div className={`modal-box flex flex-col py-4 gap-4 bg-opacity-75 rounded-lg border ${theme === "garden" ? "border-gray-400" : "border-gray-500"} backdrop-blur-lg max-h-96`}>
+    <dialog open={isOpen} className={`z-50 ${isOpen ? "modal modal-middle modal-open" : "hidden"}`}>
+      <div className={`modal-box flex flex-col py-4 gap-4 bg-opacity-60 rounded border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} backdrop-blur-lg max-h-96`}>
         <div className={`border-b pb-1 border-gray-500 w-full`}>
           <label className="input pl-0 h-8 border-none !outline-none flex items-center bg-transparent rounded-none">
             <SearchIcon />
