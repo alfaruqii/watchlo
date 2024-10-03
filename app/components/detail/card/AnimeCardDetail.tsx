@@ -24,7 +24,6 @@ export const AnimeCardDetail = ({ animeImage, episodeId, id, episodeNumber }: An
                 layout="responsive"   // Responsive layout for better scaling
                 width={300}           // The aspect ratio remains as the image scales
                 height={300}
-                quality={100}          // Ensure high quality
                 sizes="(max-width: 768px) 100vw, 33vw"  // Use appropriate sizes for different viewports
               />
             </figure>
