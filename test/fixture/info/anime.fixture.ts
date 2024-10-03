@@ -1,3 +1,4 @@
+import { AnimePopular, AnimeTrending } from "@/types/anime.type";
 import { AnimeInfo } from "@/types/anime.type";
 
 export const animeFixture: AnimeInfo = {
@@ -55,5 +56,27 @@ export const animeFixture: AnimeInfo = {
     { name: 'Studio Example' }
   ],
   relation: [],
+};
+
+export const popularAnime: AnimePopular = {
+  id: '1',
+  title: {
+    userPreferred: 'My Popular Anime',
+    romaji: 'Popular Anime Romaji',
+    english: 'Popular Anime English',
+    native: '人気アニメ',
+  },
+  coverImage: {
+    large: 'http://example.com/popular.jpg',
+  },
+  status: 'RELEASING',
+};
+
+export const trendingAnime: AnimeTrending = {
+  id: '2',
+  title: 'My Trending Anime',
+  image: 'http://example.com/trending.jpg',
+  episodeNumber: 5,
+  episodeId: 'episode-5',
 };
 
