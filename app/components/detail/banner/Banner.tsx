@@ -10,14 +10,17 @@ export const Banner = ({ item }: BannerProps) => {
   // Function to determine the title
   const determineAlt = (): string => {
     if ('title' in item) {
+      // For anime or movie
       if (typeof item.title === 'object') {
         return item.title.userPreferred || item.title.english || item.title.romaji || item.title.native || 'Unknown Title';
       }
       return item.title || 'Unknown Title';
+    } else if ('name' in item) {
+      // For TV shows
+      return item.name || 'Unknown Title';
     }
     return 'Unknown Title';
   };
-
   // Function to get the correct image URL (Anime or Movie)
   const getImageUrl = (): string => {
     if ('bannerImage' in item && item.bannerImage) {
