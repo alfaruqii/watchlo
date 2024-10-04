@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import RatingComponent from "../rating/RatingComponent";
 import ButtonWatch from "./ButtonWatch";
@@ -6,6 +8,7 @@ import fallbackDesc from "@/utils/fallbackDesc.json";
 import { Seasons, TVInfo } from "@/types/movies.type"
 
 function SeasonComponent({ data }: { data: TVInfo }) {
+  const [isImageLoading, setImageLoading] = useState(true);
   const now = Date.now();
 
   const alreadyReleased = (season: Seasons): boolean => {
@@ -37,10 +40,12 @@ function SeasonComponent({ data }: { data: TVInfo }) {
                 <div className="collapse collapse-arrow mb-1 rounded bg-base-200 font-bold drop-shadow-lg lg:mb-3" key={season.season_number}>
                   <div className="absolute inset-0 z-0 h-full w-full">
                     <Image
+                      unoptimized
                       src={season.poster_path ?? data.poster_path ?? "/fallback-card.webp"}
                       alt={data.name}
                       fill
-                      className="rounded object-cover "
+                      onLoad={() => setImageLoading(false)}
+                      className={`rounded object-cover transition-custom-blur ${isImageLoading ? 'scale-110 blur-2xl' : 'scale-100 blur-0'}`}
                     />
                     <div className="absolute h-full w-full bg-gradient-to-r from-black/80 via-black/50 to-black/40" ></div>
                   </div>

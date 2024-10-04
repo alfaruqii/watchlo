@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import parse from 'html-react-parser';
@@ -16,6 +17,7 @@ type MediaProps = {
 };
 
 function HeroMedia({ id, title, description, bannerImage, coverImage, genres }: MediaProps) {
+  const [isImageLoading, setImageLoading] = useState(true);
   const pathName = usePathname();
   const pathType = pathName.split('/')[1]; // This gives you either 'movie' or 'tv'
   const cleanDesc = description?.replace(/<br\s*\/?>/gi, '');
@@ -34,10 +36,12 @@ function HeroMedia({ id, title, description, bannerImage, coverImage, genres }: 
     <div className="embla__slide relative flex w-full" key={id}>
       {(bannerImage || displayCoverImage) && (
         <Image
+          unoptimized
           alt={displayTitle}
           src={bannerImage ?? displayCoverImage ?? '/fallback-banner.webp'} // Add fallback image
           fill
-          className="inset-0 z-0 h-full w-full object-cover"
+          onLoad={() => setImageLoading(false)}
+          className={`inset-0 transition-all duration-700 ease-in-out z-0 h-full w-full object-cover ${isImageLoading ? "blur-3xl" : "blur-0"}`}
         />
 
       )}

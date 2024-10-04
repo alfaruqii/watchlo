@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useThemeStore } from "@/store/themeStore";
@@ -6,6 +8,7 @@ import { isSearchedAnime, SearchedParams } from "@/utils/mediaTypeChecker";
 import SearchedGenre from "../genre/SearchedGenre";
 
 function SearchedResult(props: SearchedParams) {
+  const [isImageLoading, setImageLoading] = useState(true);
   const { closeModal } = useModalStore();
   const { theme } = useThemeStore();
   const isAnime = isSearchedAnime(props);
@@ -27,12 +30,15 @@ function SearchedResult(props: SearchedParams) {
       className={`${theme === "garden" ? "hover:bg-gray-400 " : "hover:bg-gray-800"} rounded p-3`}
     >
       <div className="w-full flex gap-2">
-        <div className="relative w-32 h-36">
+        <div className="relative w-32 h-36 overflow-hidden">
           <Image
+            unoptimized
             src={imgSrc ?? '/fallback-card.webp'}
             alt={title ?? 'Windah Batubara'}
             fill
-            className="object-cover rounded"
+            onLoad={() => setImageLoading(false)}
+            className={`transition-custom-blur object-cover rounded ${isImageLoading ? "blur-3xl" : "blur-0"}`}
+
           />
         </div>
         <div className="flex flex-col gap-1 w-5/6">

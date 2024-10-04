@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import { marked } from "marked";
 import parse from "html-react-parser";
@@ -15,6 +16,7 @@ function cleanReviewContent(content: string | undefined) {
 }
 
 function ReviewsComponent({ reviews }: { reviews: Review[] }) {
+  const [isImageLoading, setImageLoading] = useState(true);
   const { theme } = useThemeStore();
   // Filter out reviews that have author details
   const filteredReviews = reviews.filter((review: Review) =>
@@ -31,10 +33,12 @@ function ReviewsComponent({ reviews }: { reviews: Review[] }) {
             <div className="flex gap-2 mb-2 items-center">
               <div className="size-11 lg:size-12 relative rounded-full overflow-hidden">
                 <Image
+                  unoptimized
                   fill
                   src={review.author_details.avatar_path || "/fallback-card.webp"}
                   alt={review.author_details.name || "Avatar"}
-                  className="object-cover"
+                  onLoad={() => setImageLoading(false)}
+                  className={`object-cover ${isImageLoading ? 'blur-2xl' : 'blur-0'}`}
                 />
               </div>
               <div>

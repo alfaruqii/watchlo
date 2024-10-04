@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import { AnimeInfo } from "@/types/anime.type";
 import { MovieInfo, TVInfo } from "@/types/movies.type";
@@ -7,6 +9,7 @@ interface CardBannerProps {
 }
 
 function CardBanner({ item }: CardBannerProps) {
+  const [isImageLoading, setImageLoading] = useState(true);
   // Function to determine the title
   const determineTitle = (): string => {
     if ('title' in item) {
@@ -51,13 +54,21 @@ function CardBanner({ item }: CardBannerProps) {
   return (
     <>
       <div className="absolute flex items-center gap-2 z-20 overflow-hidden top-24 drop-shadow-lg left-3 lg:left-32 lg:top-[8.5rem]">
-        <Image
-          alt={determineTitle()}
-          src={getImageUrl()}
-          width={1000}
-          height={1000}
-          className="object-cover w-24 lg:w-40 rounded"
-        />
+        <div className="relative overflow-hidden">
+          <Image
+            alt={determineTitle()}
+            src={getImageUrl()}
+            width={1000}
+            height={1000}
+            onLoad={() => setImageLoading(false)}
+            className={`
+                transition-custom-blur
+                ${isImageLoading
+                ? 'scale-110 blur-2xl'
+                : 'scale-100 blur-0 group-hover:scale-110'
+              } object-cover w-24 lg:w-40 rounded`}
+          />
+        </div>
         <div className="flex flex-col gap-1">
           <p className="text-white font-magnatbold max-w-full sm:text-xl lg:text-2xl line-clamp-1">
             {determineTitle()}
