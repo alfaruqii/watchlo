@@ -33,6 +33,14 @@
     scrollbar-width: none;
     /* Firefox */
   }
+
+  .remove-blur {
+    @apply blur-0;
+  }
+
+  .transition-custom-blur {
+    @apply transition-all duration-700 ease-in-out;
+  }
 }
 
 .vds-volume-popup {
