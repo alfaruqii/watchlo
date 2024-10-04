@@ -7,6 +7,7 @@ import { Video } from '@/types/movies.type';
 import { usePathname } from 'next/navigation';
 
 function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
+  const [isImageLoading, setImageLoading] = useState(true);
   const pathName = usePathname();
   const pathType = pathName.split('/')[1]; // This gives you either 'movie' or 'tv'
   const isMoviePath = pathType.toLowerCase() === "movie" || pathType.toLowerCase() === "series";
@@ -39,10 +40,13 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
         {!isPlaying ? (
           <div className="relative h-full w-full cursor-pointer" onClick={handlePlay}>
             <Image
+              unoptimized
               src={trailer.thumbnail}
               alt="Video Thumbnail"
               layout="fill"
               objectFit="cover"
+              onLoad={() => setImageLoading(false)}
+              className={`transition-custom-blur object-cover rounded ${isImageLoading ? "blur-3xl" : "blur-0"}`}
             />
             <PlayButton />
           </div>
