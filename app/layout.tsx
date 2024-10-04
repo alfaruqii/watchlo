@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import { Analytics } from '@vercel/analytics/react';
 import localFont from "next/font/local";
 import { DM_Sans } from "next/font/google";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer";
 import ModalSearch from "./components/search/ModalSearch";
 import ModalDocs from "./components/docs/ModalDocs";
+import "./globals.css";
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 
@@ -36,6 +37,7 @@ export default function RootLayout({
         <div className="min-h-screen">
           <ModalDocs />
           {children}
+          <Analytics />
         </div>
         <Footer
           lightSize={4}
