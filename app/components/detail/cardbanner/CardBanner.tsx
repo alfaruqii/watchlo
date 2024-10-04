@@ -56,6 +56,7 @@ function CardBanner({ item }: CardBannerProps) {
       <div className="absolute flex items-center gap-2 z-20 overflow-hidden top-24 drop-shadow-lg left-3 lg:left-32 lg:top-[8.5rem]">
         <div className="relative overflow-hidden">
           <Image
+            unoptimized
             alt={determineTitle()}
             src={getImageUrl()}
             width={1000}
