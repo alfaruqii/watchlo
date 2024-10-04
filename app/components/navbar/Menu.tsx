@@ -25,7 +25,7 @@ function Menu({ isToggled = false }) {
           <p>Anime</p>
         </div>
       </Link>
-      <Link href="/">
+      <Link href="/docs">
         <div className="p-2 flex gap-1">
           <DocsIcon />
           <p>Docs</p>
