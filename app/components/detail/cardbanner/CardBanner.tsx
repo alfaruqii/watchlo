@@ -67,7 +67,7 @@ function CardBanner({ item }: CardBannerProps) {
                 ${isImageLoading
                 ? 'scale-110 blur-2xl'
                 : 'scale-100 blur-0 group-hover:scale-110'
-              } object-cover w-24 lg:w-40 rounded min-h-44`}
+              } object-cover w-24 lg:w-40 rounded min-h-32`}
           />
         </div>
         <div className="flex flex-col gap-1">
