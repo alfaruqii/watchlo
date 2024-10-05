@@ -39,13 +39,7 @@ export default function RootLayout({
           {children}
           <Analytics />
         </div>
-        <Footer
-          lightSize={4}
-          gap={1}
-          text="Created by faruqi"
-          font="default"
-          updateInterval={1000}
-        />
+        <Footer />
         <ModalSearch />
       </body>
     </html >
