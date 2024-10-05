@@ -17,7 +17,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('daisyui'), require('tailwind-scrollbar'), require('tailwindcss-animated')],
+  plugins: [require('daisyui'), require('tailwind-scrollbar')],
   daisyui: {
     themes: ["black", "garden"]
   }
