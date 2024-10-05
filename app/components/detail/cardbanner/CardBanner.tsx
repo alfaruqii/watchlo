@@ -27,7 +27,7 @@ function CardBanner({ item }: CardBannerProps) {
   // Function to get the correct image URL (Anime or Movie)
   const getImageUrl = (): string => {
     if ('coverImage' in item && item.coverImage) {
-      return item.coverImage.large || item.coverImage.medium || '';
+      return item.coverImage.large || item.coverImage.medium;
     }
     if ('poster_path' in item && item.backdrop_path) {
       return item.poster_path;
@@ -67,7 +67,7 @@ function CardBanner({ item }: CardBannerProps) {
                 ${isImageLoading
                 ? 'scale-110 blur-2xl'
                 : 'scale-100 blur-0 group-hover:scale-110'
-              } object-cover w-24 lg:w-40 rounded`}
+              } object-cover w-24 lg:w-40 rounded min-h-32`}
           />
         </div>
         <div className="flex flex-col gap-1">
