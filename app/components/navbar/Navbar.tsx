@@ -9,16 +9,9 @@ import ToggleSearch from "./ToggleSearch";
 import Menu from "./Menu";
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const { theme } = useThemeStore();
   const pathname = usePathname();
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -27,7 +20,10 @@ const Navbar = () => {
 
   const navLinks = [
     { href: "/", label: "Movies" },
-    { href: "/anime", label: "Anime" },
+    {
+      href: "/anime", label: "Anime",
+      badge: { text: "No ads", theme }
+    },
     {
       href: "/manga",
       label: "Manga",
@@ -42,15 +38,12 @@ const Navbar = () => {
     },
   ];
 
-  const bgClass = isScrolled
-    ? `${theme === "garden" ? "bg-base-100/80" : "bg-black/80"} backdrop-blur-lg`
-    : "bg-base-100";
   const textClass = theme === "black" ? "text-white" : "text-black";
 
   return (
     <>
       <Menu isToggled={isOpen} />
-      <div className={`${bgClass} sticky top-0 z-[90] flex items-center justify-between px-4 sm:py-2 drop-shadow-lg transition-all duration-300 sm:px-12`}>
+      <div className={`${theme === "garden" ? "bg-base-100 border-gray-700/20" : "bg-black border-gray-300/20"} sticky top-0 z-[90] flex items-center justify-between px-4 sm:py-2 border-b  transition-all duration-300 sm:px-12`}>
         <Link href="/" className={`drop-shadow-lg ${textClass}`}>
           <span className="sm:text-lg">Watch</span>
           <span className="font-magnatbold sm:text-lg">milo</span>
@@ -61,14 +54,14 @@ const Navbar = () => {
             <Link
               key={label}
               href={href}
-              className={disabled ? "pointer-events-none indicator" : ""}
+              className={badge ? disabled ? "pointer-events-none indicator" : "indicator" : ""}
               {...(external ? { target: "_blank" } : {})}
             >
-              <span className={disabled ? "text-gray-500 pr-5" : ""}>
+              <span className={badge ? disabled ? "text-gray-500 pr-5" : "pr-7" : ""}>
                 {label}
               </span>
               {badge && (
-                <div className={`indicator-item font-bold px-1 w-fit badge rounded indicator-top mt-1 indicator-end text-xs ${badge.theme === "black" ? "border-gray-400" : "border-gray-400"}`}>
+                <div className={`indicator-item font-bold px-1 w-fit badge rounded indicator-top mt-1 indicator-end text-xs ${badge.theme === "black" ? "border-gray-400 " : "border-gray-400"}`}>
                   {badge.text}
                 </div>
               )}
