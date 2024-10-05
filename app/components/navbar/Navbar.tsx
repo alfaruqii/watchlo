@@ -43,13 +43,13 @@ const Navbar = () => {
   return (
     <>
       <Menu isToggled={isOpen} />
-      <div className={`${theme === "garden" ? "bg-base-100 border-gray-700/20" : "bg-black border-gray-300/20"} sticky top-0 z-[90] flex items-center justify-between px-4 sm:py-2 border-b  transition-all duration-300 sm:px-12`}>
-        <Link href="/" className={`drop-shadow-lg ${textClass}`}>
+      <div className={`${theme === "garden" ? "bg-base-100 border-gray-700/20" : "bg-black border-gray-300/20"} sticky top-0 z-[90] flex items-center justify-between border-b px-4 transition-all  duration-300 sm:px-12 sm:py-2`}>
+        <Link href="/" className={`${textClass} drop-shadow-lg`}>
           <span className="sm:text-lg">Watch</span>
           <span className="font-magnatbold sm:text-lg">milo</span>
         </Link>
 
-        <nav className={`drop-shadow-lg hidden sm:flex sm:gap-6 lg:gap-10 font-normal ${textClass}`}>
+        <nav className={`${textClass} hidden font-normal drop-shadow-lg sm:flex sm:gap-8 lg:gap-12`}>
           {navLinks.map(({ href, label, disabled, badge, external }) => (
             <Link
               key={label}
@@ -61,7 +61,7 @@ const Navbar = () => {
                 {label}
               </span>
               {badge && (
-                <div className={`indicator-item font-bold px-1 w-fit badge rounded indicator-top mt-1 indicator-end text-xs ${badge.theme === "black" ? "border-gray-400 " : "border-gray-400"}`}>
+                <div className={`${badge.theme === "black" ? "border-gray-400 " : "border-gray-400"} badge indicator-item indicator-end indicator-top mt-1 w-fit rounded px-1 text-xs font-bold`}>
                   {badge.text}
                 </div>
               )}

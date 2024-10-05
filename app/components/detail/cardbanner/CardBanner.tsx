@@ -53,7 +53,7 @@ function CardBanner({ item }: CardBannerProps) {
 
   return (
     <>
-      <div className="absolute flex items-center gap-2 z-20 overflow-hidden top-24 drop-shadow-lg left-3 lg:left-32 lg:top-[8.5rem]">
+      <div className="absolute left-3 top-[6.5rem] z-20 flex items-center gap-2 overflow-hidden drop-shadow-lg lg:left-32 lg:top-[8.5rem]">
         <div className="relative overflow-hidden">
           <Image
             unoptimized
@@ -66,17 +66,17 @@ function CardBanner({ item }: CardBannerProps) {
                 transition-custom-blur
                 ${isImageLoading
                 ? 'scale-110 blur-2xl'
-                : 'scale-100 blur-0 group-hover:scale-110'
-              } object-cover w-24 lg:w-40 rounded min-h-32`}
+                : 'scale-100 group-hover:scale-110'}
+              min-h-32 w-24 rounded object-cover blur-0 lg:w-40`}
           />
         </div>
         <div className="flex flex-col gap-1">
-          <p className="text-white font-magnatbold max-w-full sm:text-xl lg:text-2xl line-clamp-1">
+          <p className="line-clamp-1 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl">
             {determineTitle()}
           </p>
-          <div className="flex gap-1 sm:gap-3 text-xs sm:text-base text-white">
+          <div className="flex gap-1 text-xs text-white sm:gap-3 sm:text-base">
             {getGenres().slice(0, 3).map((genre: string, i: number) => (
-              <span key={i} className="bg-gray-400/60 flex items-center max-w-20 sm:max-w-full text-center p-1 rounded">
+              <span key={i} className="flex max-w-20 items-center rounded bg-gray-400/60 p-1 text-center sm:max-w-full">
                 {genre}
               </span>
             ))}
