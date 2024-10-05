@@ -3,12 +3,15 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimeInfo } from "@/types/anime.type";
 import { MovieInfo, TVInfo } from "@/types/movies.type";
+import { usePathname } from "next/navigation";
 
 interface CardBannerProps {
   item: AnimeInfo | MovieInfo | TVInfo;
 }
 
 function CardBanner({ item }: CardBannerProps) {
+  const pathName = usePathname()
+  const pathType = pathName.split('/')[1];
   const [isImageLoading, setImageLoading] = useState(true);
   // Function to determine the title
   const determineTitle = (): string => {
@@ -53,7 +56,7 @@ function CardBanner({ item }: CardBannerProps) {
 
   return (
     <>
-      <div className="absolute left-3 top-[6.5rem] z-20 flex items-center gap-2 overflow-hidden drop-shadow-lg lg:left-32 lg:top-[8.5rem]">
+      <div className={`absolute left-3 ${pathType === "anime" ? "top-[6.5rem]" : "top-[6rem]"} z-20 flex items-center gap-2 overflow-hidden drop-shadow-lg lg:left-32 lg:top-[8rem]`}>
         <div className="relative overflow-hidden">
           <Image
             unoptimized
@@ -74,7 +77,7 @@ function CardBanner({ item }: CardBannerProps) {
           <p className="line-clamp-1 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl">
             {determineTitle()}
           </p>
-          <div className="flex gap-1 text-xs text-white sm:gap-3 sm:text-base">
+          <div className="flex gap-1 text-xs text-white sm:gap-2 sm:text-base">
             {getGenres().slice(0, 3).map((genre: string, i: number) => (
               <span key={i} className="flex max-w-20 items-center rounded bg-gray-400/60 p-1 text-center sm:max-w-full">
                 {genre}
