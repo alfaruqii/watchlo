@@ -32,7 +32,7 @@ export const Banner = ({ item }: BannerProps) => {
       return item.bannerImage;
     }
     if ("coverImage" in item && item.coverImage) {
-      return item.coverImage.large || item.coverImage.medium || "";
+      return item.coverImage.large || item.coverImage.medium;
     }
     if ("backdrop_path" in item && item.backdrop_path) {
       return item.backdrop_path;
