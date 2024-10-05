@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import localFont from "next/font/local";
 import { DM_Sans } from "next/font/google";
 import Navbar from "@/components/navbar/Navbar";
@@ -38,6 +39,7 @@ export default function RootLayout({
           <ModalDocs />
           {children}
           <Analytics />
+          <SpeedInsights />
         </div>
         <Footer />
         <ModalSearch />
