@@ -4,42 +4,62 @@ import DocsIcon from "../icons/DocsIcon";
 import AnimeIcon from "../icons/AnimeIcon";
 import MoviesIcon from "../icons/MoviesIcon";
 import GithubIcon from "../icons/GithubIcon";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Menu({ isToggled = false }) {
   const { theme } = useThemeStore();
 
+  const menuItems = [
+    { href: "/", icon: <MoviesIcon />, label: "Movies" },
+    { href: "/anime", icon: <AnimeIcon />, label: "Anime (No ads)" },
+    { href: "/docs", icon: <DocsIcon />, label: "Docs" },
+    {
+      href: "https://github.com/alfaruqii/watchlo",
+      icon: <GithubIcon />,
+      label: "Github",
+      external: true
+    },
+  ];
+
   return (
-    <div
-      className={`min-h-fit z-50 ${theme === "garden" ? "bg-gray-200/60" : "bg-black/70"} backdrop-blur-lg w-full fixed transition-all animate-delay-75 duration-200 animate-duration-500 animate-once pt-2 pb-5 px-3 ${isToggled ? "top-12 animate-fade-down" : "-top-96"
-        }`}
-    >
-      <Link href="/">
-        <div className="p-2 flex gap-1 w-full">
-          <MoviesIcon />
-          <p>Movies</p>
-        </div>
-      </Link>
-      <Link href="/anime">
-        <div className="p-2 flex gap-1">
-          <AnimeIcon />
-          <p>Anime</p>
-        </div>
-      </Link>
-      <Link href="/docs">
-        <div className="p-2 flex gap-1">
-          <DocsIcon />
-          <p>Docs</p>
-        </div>
-      </Link>
-      <Link href="https://github.com/alfaruqii/watchlo" target="_blank">
-        <div className="p-2 flex gap-1">
-          <GithubIcon />
-          <p>Github</p>
-        </div>
-      </Link>
-    </div>
+    <AnimatePresence>
+      {isToggled && (
+        <motion.ul
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.2 }}
+          className={`
+            fixed left-0 right-0 top-12 z-50 w-full overflow-hidden
+            border-b pb-2
+            ${theme === "garden" ? "bg-base-100 border-gray-700/20" : "bg-black border-gray-300/20"}
+            drop-shadow-xl 
+          `}
+        >
+          {menuItems.map((item, index) => (
+            <motion.li
+              key={item.label}
+              initial={{ opacity: 0, y: -20, x: -10 }}
+              animate={{ opacity: 1, y: 0, x: 0 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <Link
+                href={item.href}
+                {...(item.external ? { target: "_blank" } : {})}
+                className="flex h-full w-full items-center gap-1.5 px-4 py-3 
+                           transition duration-100"
+              >
+                <span className="flex items-center justify-center">
+                  {item.icon}
+                </span>
+                {item.label}
+              </Link>
+            </motion.li>
+          ))}
+        </motion.ul>
+      )}
+    </AnimatePresence>
   );
 }
 
 export default Menu;
-
