@@ -3,7 +3,7 @@
 import { useModalStore } from '@/store/modalStore';
 import SearchIcon from '../icons/SearchIcon';
 import { useThemeStore } from '@/store/themeStore';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Searched from './Searched';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePathname } from 'next/navigation'; // Use usePathname to track route changes
@@ -14,10 +14,19 @@ function ModalSearch() {
   const [query, setQuery] = useState<string>('');
   const debouncedQuery = useDebounce(query, 300);
   const pathname = usePathname(); // Get current path
+  const prevPathnameRef = useRef<string>(pathname); // Store the previous pathname
+  const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input element
 
   const handleSearch = useCallback((value: string) => {
     setQuery(value);
   }, []);
+
+  // Focus the input when the modal opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]); // Depend on isOpen to trigger focus when modal is opened
 
   // Close the modal when the path changes
   useEffect(() => {
@@ -26,6 +35,14 @@ function ModalSearch() {
     }
   }, [pathname]); // Depend on the pathname to detect changes
 
+  // Clear the search input only if there is a real pathname change
+  useEffect(() => {
+    if (pathname !== prevPathnameRef.current) {
+      setQuery('');  // Clear the search input
+      prevPathnameRef.current = pathname; // Update the previous pathname
+    }
+  }, [pathname]); // Depend on pathname to detect actual path changes
+
   return (
     <dialog open={isOpen} className={`z-50 ${isOpen ? "modal modal-middle modal-open" : "hidden"}`}>
       <div className={`modal-box flex flex-col py-4 gap-4 bg-opacity-60 rounded border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} backdrop-blur-lg max-h-96`}>
@@ -33,6 +50,7 @@ function ModalSearch() {
           <label className="input pl-0 h-8 border-none !outline-none flex items-center bg-transparent rounded-none">
             <SearchIcon />
             <input
+              ref={inputRef} // Attach the ref to the input element
               type="text"
               placeholder="Search"
               value={query}
