@@ -12,12 +12,14 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    container:
-      image: node:20
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 21
+
       - run: npm ci
       - run: npm run test
       - run: npm run build
