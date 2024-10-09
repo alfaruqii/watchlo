@@ -22,10 +22,3 @@ jobs:
 
       - run: npm ci
       - run: npm run test
-      - run: npm run build
-        env:
-          NEXT_PUBLIC_WATCHLO_API_V0: ${{ secrets.WATCHLO_API_V0 }}
-          NEXT_PUBLIC_WATCHLO_API_V1: ${{ secrets.WATCHLO_API_V1 }}
-          NEXT_PUBLIC_WATCHLO_API_V2: ${{ secrets.WATCHLO_API_V2 }}
-          NEXT_PUBLIC_WATCHLO_SOURCE_EMBED: ${{ secrets.WATCHLO_SOURCE_EMBED }}
-          NEXT_PUBLIC_ANIME_PATH: ${{ secrets.ANIME_PATH }}
