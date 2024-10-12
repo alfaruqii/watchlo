@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Spin as Hamburger } from "hamburger-react";
 import { ToggleTheme } from "./ToggleTheme";
@@ -44,9 +45,15 @@ const Navbar = () => {
     <>
       <Menu isToggled={isOpen} />
       <div className={`${theme === "garden" ? "bg-base-100 border-gray-700/20" : "bg-black border-gray-300/20"} sticky top-0 z-[90] flex items-center justify-between border-b px-4 transition-all  duration-300 sm:px-12 sm:py-2`}>
-        <Link href="/" className={`${textClass} drop-shadow-lg`}>
-          <span className="sm:text-lg">Watch</span>
-          <span className="font-magnatbold sm:text-lg">milo</span>
+        <Link href="/" className={`${textClass} relative h-auto w-24 drop-shadow-lg`}>
+          <Image
+            src={`/${theme === "garden" ? "wb" : "ww"}.png`}
+            alt="logo"
+            width={128}
+            height={128}
+            sizes="(max-width: 640px) 96px, 128px"
+            className="w-24 sm:w-32 h-auto"
+          />
         </Link>
 
         <nav className={`${textClass} hidden font-normal drop-shadow-lg sm:flex sm:gap-8 lg:gap-12`}>
