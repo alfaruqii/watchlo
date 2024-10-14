@@ -47,7 +47,7 @@ function ModalSearch() {
 
   return (
     <dialog open={isOpen} className={`z-[1000] backdrop-blur-md ${isOpen ? "modal modal-middle modal-open" : "hidden"}`}>
-      <div className={`modal-box flex flex-col py-0 px-0 gap-4 bg-opacity-80 rounded-lg border ${isWhiteMode ? "border-gray-700/60" : "border-gray-600/80"} backdrop-blur-lg max-h-96`}>
+      <div className={`modal-box flex flex-col py-0 px-0 gap-2 bg-opacity-80 rounded-lg border ${isWhiteMode ? "border-gray-700/60" : "border-gray-600/80"} backdrop-blur-lg max-h-96`}>
         <div className={`w-full ${query.length > 0 ? `border-b ${isWhiteMode ? "border-gray-400 " : "border-gray-700 "}` : ""} px-4 py-3`}>
           <label className="input pl-0 h-8 border-none !outline-none flex items-center bg-transparent rounded-none">
             <SearchIcon />
