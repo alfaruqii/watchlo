@@ -47,16 +47,16 @@ function SearchedResult(props: SearchedParams) {
             <span className="text-sm uppercase">
               {isAnime ? props.format || "unknown" : props.media_type || "unknown"}
             </span> |
-            <span className="text-sm capitalize">
+            <span className="text-sm capitalize line-clamp-1">
               {isAnime ? props.seasonYear || props.title.native || props.format || "unknown" : props.release_date?.split('-')[0] || props.original_language || props.origin_country?.[0] || "unknown"}
             </span>
           </div>
-          <div className="flex gap-1">
-            {isAnime ? props.genres?.slice(0, 2).map((genre: string, i: number) => (
+          <div className="flex flex-wrap gap-1">
+            {isAnime ? props.genres?.length ? props.genres?.slice(0, 2).map((genre: string, i: number) => (
               <SearchedGenre key={i} genre={genre} theme={theme} />
-            )) : props.genre_names?.slice(0, 2).map((genre: string, i: number) => (
+            )) : props.tags?.length ?? props.tags?.map((tag) => <span className="text-sm line-clamp-3">{tag.name}</span>) : props.genre_names?.length ? props.genre_names?.slice(0, 2).map((genre: string, i: number) => (
               <SearchedGenre key={i} genre={genre} theme={theme} />
-            ))
+            )) : <span className="line-clamp-3 text-sm">{props.overview}</span>
             }
           </div>
         </div>
