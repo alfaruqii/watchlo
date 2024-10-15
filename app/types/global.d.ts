@@ -1,7 +1,7 @@
 export interface Routes {
   pathname: string,
   query: {
-    title: string | number;
+    id: string;
     ep: number;
     season?: number;
   }
@@ -10,5 +10,10 @@ export interface Routes {
 export interface AnimeRecQueryParams {
   id?: string;
   q?: string;
+}
+
+export interface AnimeSchQueryParams {
+  p?: string;
+  pp?: string;
 }
 
