@@ -1,3 +1,11 @@
+export type IdProvider = {
+  idGogo: string;
+  idGogoDub: string;
+  idZoro: string;
+  id9anime: string;
+  idPahe: string;
+}
+
 // Title type with full structure
 export type Title = {
   userPreferred: string;
@@ -123,13 +131,7 @@ export interface AnimeInfo extends AnimeBase {
   code: number;
   message: string;
   idMal: number;
-  id_provider: {
-    idGogo: string;
-    idGogoDub: string;
-    idZoro: string;
-    id9anime: string;
-    idPahe: string;
-  };
+  id_provider: IdProvider;
   title: Title;
   dub: boolean;
   description: string;
