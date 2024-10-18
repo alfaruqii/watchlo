@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { AnimeInfo } from "@/types/anime.type";
 import { MovieInfo, TVInfo } from "@/types/movies.type";
@@ -10,85 +10,82 @@ interface CardBannerProps {
 }
 
 function CardBanner({ item }: CardBannerProps) {
-  const pathName = usePathname()
-  const pathType = pathName.split('/')[1];
+  const pathName = usePathname();
   const [isImageLoading, setImageLoading] = useState(true);
-  // Function to determine the title
-  const determineTitle = (): string => {
+
+  const isAnime = useMemo(() => pathName.split('/')[1] === "anime", [pathName]);
+
+  const title = useMemo(() => {
     if ('title' in item) {
       if (typeof item.title === 'object') {
         return item.title.userPreferred || item.title.english || item.title.romaji || item.title.native || 'Unknown Title';
       }
       return item.title || "Unknown Title";
     }
-    if ('name' in item) {
-      return item.name;
-    }
-    return 'Unknown Title';
-  };
+    return ('name' in item) ? item.name : 'Unknown Title';
+  }, [item]);
 
-  // Function to get the correct image URL (Anime or Movie)
-  const getImageUrl = (): string => {
+  const imageUrl = useMemo(() => {
     if ('coverImage' in item && item.coverImage) {
-      return item.coverImage.large || item.coverImage.medium;
+      return item.coverImage.large || item.coverImage.medium || item.coverImage.color;
     }
-    if ('poster_path' in item && item.backdrop_path) {
-      return item.poster_path;
-    }
-    return '/fallback-card.webp'; // Fallback in case there's no image available
-  };
+    return ('poster_path' in item && item.poster_path) ? item.poster_path : '/fallback-card.webp';
+  }, [item]);
 
-  // Function to get genres (handling both AnimeInfo and MovieInfo)
-  const getGenres = (): string[] => {
+  const genres = useMemo(() => {
     if ('genres' in item) {
-      // For AnimeInfo, genres are an array of strings
-      if (typeof item.genres[0] === 'string') {
-        return item.genres as string[];
+      if (item.genres.length > 0) {
+        return typeof item.genres[0] === 'string'
+          ? item.genres as string[]
+          : (item.genres as { name: string }[]).map(genre => genre.name);
       }
 
-      // For MovieInfo, genres are an array of objects
-      if (typeof item.genres[0] === 'object' && item.genres[0]["name"]) {
-        return (item as MovieInfo).genres.map((genre) => genre.name);
+      const mergedArray = [];
+      if ("id_provider" in item) {
+        mergedArray.push(...item.tags.slice(0, 2).map(tag => tag.name));
       }
+      if ("imdb_id" in item) {
+        const spokenLang = (item as MovieInfo).spoken_languages?.slice(0, 2).map(lang => lang.english_name);
+        const originCountry = (item as MovieInfo).origin_country?.slice(0, 2);
+        mergedArray.push(...(spokenLang || []), ...(originCountry || []));
+      }
+      return mergedArray;
     }
     return [];
-  };
+  }, [item]);
 
   return (
-    <>
-      <div className={`absolute left-3 ${pathType === "anime" ? "top-[6.5rem]" : "top-[6rem]"} z-20 flex items-center gap-2 overflow-hidden drop-shadow-lg lg:left-32 lg:top-[8rem]`}>
-        <div className="relative overflow-hidden">
-          <Image
-            unoptimized
-            alt={determineTitle()}
-            src={getImageUrl()}
-            width={1000}
-            height={1000}
-            onLoad={() => setImageLoading(false)}
-            className={`
-                transition-custom-blur
-                ${isImageLoading
-                ? 'scale-110 blur-2xl'
-                : 'scale-100 group-hover:scale-110'}
-              min-h-32 w-24 rounded object-cover blur-0 lg:w-40`}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <p className="line-clamp-1 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl">
-            {determineTitle()}
-          </p>
-          <div className="flex gap-1 text-xs text-white sm:gap-2 sm:text-base">
-            {getGenres().slice(0, 3).map((genre: string, i: number) => (
-              <span key={i} className="flex max-w-20 items-center rounded bg-gray-400/60 p-1 text-center sm:max-w-full">
-                {genre}
-              </span>
-            ))}
-          </div>
+    <div className={`absolute left-5 ${isAnime ? "top-[3.2rem] lg:top-[5.8rem]" : "top-[3rem] lg:top-[5.4rem]"} z-20 flex items-center gap-2 overflow-hidden drop-shadow-lg lg:left-32`}>
+      <div className="relative w-24 h-32 min-w-24 md:w-32 md:h-44 lg:w-40 lg:h-56 overflow-hidden">
+        <Image
+          unoptimized
+          alt={title}
+          src={imageUrl}
+          layout="fill"
+          objectFit="cover"
+          onLoad={() => setImageLoading(false)}
+          className={`
+            transition-custom-blur rounded
+            ${isImageLoading
+              ? 'scale-110 blur-2xl'
+              : 'scale-100 group-hover:scale-110 blur-0'}
+          `}
+        />
+      </div>
+      <div className={`flex flex-col relative gap-1 ${isAnime ? "top-3 sm:top-2" : "top-4"}`}>
+        <p className="line-clamp-1 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl">
+          {title}
+        </p>
+        <div className="flex flex-wrap gap-1 text-xs text-white sm:gap-2 sm:text-base">
+          {genres.slice(0, 3).map((genre: string, i: number) => (
+            <div key={i} className="flex items-center rounded truncate font-semibold text-black bg-gray-400 p-1 text-center sm:max-w-full">
+              <p>{genre}</p>
+            </div>
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
 export default CardBanner;
-
