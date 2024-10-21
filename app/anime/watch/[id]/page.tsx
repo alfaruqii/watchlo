@@ -1,3 +1,4 @@
+"use client"
 import EpisodesComponent from '@/components/watch/episodes/EpisodesComponent';
 import { Media } from '@/components/media/Media';
 import { AnimeServiceV1 } from '@/services';
@@ -13,9 +14,9 @@ async function WatchPage({ params, searchParams }: WatchPageParams) {
   const { title, ep } = searchParams;
 
   // Fetch the stream info (for video sources)
-  const { data: dataStream }: { data: StreamInfo } = await AnimeServiceV1.getAnimeStream(`${id}`);
+  const { data: dataStream }: { data: StreamInfo } = await AnimeServiceV1.getAnimeStreamGogo(`${id}`);
   // Fetch the anime details (for title, image, etc.)
-  const { data: dataInfo }: { data: AnimeDetails } = await AnimeServiceV1.getAnimeInfoV1(`${title}`);
+  const { data: dataInfo }: { data: AnimeDetails } = await AnimeServiceV1.getAnimeInfoV1Gogo(`${title}`);
 
   return (
     <>
