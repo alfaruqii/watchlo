@@ -8,7 +8,17 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      magnatbold: ['var(--font-magnatBold)'],
+      magnatbold: ["var(--font-magnatBold)"],
+    },
+    container: {
+      screens: {
+        lg: "100%",
+        xl: "100%",
+        "2xl": "100%",
+        "3xl": "100%",
+        "4xl": "100%",
+        "5xl": "1920px",
+      },
     },
     extend: {
       colors: {
@@ -17,9 +27,13 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('daisyui'), require('tailwind-scrollbar')],
+  plugins: [
+    require("daisyui"),
+    require("tailwind-scrollbar"),
+    require("@vidstack/react/tailwind.cjs"),
+  ],
   daisyui: {
-    themes: ["black", "garden"]
-  }
+    themes: ["black", "garden"],
+  },
 };
 export default config;
