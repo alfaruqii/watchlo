@@ -37,7 +37,9 @@ export default function RootLayout({
         <Navbar />
         <div className="min-h-screen">
           <ModalDocs />
-          {children}
+          <div className="container mx-auto relative">
+            {children}
+          </div>
           <Analytics />
           <SpeedInsights />
         </div>
