@@ -1,17 +1,15 @@
 function SkeletonEpisodeNum() {
   return (
-    <>
-      <div className="lg:max-w-[50%] flex flex-col pt-1.5">
-        <div className="flex flex-wrap gap-2 scrollbar scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-800 scrollbar-track-gray-300 max-h-96 2xl:max-h-[30rem] overflow-y-scroll ">
-          {
-            Array(18).fill(0).map((_: number, i: number) => (
-              <div key={i} className="min-w-24 skeleton h-10"></div>
-            ))
-          }
-        </div>
+    <div className="flex flex-col pt-1.5 col-span-2">
+      <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-96 overflow-y-auto scrollbar scrollbar-track-gray-300 scrollbar-thumb-gray-800 p-2">
+        {Array(18)
+          .fill(0)
+          .map((_: number, i: number) => (
+            <div key={i} className="skeleton h-10 w-full"></div>
+          ))}
       </div>
-    </>
-  )
+    </div>
+  );
 }
 
-export default SkeletonEpisodeNum
+export default SkeletonEpisodeNum;

@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
 
 function SkeletonMediaPlayer() {
   return (
     <>
-      <div className="skeleton h-44 sm:h-96 lg:w-1/2"></div>
+      <div className="lg:col-span-3 flex flex-col gap-3">
+        <div className="h-52 skeleton sm:h-96 lg:h-[28rem]"></div>
+        <div className="h-11 skeleton w-32"></div>
+      </div>
     </>
-  )
+  );
 }
 
-export default SkeletonMediaPlayer
+export default SkeletonMediaPlayer;
