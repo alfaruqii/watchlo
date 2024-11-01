@@ -34,7 +34,7 @@ if you want to trigger a test if there are any  changes
 
 ## Support
 
-What does it feels like asking for a star
+What it feels like asking for a star
 
 ![Meme](https://res.cloudinary.com/de6icstca/image/upload/v1728121626/watchlo/readme/meme_ie1fqr_c_fill_w_200_xkk7xg.jpg)
 
