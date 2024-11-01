@@ -11,7 +11,7 @@ function Footer() {
             Disclaimer | Please use this site wisely, dont use it to search some inappropriate film, because the purpose of this project is not for that, grow up.
           </p>
           <p className="mt-2">
-            Copyright © 2024 Watchlo
+            Copyright © 2024 Watchlo | Made by faruqi.
           </p>
         </div>
       </div>
