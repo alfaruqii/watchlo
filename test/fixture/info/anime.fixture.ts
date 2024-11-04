@@ -1,56 +1,116 @@
-export const animeFixture = {
-  id: 1,
+export const animeInfoV2Fixture = {
   code: 200,
-  message: "Success",
-  idMal: 1,
+  message: "success",
+  id: 1535,
+  idMal: 1535,
   id_provider: {
-    idGogo: "gogo_id",
-    idGogoDub: "gogo_dub_id",
-    idZoro: "zoro_id",
-    id9anime: "9anime_id",
-    idPahe: "pahe_id",
+    idGogo: "death-note",
+    idGogoDub: "death-note-dub",
+    idZoro: "death-note-60",
+    id9anime: "death-note.2r4r",
+    idPahe: "672",
   },
   title: {
-    userPreferred: "Anime Title",
-    romaji: "Romaji Title",
-    english: "English Title",
-    native: "Native Title",
+    romaji: "DEATH NOTE",
+    english: "Death Note",
+    native: "DEATH NOTE",
+    userPreferred: "DEATH NOTE",
   },
   dub: true,
-  description: "This is an anime description.",
+  description:
+    "Light Yagami is a genius high school student who is about to learn about life through a book of death. When a bored shinigami, a God of Death, named Ryuk drops a black notepad called a <i>Death Note</i>, Light receives power over life and death with the stroke of a pen. Determined to use this dark gift for the best, Light sets out to rid the world of evil… namely, the people he believes to be evil. Should anyone hold such power?<br>\n<br>\nThe consequences of Light’s actions will set the world ablaze.<br>\n<br>\n(Source: Viz Media)",
   coverImage: {
-    large: "https://example.com/cover-large.jpg",
-    medium: "https://example.com/cover-medium.jpg",
-    color: "https://example.com/cover-color.jpg",
+    large:
+      "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1535-4r88a1tsBEIz.jpg",
+    medium:
+      "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx1535-4r88a1tsBEIz.jpg",
+    color: null,
   },
-  bannerImage: "https://example.com/banner.jpg",
-  genres: ["Action", "Adventure"],
+  bannerImage:
+    "https://s4.anilist.co/file/anilistcdn/media/anime/banner/1535.jpg",
+  genres: ["Mystery", "Psychological", "Supernatural", "Thriller"],
   tags: [
-    { id: 1, name: "Adventure" },
-    { id: 2, name: "Fantasy" },
+    {
+      id: 648,
+      name: "Crime",
+    },
+    {
+      id: 694,
+      name: "Detective",
+    },
+    {
+      id: 104,
+      name: "Anti-Hero",
+    },
   ],
   status: "FINISHED",
   format: "TV",
-  episodes: 24,
-  year: 2020,
+  episodes: 37,
+  year: 2006,
   season: "FALL",
-  duration: 24,
-  startIn: { year: 2020, month: 10, day: 1 },
-  endIn: { year: 2021, month: 3, day: 27 },
+  duration: 23,
+  startIn: {
+    year: 2006,
+    month: 10,
+    day: 4,
+  },
+  endIn: {
+    year: 2007,
+    month: 6,
+    day: 27,
+  },
   nextair: null,
   score: {
-    averageScore: 85,
-    decimalScore: 8.5,
+    averageScore: 84,
+    decimalScore: 8.4,
   },
-  popularity: 120000,
-  siteUrl: "https://example.com/anime",
+  popularity: 740433,
+  siteUrl: "https://anilist.co/anime/1535",
   trailer: {
-    id: "trailer1",
-    site: "YouTube",
-    thumbnail: "https://example.com/trailer-thumbnail.jpg",
+    id: "NlJZ-YgAt-c",
+    site: "youtube",
+    thumbnail: "https://i.ytimg.com/vi/NlJZ-YgAt-c/hqdefault.jpg",
   },
-  studios: [{ name: "Studio Example" }],
-  relation: [],
+  studios: [
+    {
+      name: "MADHOUSE",
+    },
+  ],
+  relation: [
+    {
+      id: 30021,
+      idMal: 21,
+      title: {
+        romaji: "DEATH NOTE",
+        english: "Death Note",
+        native: "DEATH NOTE",
+        userPreferred: "DEATH NOTE",
+      },
+      coverImage: {
+        large:
+          "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx30021-FE6kmrfpuKyb.jpg",
+        medium:
+          "https://s4.anilist.co/file/anilistcdn/media/manga/cover/small/bx30021-FE6kmrfpuKyb.jpg",
+        color: "#f1e4ae",
+      },
+      bannerImage:
+        "https://s4.anilist.co/file/anilistcdn/media/manga/banner/n30021-eZbrTpIjv10E.jpg",
+      genres: ["Drama", "Mystery", "Psychological", "Supernatural", "Thriller"],
+      tags: [
+        {
+          id: 694,
+          name: "Detective",
+        },
+      ],
+      type: "MANGA",
+      format: "MANGA",
+      status: "FINISHED",
+      episodes: null,
+      duration: null,
+      averageScore: 84,
+      season: null,
+    },
+  ],
 };
 
 export const popularAnime = {
@@ -102,51 +162,11 @@ export const popularAnime = {
   nextAiringEpisode: null,
 };
 
-export const trendingAnime = {
-  id: 171018,
-  idMal: 57334,
-  status: "RELEASING",
-  title: {
-    userPreferred: "Dandadan",
-    romaji: "Dandadan",
-    english: "DAN DA DAN",
-    native: "ダンダダン",
-  },
-  genres: ["Action", "Comedy", "Drama", "Romance", "Sci-Fi", "Supernatural"],
-  tags: [
-    {
-      id: 321,
-      name: "Urban Fantasy",
-    },
-  ],
-  trailer: {
-    id: "vnRmIBoyfBM",
-    site: "youtube",
-    thumbnail: "https://i.ytimg.com/vi/vnRmIBoyfBM/hqdefault.jpg",
-  },
-  description:
-    "This is a story about Momo, a high school girl who comes from a family of spirit mediums, and her classmate Okarun, an occult fanatic. After Momo rescues Okarun from being bullied, they begin talking. However, an argument ensues between them since Momo believes in ghosts but denies aliens exist, and Okarun believes in aliens but denies ghosts exist.\n<br><br>\nTo prove to each other what they believe in is real, Momo goes to an abandoned hospital where a UFO has been spotted and Okarun goes to a tunnel rumored to be haunted. To their surprise, they each encounter overwhelming paranormal activities that transcend comprehension. Amid these predicaments, Momo awakens her hidden power and Okarun gains the power of a curse to overcome these new dangers! Their fateful love begins as well!?\n<br><br>\nThe story of the occult battle and adolescence starts!<br><br>\n(Source: Crunchyroll) <br><br>\n\n<i>Notes: <br>\n- Worldwide premiere of Episode 1 before the Japanese television premiere occurred at Anime Expo July 6, 2024. <br>\n- Episodes 1-3 titled as <b>DAN DA DAN: FIRST ENCOUNTER</b> was pre-screened in advance in theaters on August 31, 2024 in Asia, September 7, 2024 in Europe and September 13, 2024 in North America. The regular TV broadcast began October 4, 2024.</i>",
-  format: "TV",
-  bannerImage:
-    "https://s4.anilist.co/file/anilistcdn/media/anime/banner/171018-SpwPNAduszXl.jpg",
-  coverImage: {
-    extraLarge:
-      "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx171018-2ldCj6QywuOa.jpg",
-    large:
-      "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx171018-2ldCj6QywuOa.jpg",
-    medium:
-      "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx171018-2ldCj6QywuOa.jpg",
-    color: "#e47850",
-  },
-  episodes: 12,
-  meanScore: 84,
-  duration: 24,
-  season: "FALL",
-  seasonYear: 2024,
-  averageScore: 84,
-  nextAiringEpisode: {
-    airingAt: 1730993160,
-    timeUntilAiring: 437497,
-    episode: 6,
-  },
+export const recentAnime = {
+  id: "blue-lock",
+  episodeId: "blue-lock-episode-nagi-additional-time-episode-1",
+  episodeNumber: 1,
+  title: "Blue Lock: Episode Nagi - Additional Time!",
+  image: "https://gogocdn.net/cover/blue-lock-episode-nagi-additional-time.png",
+  url: "https://anitaku.pe/blue-lock-episode-nagi-additional-time-episode-1",
 };
