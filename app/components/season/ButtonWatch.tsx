@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 function ButtonWatch({ text, season, ep = 1, id }: { text: string; season?: number; ep?: number; id?: number; isAnime?: boolean }) {
-  const routes = `/series/watch/${id}/season/${season}/ep/${ep}`;
+  const routes = { pathname: `/series/watch`, query: { id: id, season, ep } };
   return (
     <>
       {
