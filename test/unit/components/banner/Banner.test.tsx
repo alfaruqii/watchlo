@@ -18,7 +18,14 @@ jest.mock("next/image", () => ({
           width: "100%",
         }
       : {};
-    return <img data-testid="mock-image" {...rest} style={style} />;
+    return (
+      <img
+        data-testid="mock-image"
+        {...rest}
+        unoptimized="true"
+        style={style}
+      />
+    );
   },
 }));
 
