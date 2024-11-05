@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { data } = await AnimeServiceV1.getAnimeInfoV1Gogo(query);
+    const { data } = await AnimeServiceV1.getAnimeStreamGogo(query);
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error searching anime:", error);
@@ -23,3 +23,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

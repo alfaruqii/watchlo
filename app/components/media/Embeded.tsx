@@ -1,30 +1,44 @@
-import { getEnv } from "@/utils/getEnv"
+import { getEnv } from "@/utils/getEnv";
 
 type EmbededProps = {
   id: string;
   type: "movie" | "tv";
-  season?: number;
-  ep?: number;
-}
+  season?: string;
+  ep?: string;
+};
 
-function Embeded({ id, type, season = 1, ep = 1 }: EmbededProps) {
+function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
   const determinePathQuery = (): string => {
-    if (type.toLowerCase() === "tv") return `/tv?tmdb=${id}&season=${season}&episode=${ep}`
+    if (type.toLowerCase() === "tv") return `/tv/${id}/${season}/${ep}`;
     return `/movie/${id}`;
-  }
+  };
 
-  const source = `${(getEnv("WATCHLO_SOURCE_EMBED") ?? process.env["NEXT_PUBLIC_WATCHLO_SOURCE_EMBED"])}${determinePathQuery()}`
+  const source = `${
+    getEnv("WATCHLO_SOURCE_EMBED") ??
+    process.env["NEXT_PUBLIC_WATCHLO_SOURCE_EMBED"]
+  }${determinePathQuery()}`;
   return (
     <>
-      <div className="mt-4 flex flex-col items-center overflow-hidden w-full">
-        {
-          type.toLowerCase() === "movie" &&
+      <div
+        className={`mt-4 flex flex-col items-center overflow-hidden w-full ${
+          type.toLowerCase() === "tv" ? "col-span-3" : ""
+        }`}
+      >
+        {type.toLowerCase() === "movie" && (
           <p className="text-center w-full text-xl mb-2 font-bold">Watch 🎬</p>
-        }
-        <iframe src={source ?? "https://www.youtube.com/embed/xvFZjo5PgG0?si=ANsa_ekk0Jg9zbWg"} referrerPolicy="origin" allowFullScreen className="rounded drop-shadow-lg"></iframe>
+        )}
+        <iframe
+          src={
+            source ??
+            "https://www.youtube.com/embed/xvFZjo5PgG0?si=ANsa_ekk0Jg9zbWg"
+          }
+          referrerPolicy="origin"
+          allowFullScreen
+          className="rounded drop-shadow-lg"
+        ></iframe>
       </div>
     </>
-  )
+  );
 }
 
-export default Embeded
+export default Embeded;

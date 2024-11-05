@@ -1,36 +1,51 @@
+interface Genre {
+  id: number;
+  name: string;
+}
+
+interface ProductionCompany {
+  id: number;
+  logo_path: string | null;
+  name: string;
+  origin_country: string;
+}
+
+interface ProductionCountry {
+  iso_3166_1: string;
+  name: string;
+}
+
+interface SpokenLanguage {
+  english_name: string;
+  iso_639_1: string;
+  name: string;
+}
+
+interface Collection {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
+}
+
 interface BaseMediaInfo {
   adult: boolean;
   backdrop_path: string;
-  genres: {
-    id: number;
-    name: string;
-  }[];
+  genre_names: string[]; // Array of genre names as strings
   homepage: string;
   id: number;
   original_language: string;
   overview: string;
   popularity: number;
   poster_path: string;
-  production_companies: {
-    id: number;
-    logo_path: string | null;
-    name: string;
-    origin_country: string;
-  }[];
-  production_countries: {
-    iso_3166_1: string;
-    name: string;
-  }[];
-  spoken_languages: {
-    english_name: string;
-    iso_639_1: string;
-    name: string;
-  }[];
+  origin_country: string[];
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
+  spoken_languages: SpokenLanguage[];
   status: string;
   tagline: string;
   vote_average: number;
   vote_count: number;
-  genre_names: string[];
 }
 
 export interface MovieInfo extends BaseMediaInfo {
@@ -40,17 +55,10 @@ export interface MovieInfo extends BaseMediaInfo {
   runtime: number;
   title: string;
   video: boolean;
-}
-
-export interface Seasons {
-  air_date: string;
-  episode_count: number;
-  id: number;
-  name: string;
-  overview: string;
-  poster_path: string;
-  season_number: number;
-  vote_average: number;
+  belongs_to_collection: Collection | null;
+  budget: number | null;
+  imdb_id: string;
+  genres: Genre[];
 }
 
 export interface TVInfo extends BaseMediaInfo {
@@ -67,48 +75,59 @@ export interface TVInfo extends BaseMediaInfo {
   in_production: boolean;
   languages: string[];
   last_air_date: string;
-  last_episode_to_air: {
-    id: number;
-    name: string;
-    overview: string;
-    vote_average: number;
-    vote_count: number;
-    air_date: string;
-    episode_number: number;
-    episode_type: string;
-    production_code: string;
-    runtime: number;
-    season_number: number;
-    show_id: number;
-    still_path: string;
-  };
+  last_episode_to_air: SeriesEpisode;
   name: string;
-  next_episode_to_air: null | unknown;
-  networks: {
-    id: number;
-    logo_path: string;
-    name: string;
-    origin_country: string;
-  }[];
+  next_episode_to_air: SeriesEpisode | null;
+  networks: ProductionCompany[];
   number_of_episodes: number;
   number_of_seasons: number;
-  origin_country: string[];
   original_name: string;
   seasons: Seasons[];
   type: string;
+  genres: Genre[];
+}
+
+export interface Seasons {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+  vote_average: number;
+}
+
+interface BaseEpisode {
+  id: number;
+  name: string;
+  overview: string;
+  vote_average: number;
+  vote_count: number;
+  air_date: string;
+  episode_number: number;
+  season_number: number;
+  still_path: string | null;
+}
+
+export interface SeriesEpisode extends BaseEpisode {
+  episode_type: string;
+  production_code: string;
+  runtime: number;
+  show_id: number;
 }
 
 export interface Video {
-  id: string,
-  key: string,
-  name: string,
-  site: string,
-  type: string,
-  official: boolean,
-  published_at: string,
-  iso_639_1: string,
-  iso_3166_1: string,
-  thumbnail: string
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+  published_at: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  thumbnail: string;
 }
 
 export interface CrewMember {
@@ -123,24 +142,6 @@ export interface GuestStar {
   name: string;
   character: string;
   order: number;
-}
-
-export interface SeriesEpisode {
-  air_date: string;
-  episode_number: number;
-  episode_type: string;
-  id: number;
-  name: string;
-  overview: string;
-  production_code: string;
-  runtime: number;
-  season_number: number;
-  show_id: number;
-  still_path: string | null;
-  vote_average: number;
-  vote_count: number;
-  crew: CrewMember[];
-  guest_stars: GuestStar[];
 }
 
 export interface TV {
@@ -162,7 +163,6 @@ export interface AuthorDetails {
   rating: number;
 }
 
-
 export interface Review {
   id: string;
   author: string;
@@ -174,15 +174,15 @@ export interface Review {
   rating?: number;
 }
 
-export type MediaType = 'movie' | 'tv';
+export type MediaType = "movie" | "tv";
 
 export interface SearchedMovies {
   backdrop_path: string;
   id: number;
-  name?: string;  // For TV shows
-  original_name?: string;  // For TV shows
-  title?: string;  // For movies
-  original_title?: string;  // For movies
+  name?: string; // For TV shows
+  original_name?: string; // For TV shows
+  title?: string; // For movies
+  original_title?: string; // For movies
   overview: string;
   poster_path: string;
   media_type: MediaType;
@@ -202,4 +202,3 @@ export interface SearchedMovies {
   release_date?: string;
   video?: boolean;
 }
-

@@ -8,6 +8,7 @@ function loading() {
       <SkeletonEpisodes />
       <SkeletonEpisodes />
       <SkeletonEpisodes />
+      <SkeletonEpisodes />
     </>
   )
 }

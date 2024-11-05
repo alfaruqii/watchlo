@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AnimeServiceV1 } from "@/services";
+import { AnimeServiceV2 } from "@/services";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { data } = await AnimeServiceV1.getAnimeInfoV1Gogo(query);
+    const { data } = await AnimeServiceV2.getAnimeInfoV2(query);
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error searching anime:", error);

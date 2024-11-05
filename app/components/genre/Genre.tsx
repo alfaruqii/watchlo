@@ -5,7 +5,7 @@ type Genre = {
 function Genre({ genre }: Genre) {
   return (
     <span
-      className="rounded border border-gray-400 bg-gray-800 p-2 text-xs sm:text-base"
+      className="rounded border border-gray-400/60 bg-gray-800/50 p-2 text-xs font-black drop-shadow backdrop-blur-md sm:text-base"
     >
       {genre}
     </span>

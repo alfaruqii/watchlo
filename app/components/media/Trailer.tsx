@@ -1,28 +1,31 @@
 "use client";
-import { AnimeInfo } from '@/types/anime.type'
-import { useState } from 'react'
-import Image from 'next/image'
+import { AnimeInfo } from "@/types/anime.type";
+import { useState } from "react";
+import Image from "next/image";
 import PlayButton from "./PlayButton";
-import { Video } from '@/types/movies.type';
-import { usePathname } from 'next/navigation';
+import { Video } from "@/types/movies.type";
+import { usePathname } from "next/navigation";
 
 function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
   const [isImageLoading, setImageLoading] = useState(true);
   const pathName = usePathname();
-  const pathType = pathName.split('/')[1]; // This gives you either 'movie' or 'tv'
-  const isMoviePath = pathType.toLowerCase() === "movie" || pathType.toLowerCase() === "series";
+  const pathType = pathName.split("/")[1]; // This gives you either 'movie' or 'tv'
+  const isMoviePath =
+    pathType.toLowerCase() === "movie" || pathType.toLowerCase() === "series";
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   if (!trailer || !trailer.id) {
     return null; // Don't render anything if there's no trailer
   }
 
-  let videoUrl = '';
+  let videoUrl = "";
   switch (trailer.site?.toLowerCase()) {
-    case 'youtube':
-      videoUrl = `https://www.youtube.com/embed/${"key" in trailer ? trailer.key : trailer.id ?? "xvFZjo5PgG0"}?autoplay=1`;
+    case "youtube":
+      videoUrl = `https://www.youtube.com/embed/${
+        "key" in trailer ? trailer.key : trailer.id ?? "xvFZjo5PgG0"
+      }?autoplay=0`;
       break;
-    case 'dailymotion':
+    case "dailymotion":
       videoUrl = `https://www.dailymotion.com/embed/video/${trailer.id}?autoplay=1`;
       break;
     default:
@@ -30,15 +33,22 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
   }
 
   const handlePlay = () => {
-    setIsPlaying(true)
-  }
+    setIsPlaying(true);
+  };
 
   return (
     <div className="mt-4 flex flex-col items-center overflow-hidden">
       <p className="text-center w-full text-xl mb-2 font-bold">Trailer 💡</p>
-      <div className={`relative aspect-video w-full overflow-hidden rounded drop-shadow-lg ${isMoviePath ? "" : "sm:w-2/5"}`}>
+      <div
+        className={`relative aspect-video w-full overflow-hidden rounded drop-shadow-lg ${
+          isMoviePath ? "" : "sm:w-2/5"
+        }`}
+      >
         {!isPlaying ? (
-          <div className="relative h-full w-full cursor-pointer" onClick={handlePlay}>
+          <div
+            className="relative h-full w-full cursor-pointer"
+            onClick={handlePlay}
+          >
             <Image
               unoptimized
               src={trailer.thumbnail}
@@ -46,7 +56,9 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
               layout="fill"
               objectFit="cover"
               onLoad={() => setImageLoading(false)}
-              className={`transition-custom-blur object-cover rounded ${isImageLoading ? "blur-3xl" : "blur-0"}`}
+              className={`transition-custom-blur object-cover rounded ${
+                isImageLoading ? "blur-3xl" : "blur-0"
+              }`}
             />
             <PlayButton />
           </div>
@@ -61,7 +73,7 @@ function Trailer({ trailer }: { trailer: AnimeInfo["trailer"] | Video }) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export default Trailer;

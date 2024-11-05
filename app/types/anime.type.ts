@@ -1,6 +1,14 @@
+export type IdProvider = {
+  idGogo: string;
+  idGogoDub: string;
+  idZoro: string;
+  id9anime: string;
+  idPahe: string;
+};
+
 // Title type with full structure
 export type Title = {
-  userPreferred: string;
+  userPreferred?: string;
   romaji?: string;
   english?: string;
   native?: string;
@@ -8,10 +16,16 @@ export type Title = {
 
 // CoverImage type with optional fields for flexibility
 export type CoverImage = {
-  extraLarge?: string;
-  large: string;
-  medium?: string;
-  color?: string; // Optional color property
+  extraLarge?: string | null;
+  large?: string | null;
+  medium?: string | null;
+  color?: string | null; // Optional color property
+};
+
+export type AnimeTrailer = {
+  id: string;
+  site: string;
+  thumbnail: string;
 };
 
 // Date type used for startDate and endDate
@@ -30,185 +44,13 @@ export type NextAiringEpisode = {
 
 // Studio related types
 export type Studio = {
-  id: number;
   name: string;
-};
-
-export type StudioEdge = {
-  isMain: boolean;
-  node: Studio;
-};
-
-export type Studios = {
-  edges: StudioEdge[];
 };
 
 export type Tags = {
   id: number;
   name: string;
-}
-
-export type Relation = {
-  id: number;
-  idMal: number;
-  title: Title;
-  coverImage: CoverImage;
-  bannerImage: string;
-  genres: string[];
-  tags: {
-    id: number;
-    name: string;
-  }[];
-  type: string;
-  format: string;
-  status: string;
-  episodes: number | null;
-  duration: number | null;
-  averageScore: number;
-  season: string | null;
-}
-
-// Core Anime type definition
-export type Anime = {
-  id: number;
-  title: Title | string;
-  description: string;
-  coverImage: CoverImage;
-  startDate: Date;
-  endDate: Date;
-  bannerImage: string;
-  season: string;
-  seasonYear: number;
-  type: string;
-  format: string;
-  status: string;
-  episodes: number | null;
-  duration: number;
-  chapters: number | null;
-  volumes: number | null;
-  genres: string[];
-  isAdult: boolean;
-  averageScore: number;
-  popularity: number;
-  nextAiringEpisode: NextAiringEpisode | null;
-  mediaListEntry: unknown;  // Adjust if you know the exact type
-  studios: Studios;
 };
-
-// Base interface for Anime
-export interface AnimeBase {
-  id: string | number;
-}
-
-// Trending Anime with essential fields
-export interface AnimeTrending extends AnimeBase {
-  title: string;
-  image: string;
-  episodeNumber: number;
-  episodeId: string;
-}
-
-// Popular Anime, using the existing Title and CoverImage types
-export interface AnimePopular extends AnimeBase {
-  title: Title;
-  coverImage: CoverImage;
-  status: string;
-}
-
-// Union type for AnimeType
-export type AnimeType = AnimeTrending | AnimePopular;
-
-// Detailed AnimeInfo interface, removing redundancies and reusing existing types
-export interface AnimeInfo extends AnimeBase {
-  code: number;
-  message: string;
-  idMal: number;
-  id_provider: {
-    idGogo: string;
-    idGogoDub: string;
-    idZoro: string;
-    id9anime: string;
-    idPahe: string;
-  };
-  title: Title;
-  dub: boolean;
-  description: string;
-  coverImage: {
-    large: string;
-    medium: string;
-    color: string;
-  };
-  bannerImage: string;
-  genres: string[];
-  tags: {
-    id: number;
-    name: string;
-  }[];
-  status: string;
-  format: string;
-  episodes: number;
-  year: number;
-  season: string;
-  duration: number;
-  startIn: Date;
-  endIn: Date;
-  nextair: null | string;
-  score: {
-    averageScore: number;
-    decimalScore: number;
-  };
-  popularity: number;
-  siteUrl: string;
-  trailer: {
-    id: string;
-    site: string;
-    thumbnail: string;
-  };
-  studios: {
-    name: string;
-  }[];
-  relation: Relation[];
-}
-
-export interface AnimeEpisode {
-  id: string;
-  number: number;
-  url: string;
-}
-
-export interface AnimeDetails {
-  id: string;
-  title: string;
-  url: string;
-  genres: string[];
-  totalEpisodes: number;
-  image: string;
-  releaseDate: string;
-  description: string;
-  subOrDub: 'sub' | 'dub';  // Restrict to 'sub' or 'dub'
-  type: string;
-  status: string;
-  otherName: string;
-  episodes: AnimeEpisode[];  // Array of episode objects
-}
-
-export interface SearchedAnime {
-  id: number,
-  status: string,
-  idMal: number,
-  title: Title,
-  bannerImage: string,
-  coverImage: CoverImage,
-  episodes: number,
-  genres: string[],
-  tags: Tags[],
-  season: string,
-  format: string,
-  type: string,
-  seasonYear: number,
-  averageScore: number,
-  nextAiringEpisode: unknown;
-}
 
 export interface Source {
   url: string;
@@ -226,3 +68,116 @@ export interface StreamInfo {
   download: string;
 }
 
+export type RelationOrRecommendation = {
+  id: number;
+  idMal: number;
+  title: Title;
+  coverImage: CoverImage;
+  bannerImage: string;
+  genres: string[];
+  tags: Tags[];
+  type: string;
+  format: string;
+  status: string;
+  episodes: number | null;
+  duration: number | null;
+  averageScore: number;
+  season: string | null;
+};
+
+// Core Anime type definition (usually for trending and popular)
+export type Anime = {
+  id: number;
+  idMal: number;
+  status: string;
+  title: Title;
+  genres: string[];
+  tags: Tags[];
+  description: string;
+  bannerImage?: string;
+  coverImage?: CoverImage;
+  episodes: number | null;
+  meanScore?: number;
+  duration: number;
+  season: string;
+  seasonYear?: number;
+  averageScore: number;
+  nextAiringEpisode?: NextAiringEpisode | null;
+  trailer: AnimeTrailer;
+};
+
+// Trending Anime with essential fields
+export interface AnimeRecent {
+  id: string;
+  episodeId: string;
+  episodeNumber: number;
+  title: string;
+  image: string;
+  url: string;
+}
+
+// Union type for AnimeType
+export type AnimeType = AnimeRecent | Anime;
+
+// Detailed AnimeInfo Single (e.g One Piece) interface, removing redundancies and reusing existing types
+export interface AnimeInfo extends Omit<Anime, "averageScore" | "type"> {
+  code: number;
+  message: string;
+  id_provider: IdProvider;
+  title: Title;
+  dub: boolean;
+  format?: string;
+  year: number;
+  startIn: Date;
+  endIn: Date;
+  nextair: string | null;
+  score: {
+    averageScore: number;
+    decimalScore: number;
+  };
+  popularity: number;
+  siteUrl: string;
+  studios: Studio[];
+  relation: RelationOrRecommendation[];
+}
+
+export interface AnimeEpisode {
+  id: string;
+  number: number;
+  url: string;
+}
+
+// AnimeDetail single for from V1 API
+export interface AnimeDetails {
+  id: string;
+  title: string;
+  url: string;
+  genres: string[];
+  totalEpisodes: number;
+  image: string;
+  releaseDate: string;
+  description: string;
+  subOrDub: "sub" | "dub"; // Restrict to 'sub' or 'dub'
+  type: string;
+  status: string;
+  otherName: string;
+  episodes: AnimeEpisode[]; // Array of episode objects
+}
+
+export interface SearchedAnime {
+  id: number;
+  status: string;
+  idMal: number;
+  title: Title;
+  bannerImage: string;
+  coverImage: CoverImage;
+  episodes: number;
+  genres: string[];
+  tags: Tags[];
+  season: string;
+  format: string;
+  type: string;
+  seasonYear: number;
+  averageScore: number;
+  nextAiringEpisode: unknown;
+}

@@ -1,7 +1,7 @@
 // store/themeStore.ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
-interface ThemeStore {
+export interface ThemeStore {
   theme: string;
   setTheme: (theme: string) => void;
 }
@@ -11,13 +11,12 @@ export const useThemeStore = create<ThemeStore>((set) => ({
 
   setTheme: (theme: string) => {
     // Persist theme in localStorage
-    localStorage.setItem('theme', theme);
+    localStorage.setItem("theme", theme);
 
     // Update the theme on the document HTML element
-    document.querySelector('html')?.setAttribute('data-theme', theme);
+    document.querySelector("html")?.setAttribute("data-theme", theme);
 
     // Update the Zustand store
     set(() => ({ theme }));
   },
 }));
-

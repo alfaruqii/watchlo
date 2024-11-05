@@ -1,19 +1,32 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from "next/link"
-import Image from 'next/image'
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface AnimeCardDetailProps {
-  animeImage: string
-  episodeId: string
-  id: string
-  episodeNumber: number
+  animeImage: string;
+  episodeId: string;
+  id: string;
+  episodeNumber: number;
 }
 
-export const AnimeCardDetail = ({ animeImage, episodeId, id, episodeNumber }: AnimeCardDetailProps) => {
-  const [isImageLoading, setImageLoading] = useState(true)
-  const route = { pathname: `/anime/watch/${episodeId}`, query: { title: id, ep: episodeNumber } }
+export const AnimeCardDetail = ({
+  animeImage,
+  episodeId,
+  id,
+  episodeNumber,
+}: AnimeCardDetailProps) => {
+  const [isImageLoading, setImageLoading] = useState(true);
+  const isDub = episodeId.includes("-dub");
+  const route = {
+    pathname: `/anime/watch`,
+    query: {
+      id: id,
+      ep: episodeNumber,
+      ...(isDub && { isDub: true }), // Only add isDub if it's true
+    },
+  };
 
   return (
     <Link href={route}>
@@ -29,9 +42,10 @@ export const AnimeCardDetail = ({ animeImage, episodeId, id, episodeNumber }: An
               className={`
                 object-cover
                 transition-custom-blur
-                ${isImageLoading
-                  ? 'scale-110 blur-2xl'
-                  : 'scale-100 blur-0 group-hover:scale-110'
+                ${
+                  isImageLoading
+                    ? "scale-110 blur-2xl"
+                    : "scale-100 blur-0 group-hover:scale-110"
                 }
                 hover:scale-110 hover:duration-300
               `}
@@ -46,12 +60,12 @@ export const AnimeCardDetail = ({ animeImage, episodeId, id, episodeNumber }: An
           className={`
             line-clamp-2 truncate text-sm font-bold
             transition-opacity duration-500
-            ${isImageLoading ? 'opacity-0' : 'opacity-100'}
+            ${isImageLoading ? "opacity-0" : "opacity-100"}
           `}
         >
           Episode {episodeNumber}
         </p>
       </div>
     </Link>
-  )
-}
+  );
+};

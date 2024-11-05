@@ -4,7 +4,7 @@ import React from 'react'
 function Quality({ sources, handleQualityChange }: { sources: Source[]; handleQualityChange: (url: string) => void }) {
   return (
     <>
-      <div className="dropdown dropdown-bottom sm:dropdown-right">
+      <div className="dropdown dropdown-top sm:dropdown-top z-40">
         <div tabIndex={0} role="button" className="btn m-1">Quality video</div>
         <div tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-full p-2 shadow">
           {

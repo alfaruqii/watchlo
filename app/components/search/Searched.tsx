@@ -49,7 +49,7 @@ function Searched({ searchedText }: SearchedProps) {
   if (!searchedText) return null;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col px-2 pb-2">
       {isLoading && <SkeletonSearch />}
       {error && <p>{error}</p>}
       {!isLoading && searchedData.length > 0 ? (
@@ -57,7 +57,7 @@ function Searched({ searchedText }: SearchedProps) {
           <SearchedResult key={item.id} {...item} />
         ))
       ) : (
-        !isLoading && <p>No results found.</p>
+        !isLoading && <p className="px-2 pb-2">No results found 😿</p>
       )}
     </div>
   );
