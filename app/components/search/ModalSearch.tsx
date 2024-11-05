@@ -1,7 +1,7 @@
 'use client';
 
 import { useModalStore } from '@/store/modalStore';
-import SearchIcon from '../icons/SearchIcon';
+import { GoSearch } from 'react-icons/go';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Searched from './Searched';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -50,7 +50,7 @@ function ModalSearch() {
       <div className={`modal-box flex flex-col py-0 px-0 gap-2 bg-opacity-80 rounded-lg border ${isWhiteMode ? "border-gray-700/60" : "border-gray-600/80"} backdrop-blur-lg max-h-96`}>
         <div className={`w-full ${query.length > 0 ? `border-b ${isWhiteMode ? "border-gray-400 " : "border-gray-700 "}` : ""} px-4 py-3`}>
           <label className="input pl-0 h-8 border-none !outline-none flex items-center bg-transparent rounded-none">
-            <SearchIcon />
+            <GoSearch size={20} />
             <input
               ref={inputRef} // Attach the ref to the input element
               type="text"
