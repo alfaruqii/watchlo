@@ -1,19 +1,13 @@
 export interface Routes {
-  pathname: string,
+  pathname: string;
   query: {
     id: string;
-    ep: number;
+    ep?: number;
     season?: number;
-  }
-}
-
-export interface AnimeRecQueryParams {
-  id?: string;
-  q?: string;
+  };
 }
 
 export interface AnimeSchQueryParams {
   p?: string;
   pp?: string;
 }
-
