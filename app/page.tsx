@@ -11,22 +11,33 @@ export default async function Home() {
 
   return (
     <>
-      <div className="flex flex-col gap-4 min-h-fit">
+      <div className="flex flex-col gap-2 min-h-fit">
         <HeroMediaCarousel items={dataMoviesPopular.results} />
         <div className="p-4 sm:p-0">
-          <MoviesContainerCard containerTitle="Top Rated Movie 🥇" movies={dataMoviesTopRated.results} />
+          <MoviesContainerCard
+            containerTitle="Top Rated Movie 🥇"
+            movies={dataMoviesTopRated.results}
+          />
         </div>
         <div className="p-4 sm:p-0">
-          <MoviesContainerCard containerTitle="Trending Movies 📈" movies={dataMoviesTrending.results} />
+          <MoviesContainerCard
+            containerTitle="Trending Movies 📈"
+            movies={dataMoviesTrending.results}
+          />
         </div>
         <div className="p-4 sm:p-0">
-          <MoviesContainerCard containerTitle="Top Rated Series 🏆" movies={dataTvTopRated.results} />
+          <MoviesContainerCard
+            containerTitle="Top Rated Series 🏆"
+            movies={dataTvTopRated.results}
+          />
         </div>
         <div className="p-4 sm:p-0">
-          <MoviesContainerCard containerTitle="Trending Series 🔥" movies={dataTvTrending.results} />
+          <MoviesContainerCard
+            containerTitle="Trending Series 🔥"
+            movies={dataTvTrending.results}
+          />
         </div>
       </div>
     </>
   );
 }
-
