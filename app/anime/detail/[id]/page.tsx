@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 
-import { Banner } from "@/components/detail/banner/Banner";
+import Banner from "@/components/detail/banner/Banner";
 import CardBanner from "@/components/detail/cardbanner/CardBanner";
+import AnimeContainerCard from "@/components/card/animecard/AnimeContainerCard";
 import EpisodesContainer from "@/components/detail/episodes/EpisodesContainer";
 import RelationComponent from "@/components/detail/relation/RelationComponent";
 import InfoDetails from "@/components/detail/infodetails/InfoDetails";
@@ -10,7 +11,6 @@ import SkeletonEpisodes from "@/components/skeleton/SkeletonEpisodes";
 
 import { AnimeServiceV2 } from "@/services";
 import { AnimeInfo, RelationOrRecommendation } from "@/types/anime.type";
-import { AnimeContainerCard } from "@/components/card/animecard/AnimeContainerCard";
 
 async function DetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
