@@ -1,13 +1,16 @@
 import { getEnv } from "@/utils/getEnv";
-import { AnimeRecQueryParams } from "@/types/global";
-import { API_V0, API_V1, API_V2 } from "../lib/api"
-import { AxiosResponse } from 'axios';
+import { AnimeSchQueryParams } from "@/types/global";
+import { API_V0, API_V1, API_V2 } from "../lib/api";
+import { AxiosResponse } from "axios";
 
-const ANIME_PATH = getEnv("ANIME_PATH") || process.env["NEXT_PUBLIC_ANIME_PATH"];
+const GOGO_PATH = getEnv("GOGO_PATH") || process.env["NEXT_PUBLIC_GOGO_PATH"];
 
 const MovieService = {
-  getPopularMovies: async (): Promise<AxiosResponse> => {
+  getMoviesPopular: async (): Promise<AxiosResponse> => {
     return API_V0().get("/tmdb/movies/popular");
+  },
+  getMoviesTrending: async (): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/movies/trending`);
   },
   getMoviesTopRated: async (): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/movies/top-rated`);
@@ -18,11 +21,17 @@ const MovieService = {
   getMovieTrailer: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/movies/${id}/videos`);
   },
+  getMovieRecommendations: async (id: string): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/movies/${id}/recommendations`);
+  },
+  getMovieSimilar: async (id: string): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/movies/${id}/similar`);
+  },
   getMovieReviews: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/movies/${id}/reviews`);
   },
-  getPopularTV: async (): Promise<AxiosResponse> => {
-    return API_V0().get(`/tmdb/tv/popular`);
+  getTvTrending: async (): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/tv/trending`);
   },
   getTvTopRated: async (): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/top-rated`);
@@ -30,36 +39,51 @@ const MovieService = {
   getTvById: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}`);
   },
-  getTvSeason: async (id: string, season: number): Promise<AxiosResponse> => {
+  getTvSeason: async (id: string, season: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/season/${season}`);
   },
-  getTvEpisode: async (id: string, season: string, episode: string): Promise<AxiosResponse> => {
+  getTvEpisode: async (
+    id: string,
+    season: string,
+    episode: string
+  ): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/season/${season}/episode/${episode}`);
   },
-  getTVTrailer: async (id: string): Promise<AxiosResponse> => {
+  getTvTrailer: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/videos`);
   },
-  getTVReviews: async (id: string): Promise<AxiosResponse> => {
+  getTvRecommendations: async (id: string): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/tv/${id}/recommendations`);
+  },
+  getTvSimilar: async (id: string): Promise<AxiosResponse> => {
+    return API_V0().get(`/tmdb/tv/${id}/similar`);
+  },
+  getTvReviews: async (id: string): Promise<AxiosResponse> => {
     return API_V0().get(`/tmdb/tv/${id}/reviews`);
   },
   searchMovie: async (title?: string): Promise<AxiosResponse> => {
-    return API_V0().get(`/tmdb/search?query=${title}`);
+    return API_V0({ params: { query: title } }).get(`/tmdb/search`);
   },
-}
+};
 
 const AnimeServiceV1 = {
-  getRecentEpisode: async (): Promise<AxiosResponse> => {
-    return API_V1().get(`${ANIME_PATH}/recent-episodes`);
+  getRecentEpisodeGogo: async (): Promise<AxiosResponse> => {
+    return API_V1().get(`${GOGO_PATH}/recent-episodes`);
   },
-  getAnimeStream: async (id: string): Promise<AxiosResponse> => {
-    return API_V1().get(`${ANIME_PATH}/watch/${id}`);
+  getAnimeStreamGogo: async (id: string): Promise<AxiosResponse> => {
+    return API_V1().get(`${GOGO_PATH}/watch/${id}`);
   },
-  getAnimeInfoV1: async (id: string): Promise<AxiosResponse> => {
-    return API_V1().get(`${ANIME_PATH}/info/${id}`);
+  getAnimeInfoV1Gogo: async (id: string): Promise<AxiosResponse> => {
+    return API_V1().get(`${GOGO_PATH}/info/${id}`);
   },
-}
+};
 
 const AnimeServiceV2 = {
+  getScheduledAnime: async (
+    params?: AnimeSchQueryParams
+  ): Promise<AxiosResponse> => {
+    return API_V2({ params }).get(`/schedule`);
+  },
   getTrendingAnime: async (): Promise<AxiosResponse> => {
     return API_V2().get(`/trending`);
   },
@@ -69,12 +93,12 @@ const AnimeServiceV2 = {
   getAnimeInfoV2: async (id: string): Promise<AxiosResponse> => {
     return API_V2().get(`/info/${id}`);
   },
-  getRecommendationAnime: async (params: AnimeRecQueryParams): Promise<AxiosResponse> => {
-    return API_V2().get(`/recommendations/${params.id}`);
+  getRecommendationAnime: async (id: string): Promise<AxiosResponse> => {
+    return API_V2().get(`/recommendations/${id}`);
   },
   searchAnimeV2: async (title?: string): Promise<AxiosResponse> => {
-    return API_V2().get(`/search?q=${title}`);
+    return API_V2({ params: { q: title } }).get(`/search`);
   },
-}
+};
 
 export { MovieService, AnimeServiceV1, AnimeServiceV2 };
