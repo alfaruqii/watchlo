@@ -1,7 +1,7 @@
 "use client";
 
 import { useThemeStore } from "@/store/themeStore";
-import { AnimeCard } from "./AnimeCard";
+import AnimeCard from "./AnimeCard";
 import { AnimeType, RelationOrRecommendation } from "@/types/anime.type";
 
 interface AnimeContainerProps {
@@ -9,7 +9,7 @@ interface AnimeContainerProps {
   containerTitle: string;
 }
 
-export const AnimeContainerCard = ({
+const AnimeContainerCard = ({
   animes,
   containerTitle,
 }: AnimeContainerProps) => {
@@ -33,3 +33,5 @@ export const AnimeContainerCard = ({
     </div>
   );
 };
+
+export default AnimeContainerCard;
