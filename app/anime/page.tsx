@@ -1,5 +1,5 @@
 import HeroMediaCarousel from "@/components/hero/HeroMediaCarousel";
-import { AnimeContainerCard } from "../components/card/animecard/AnimeContainerCard";
+import AnimeContainerCard from "../components/card/animecard/AnimeContainerCard";
 import { AnimeServiceV1, AnimeServiceV2 } from "../services";
 
 export default async function Home() {
