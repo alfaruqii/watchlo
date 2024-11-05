@@ -94,7 +94,7 @@ const InfoDetails: React.FC<InfoDetailsProps> = ({ item }) => {
           <p>10</p>
         </div>
         <Infos topic="Status" value={status} />
-        <Infos topic="Format" value={format.toUpperCase()} />
+        <Infos topic="Format" value={format?.toUpperCase()} />
         {releaseDate?.length && (
           <Infos topic="Release Date" value={formatDate(releaseDate)} />
         )}
