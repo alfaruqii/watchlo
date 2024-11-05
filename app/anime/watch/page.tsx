@@ -2,9 +2,9 @@
 "use client";
 import useSWR from "swr";
 import EpisodesComponent from "@/components/watch/episodes/EpisodesComponent";
+import Media from "@/components/media/Media";
 import Error from "@/error";
-import { Media } from "@/components/media/Media";
-import { AnimeServiceV1, AnimeServiceV2 } from "@/services";
+import Loading from "./loading";
 import { AnimeDetails, AnimeInfo } from "@/types/anime.type";
 import { useState, useEffect, useCallback } from "react";
 
@@ -12,38 +12,41 @@ type WatchPageParams = {
   searchParams: { id: string; ep: string; isDub?: string };
 };
 
-// Get the Episode From Gogo
+const doesIdNumber = (id: unknown): boolean => Number.isInteger(Number(id));
+
+// Fetch Anime Info based on ID
 const fetchAnimeInfoV1 = async (idProvider: string) => {
   if (!idProvider) return null;
-  let res = await AnimeServiceV1.getAnimeInfoV1Gogo(idProvider);
-  return res.data;
+  const res = await fetch(`/api/anime-infov1?query=${idProvider}`);
+  return res.json();
 };
 
 const fetchAnimeInfoV2 = async (id: string) => {
-  const res = await AnimeServiceV2.getAnimeInfoV2(id);
-  return res.data;
+  if (doesIdNumber(id)) {
+    const res = await fetch(`/api/anime-infov2?query=${id}`);
+    return res.json();
+  }
 };
 
 function WatchPage({ searchParams }: WatchPageParams) {
   const { id, ep, isDub } = searchParams;
-  // Store the selected episode ID for stream fetching (v1)
+
   const [episodeId, setEpisodeId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
-  // const [provider, setProvider] = useState("");
 
-  // Fetch data from API v2 to get id_provider
+  // Fetch data from API v2 and API v1 separately
   const { data: animeInfoV2, error: errorInfoV2 } = useSWR<AnimeInfo>(
-    id,
+    doesIdNumber(id) ? id : null,
     fetchAnimeInfoV2
   );
 
-  // Fetch data from API v1 using the id_provider from API v2
+  const idProvider = isDub
+    ? animeInfoV2?.id_provider.idGogoDub
+    : animeInfoV2?.id_provider.idGogo || id;
+
   const { data: animeInfoV1, error: errorInfoV1 } = useSWR<AnimeDetails>(
-    () =>
-      !isDub
-        ? animeInfoV2?.id_provider.idGogo
-        : animeInfoV2?.id_provider.idGogoDub || null,
-    fetchAnimeInfoV1
+    idProvider ? [idProvider, "v1"] : null,
+    () => fetchAnimeInfoV1(idProvider!)
   );
 
   // Set the initial episode ID once the anime info and episodes are loaded
@@ -60,16 +63,14 @@ function WatchPage({ searchParams }: WatchPageParams) {
   }, [animeInfoV1, ep]);
 
   // Handle episode change through the EpisodesComponent
-  const handleEpisodeChange = useCallback(
-    (newEpisodeId: string) => {
-      setEpisodeId(newEpisodeId);
-    },
-    [episodeId]
-  );
+  const handleEpisodeChange = useCallback((newEpisodeId: string) => {
+    setEpisodeId(newEpisodeId);
+  }, []);
 
   // Handle loading and error states
   if (errorInfoV2 || errorInfoV1) return <Error />;
-  if (isLoading || !animeInfoV2 || !animeInfoV1) return <div>Loading...</div>;
+  if (!animeInfoV2 && doesIdNumber(id)) return <Loading />;
+  if (isLoading || !animeInfoV1) return <Loading />;
 
   return (
     <div className="flex flex-col gap-6 p-6 lg:grid lg:grid-cols-5">
