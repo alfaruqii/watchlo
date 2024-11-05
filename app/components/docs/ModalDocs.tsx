@@ -54,7 +54,7 @@ const ModalDocs = () => {
   return (
     <>
       {isOpen && pathname === "/" && (
-        <dialog id="my_modal_3" className="modal-open modal" open={isOpen}>
+        <dialog id="my_modal_3" className="modal-open backdrop-blur modal" open={isOpen}>
           <div className={`modal-box border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} rounded shadow-lg`}>
             {/* Modal content remains the same */}
             <div className="flex gap-4">
