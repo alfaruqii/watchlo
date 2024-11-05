@@ -1,39 +1,85 @@
 "use client";
 import { useThemeStore } from "@/store/themeStore";
-import { Routes } from "@/types/global";
-import Link from "next/link"
+import { AnimeEpisode } from "@/types/anime.type";
+import { SeriesEpisode } from "@/types/movies.type";
+import { useRouter } from "next/navigation";
 
 type Episode = {
-  epQuery: number;
-  titleAndEpisode: string;
-  episodeNumber: number;
-  isSeries?: boolean;
+  isDub?: string;
+  episode: AnimeEpisode | SeriesEpisode;
+  isAnime: boolean;
   id: string;
-  season?: number;
-  ep?: number;
-}
+  season?: string;
+  ep?: string;
+  handleEpisodeChange?: (id: string) => void;
+};
 
-function EpisodeComponent({ id, titleAndEpisode, episodeNumber, epQuery, isSeries, season = 1, ep = 1 }: Episode) {
+function EpisodeComponent({
+  isDub,
+  episode,
+  isAnime,
+  id,
+  season = "1",
+  ep,
+  handleEpisodeChange,
+}: Episode) {
   const { theme } = useThemeStore();
-  const determineRoutes = (): Routes | string => {
-    if (isSeries) return `/series/watch/${id}/season/${season}/ep/${ep}`
-    return { pathname: `/anime/watch/${id}`, query: { title: titleAndEpisode, ep: episodeNumber } };
-  }
+  const router = useRouter();
 
-  const conditionEpisode = String(episodeNumber) === String(epQuery);
+  const isWhiteMode = (): boolean => theme === "garden";
+
+  const activeEpisode = (episodeNumber: number): string => {
+    const isActive = String(episodeNumber) === String(ep);
+    if (isActive && isWhiteMode()) {
+      return "bg-gray-700 text-white";
+    }
+    if (isActive && !isWhiteMode()) {
+      return "bg-gray-600";
+    }
+    return "";
+  };
+
+  const handleEpisodeClick = (episodeNumber: number, episodeId?: string) => {
+    const query = isAnime
+      ? {
+          id,
+          ep: episodeNumber,
+          ...(isDub && { isDub: true }), // Only add isDub if it's true
+        }
+      : { id, season, ep: episodeNumber };
+    const queryString = new URLSearchParams(
+      Object.entries(query).map(([key, value]) => [key, String(value)])
+    ).toString();
+    const fullPath = `${
+      isAnime ? "/anime/watch" : "/series/watch"
+    }?${queryString}`;
+
+    if (handleEpisodeChange && episodeId) {
+      handleEpisodeChange(episodeId);
+    }
+    router.push(fullPath);
+  };
+
   return (
-    <>
-      <Link href={determineRoutes()}>
-        <div className={`btn min-w-24 2xl:min-w-24 ${conditionEpisode ? `${theme === "garden" ? "bg-gray-700 text-white" : "bg-gray-600"}` : ""}`}>
-          <p>
-            {
-              episodeNumber
-            }
-          </p>
-        </div>
-      </Link>
-    </>
-  )
+    <button
+      onClick={() =>
+        handleEpisodeClick(
+          isAnime
+            ? (episode as AnimeEpisode).number
+            : (episode as SeriesEpisode).episode_number
+        )
+      }
+      className={`btn ${activeEpisode(
+        isAnime
+          ? (episode as AnimeEpisode).number
+          : (episode as SeriesEpisode).episode_number
+      )}`}
+    >
+      {isAnime
+        ? (episode as AnimeEpisode).number
+        : (episode as SeriesEpisode).episode_number}
+    </button>
+  );
 }
 
 export default EpisodeComponent;
