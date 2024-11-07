@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     const { data } = await AnimeServiceV1.getAnimeInfoV1Gogo(query);
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error searching anime:", error);
+    console.error("Error to give animev1 info:", error);
     return NextResponse.json(
-      { error: "Failed to search anime" },
+      { error: "Failed to give animev1 info" },
       { status: 500 }
     );
   }
