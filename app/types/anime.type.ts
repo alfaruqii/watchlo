@@ -98,6 +98,7 @@ export type Anime = {
   coverImage?: CoverImage;
   episodes: number | null;
   meanScore?: number;
+  format?: string;
   duration: number;
   season: string;
   seasonYear?: number;
