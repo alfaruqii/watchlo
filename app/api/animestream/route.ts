@@ -16,11 +16,10 @@ export async function GET(request: NextRequest) {
     const { data } = await AnimeServiceV1.getAnimeStreamGogo(query);
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error searching anime:", error);
+    console.error("Failed to give animev1 stream", error);
     return NextResponse.json(
-      { error: "Failed to search anime" },
+      { error: "Failed to give animev1 stream" },
       { status: 500 }
     );
   }
 }
-

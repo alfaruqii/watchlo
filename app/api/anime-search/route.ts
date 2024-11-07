@@ -1,19 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { AnimeServiceV2 } from '@/services'
+import { NextRequest, NextResponse } from "next/server";
+import { AnimeServiceV2 } from "@/services";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const query = searchParams.get('query')
+  const searchParams = request.nextUrl.searchParams;
+  const query = searchParams.get("query");
 
   if (!query) {
-    return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 })
+    return NextResponse.json(
+      { error: "Query parameter is required" },
+      { status: 400 }
+    );
   }
 
   try {
-    const { data } = await AnimeServiceV2.searchAnimeV2(query)
-    return NextResponse.json(data)
+    const { data } = await AnimeServiceV2.searchAnimeV2(query);
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error searching anime:', error)
-    return NextResponse.json({ error: 'Failed to search anime' }, { status: 500 })
+    console.error("Error searching animev2:", error);
+    return NextResponse.json(
+      { error: "Failed to search animev2" },
+      { status: 500 }
+    );
   }
 }

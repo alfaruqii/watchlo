@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     const { data } = await AnimeServiceV2.getAnimeInfoV2(query);
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error searching anime:", error);
+    console.error("Failed to give animev2 info", error);
     return NextResponse.json(
-      { error: "Failed to search anime" },
+      { error: "Failed to give animev2 info" },
       { status: 500 }
     );
   }
