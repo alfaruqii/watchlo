@@ -62,7 +62,7 @@ const AnimeCard = ({ anime }: AnimeCardProps) => {
 
           {isPopularAnime(anime) && (
             <SmallInfo
-              year={String(anime?.seasonYear)}
+              year={String(anime?.seasonYear || anime.format)}
               genre={anime?.genres?.[0]}
               rating={String(anime?.averageScore / 10)}
             />
