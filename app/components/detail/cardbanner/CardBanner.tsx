@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { AnimeInfo } from "@/types/anime.type";
 import { MovieInfo, TVInfo } from "@/types/movies.type";
@@ -13,6 +13,14 @@ function CardBanner({ item }: CardBannerProps) {
   const pathName = usePathname();
   const fallbackCard = "/fallback-card.webp";
   const [isImageLoading, setImageLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640); // Tailwind's mobile breakpoint (sm: 640px)
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const isAnime = useMemo(() => pathName.split("/")[1] === "anime", [pathName]);
 
@@ -69,6 +77,8 @@ function CardBanner({ item }: CardBannerProps) {
     return [];
   }, [item]);
 
+  const genreSlice = isMobile ? genres.slice(0, 2) : genres.slice(0, 3);
+
   return (
     <div
       className={`${
@@ -99,7 +109,7 @@ function CardBanner({ item }: CardBannerProps) {
           {title}
         </p>
         <div className="flex flex-wrap gap-1 text-xs text-white sm:gap-2 sm:text-base">
-          {genres.slice(0, 3).map((genre: string, i: number) => (
+          {genreSlice.map((genre: string, i: number) => (
             <div
               key={i}
               className="flex items-center truncate rounded bg-gray-400 p-1 text-center font-semibold text-black sm:max-w-full"
