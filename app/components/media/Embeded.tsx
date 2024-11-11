@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 import { Provider } from "@/types/movies.type";
-import { getEnv } from "@/utils/getEnv";
 
 type EmbededProps = {
   id: string;
@@ -12,9 +11,7 @@ type EmbededProps = {
 };
 
 const sourcesMap: Provider[] = JSON.parse(
-  getEnv("WATCHLO_SOURCE_EMBED") ||
-    process.env.NEXT_PUBLIC_WATCHLO_SOURCE_EMBED ||
-    "[]"
+  process.env.NEXT_PUBLIC_WATCHLO_SOURCE_EMBED || "[]"
 );
 
 function generateUrl(
