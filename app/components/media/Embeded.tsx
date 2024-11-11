@@ -70,31 +70,32 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
 
   return (
     <div
-      className={`mt-4 flex flex-col w-full ${
+      className={`${
         type.toLowerCase() === "tv" ? "col-span-3" : ""
-      }`}
+      } mt-4 flex w-full
+      flex-col`}
     >
       {/* Iframe at the top */}
       {type.toLowerCase() === "movie" && (
-        <p className="text-center w-full text-xl mb-2 font-bold">Watch 🎬</p>
+        <p className="mb-2 w-full text-center text-xl font-bold">Watch 🎬</p>
       )}
       <iframe
         ref={iframeRef}
         src={generateUrl(provider.url, type, id, season, ep)}
         allowFullScreen
-        className="w-full h-full rounded aspect-video drop-shadow-lg mb-4"
+        className="mb-4 aspect-video h-full w-full rounded drop-shadow-lg"
       />
 
       {/* Provider changer below the iframe */}
       <div className="flex items-center justify-between">
         <div className="dropdown dropdown-top rounded">
           <label tabIndex={0} className="btn btn-ghost">
-            <AiOutlineSetting className="w-6 h-6 mr-2" />
+            <AiOutlineSetting className="mr-2 h-6 w-6" />
             <span>{provider.label}</span>
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            className="dropdown-content menu w-52 rounded-box bg-base-100 p-2 shadow"
           >
             {sourcesMap.map((source, index) => (
               <li key={index}>
