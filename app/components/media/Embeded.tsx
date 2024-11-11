@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
+import sourcesMap from "@/data/watchlo-source.json";
 import { Provider } from "@/types/movies.type";
 
 type EmbededProps = {
@@ -9,10 +10,6 @@ type EmbededProps = {
   season?: string;
   ep?: string;
 };
-
-const sourcesMap: Provider[] = JSON.parse(
-  process.env.NEXT_PUBLIC_WATCHLO_SOURCE_EMBED || "[]"
-);
 
 function generateUrl(
   base: string,
@@ -35,7 +32,7 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
           label: "Initial Stream",
           url: "https://vidsrc.to",
         };
-  const [provider, setProvider] = useState(initialProvider);
+  const [provider, setProvider] = useState<Provider>(initialProvider);
   console.log("provider: ", generateUrl(provider.url, type, id, season, ep));
 
   const iframeRef = useRef<HTMLIFrameElement>(null);

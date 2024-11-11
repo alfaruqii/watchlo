@@ -1,0 +1,52 @@
+[
+  {
+    "name": "vidlink",
+    "label": "VidLink",
+    "url": "https://vidlink.pro"
+  },
+  {
+    "name": "embed.su",
+    "label": "Embedded SU",
+    "url": "https://embed.su/embed"
+  },
+  {
+    "name": "vidsrc.cc/v3",
+    "label": "Vidsrc CC v3",
+    "url": "https://vidsrc.cc/v3/embed"
+  },
+  {
+    "name": "smashystream",
+    "label": "Smashy Stream",
+    "url": "https://player.smashy.stream"
+  },
+  {
+    "name": "AutoEmbe",
+    "label": "AutoEmbe",
+    "url": "https://player.autoembed.cc/embed"
+  },
+  {
+    "name": "vidbinge",
+    "label": "Vidbinge 4K",
+    "url": "https://vidbinge.dev/embed"
+  },
+  {
+    "name": "vidsrc.vip",
+    "label": "Premium Stream",
+    "url": "https://vidsrc.vip/embed"
+  },
+  {
+    "name": "vidsrc.icu",
+    "label": "Backup Stream",
+    "url": "https://vidsrc.icu/embed"
+  },
+  {
+    "name": "vidsrc.pro",
+    "label": "Main Stream",
+    "url": "https://vidsrc.pro/embed"
+  },
+  {
+    "name": "vidsrc.xyz",
+    "label": "Alternative Stream",
+    "url": "https://vidsrc.to/embed"
+  }
+]
