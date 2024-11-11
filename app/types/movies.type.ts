@@ -1,3 +1,10 @@
+export interface Provider {
+  name: string;
+  label: string;
+  ads: boolean;
+  url: string;
+}
+
 interface Genre {
   id: number;
   name: string;
