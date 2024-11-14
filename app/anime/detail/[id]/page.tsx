@@ -12,7 +12,8 @@ import SkeletonEpisodes from "@/components/skeleton/SkeletonEpisodes";
 import { AnimeServiceV2 } from "@/services";
 import { AnimeInfo, RelationOrRecommendation } from "@/types/anime.type";
 
-async function DetailPage({ params }: { params: { id: string } }) {
+async function DetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { id } = params;
   const { data: dataInfo }: { data: AnimeInfo } =
     await AnimeServiceV2.getAnimeInfoV2(id);
