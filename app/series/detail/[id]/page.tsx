@@ -10,7 +10,8 @@ import fallbackTrailer from "@/utils/fallbackTrailer.json";
 import { Review, TVInfo, Video } from "@/types/movies.type";
 import ReviewsComponent from "@/components/reviews/ReviewsComponent";
 
-async function DetailPage({ params }: { params: { id: string } }) {
+async function DetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { id } = params;
   const { data: dataInfo }: { data: TVInfo } = await MovieService.getTvById(id);
   const {

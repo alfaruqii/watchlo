@@ -4,10 +4,11 @@ import { MovieService } from "@/services";
 import Embeded from "@/components/media/Embeded";
 
 type WatchPageParams = {
-  searchParams: { id: string; ep: string; season: string };
+  searchParams: Promise<{ id: string; ep: string; season: string }>;
 };
 
-async function WatchPage({ searchParams }: WatchPageParams) {
+async function WatchPage(props: WatchPageParams) {
+  const searchParams = await props.searchParams;
   const { id, season, ep }: { id: string; ep: string; season: string } =
     searchParams;
   const { data: tvInfo }: { data: TV } = await MovieService.getTvSeason(
