@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, type JSX } from 'react';
 import { useThemeStore } from '../../store/themeStore';
 import { IoPartlySunny } from "react-icons/io5";
 import { FaCloudMoon } from "react-icons/fa";

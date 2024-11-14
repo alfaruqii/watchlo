@@ -12,7 +12,8 @@ import Embeded from "@/components/media/Embeded";
 import ReviewsComponent from "@/components/reviews/ReviewsComponent";
 import { MoviesContainerCard } from "@/components/card/moviescard/MoviesContainterCard";
 
-async function DetailPage({ params }: { params: { id: string } }) {
+async function DetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { id } = params;
   const { data: dataInfo }: { data: MovieInfo } =
     await MovieService.getMoviesById(id);

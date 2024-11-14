@@ -6,10 +6,10 @@ import Media from "@/components/media/Media";
 import Error from "@/error";
 import Loading from "./loading";
 import { AnimeDetails, AnimeInfo } from "@/types/anime.type";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use } from "react";
 
 type WatchPageParams = {
-  searchParams: { id: string; ep: string; isDub?: string };
+  searchParams: Promise<{ id: string; ep: string; isDub?: string }>;
 };
 
 const doesIdNumber = (id: unknown): boolean => Number.isInteger(Number(id));
@@ -28,7 +28,8 @@ const fetchAnimeInfoV2 = async (id: string) => {
   }
 };
 
-function WatchPage({ searchParams }: WatchPageParams) {
+function WatchPage(props: WatchPageParams) {
+  const searchParams = use(props.searchParams);
   const { id, ep, isDub } = searchParams;
 
   const [episodeId, setEpisodeId] = useState<string>("");

@@ -44,6 +44,8 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
     setProvider(selectedProvider || sourcesMap[0]);
   };
 
+  const doesTV = type?.toLowerCase() === "tv";
+
   useEffect(() => {
     const handleIframeLoad = () => {
       if (iframeRef.current) {
@@ -67,9 +69,7 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
 
   return (
     <div
-      className={`${
-        type.toLowerCase() === "tv" ? "col-span-3" : ""
-      } mt-4 flex w-full
+      className={`${doesTV ? "col-span-3" : ""} mt-4 flex w-full
       flex-col`}
     >
       {/* Iframe at the top */}
@@ -85,14 +85,22 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
 
       {/* Provider changer below the iframe */}
       <div className="flex items-center justify-between">
-        <div className="dropdown dropdown-top rounded">
-          <label tabIndex={0} className="btn btn-ghost">
-            <AiOutlineSetting className="mr-2 h-6 w-6" />
+        <div
+          className={`${
+            doesTV ? "dropdown-bottom sm:dropdown-top" : "dropdown-top"
+          }
+          dropdown rounded`}
+        >
+          <label
+            tabIndex={0}
+            className="btn btn-ghost rounded border border-base-300 px-4 text-xs"
+          >
+            <AiOutlineSetting className="size-4" />
             <span>{provider.label}</span>
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content menu w-52 rounded-box bg-base-100 p-2 shadow"
+            className="dropdown-content menu z-10 w-52 rounded-box bg-base-100 p-2 text-xs shadow"
           >
             {sourcesMap.map((source, index) => (
               <li key={index}>
