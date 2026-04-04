@@ -26,6 +26,8 @@ async function DetailPage(props: { params: Promise<{ id: string }> }) {
   const { data: dataMovieSimilar } = await MovieService.getMovieSimilar(id);
   const { data: dataMovieRecommendations } =
     await MovieService.getMovieRecommendations(id);
+  const similarMovies = dataMovieSimilar?.results ?? [];
+  const recommendedMovies = dataMovieRecommendations?.results ?? [];
   const trailerVideo = dataVideos.find(
     (video: Video) =>
       video.type.toLowerCase() === "trailer" ||
@@ -46,16 +48,16 @@ async function DetailPage(props: { params: Promise<{ id: string }> }) {
             </Suspense>
           </div>
           <div className="mt-10 flex flex-col gap-4">
-            {dataMovieRecommendations.length > 0 && (
+            {recommendedMovies.length > 0 && (
               <MoviesContainerCard
                 containerTitle="Recommendations 👌"
-                movies={dataMovieRecommendations.results}
+                movies={recommendedMovies}
               />
             )}
-            {dataMovieSimilar.length > 0 && (
+            {similarMovies.length > 0 && (
               <MoviesContainerCard
                 containerTitle="Similar 📍"
-                movies={dataMovieSimilar.results}
+                movies={similarMovies}
               />
             )}
           </div>
