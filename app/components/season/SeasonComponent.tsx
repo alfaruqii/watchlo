@@ -6,6 +6,12 @@ import ButtonWatch from "./ButtonWatch";
 import { formatDesc } from "@/utils/formatted";
 import fallbackDesc from "@/utils/fallbackDesc.json";
 import { Seasons, TVInfo } from "@/types/movies.type"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 function SeasonComponent({ data }: { data: TVInfo }) {
   const [isImageLoading, setImageLoading] = useState(true);
@@ -34,10 +40,14 @@ function SeasonComponent({ data }: { data: TVInfo }) {
       <div className="overflow-hidden">
         <p className="mb-2 mt-4 w-full text-center text-xl font-bold">Seasons 📽️</p>
         <div className="scrollbar-w-8 scrollbar-thumb-rounded-full scrollbar-track-rounded-full max-h-[23rem] overflow-y-scroll rounded scrollbar scrollbar-track-gray-400 scrollbar-thumb-gray-900 ">
-          {
-            filteredSeason.map((season) => (
-              <>
-                <div className="collapse collapse-arrow mb-1 rounded bg-base-200 font-bold drop-shadow-lg lg:mb-3" key={season.season_number}>
+          <Accordion type="single" collapsible defaultValue={filteredSeason[0] ? `season-${filteredSeason[0].season_number}` : undefined}>
+            {filteredSeason.map((season) => (
+              <AccordionItem
+                className="mb-1 rounded bg-neutral-800 font-bold drop-shadow-lg lg:mb-3"
+                key={season.season_number}
+                value={`season-${season.season_number}`}
+              >
+                <div className="relative">
                   <div className="absolute inset-0 z-0 h-full w-full">
                     <Image
                       unoptimized
@@ -49,9 +59,13 @@ function SeasonComponent({ data }: { data: TVInfo }) {
                     />
                     <div className="absolute h-full w-full bg-gradient-to-r from-black/80 via-black/50 to-black/40" ></div>
                   </div>
-                  <input type="radio" name="my-accordion-2" className="z-20" defaultChecked />
-                  <div className="collapse-title relative z-10 text-lg font-medium text-white">Season {season.season_number} {season.name && <p className={`${doesNameSameLikeSeason(season) ? "hidden" : "text-xs line-clamp-1"}`}>({season.name})</p>}</div>
-                  <div className="collapse-content relative z-10 flex gap-2 text-white">
+                  <AccordionTrigger className="relative z-10 px-4 text-lg font-medium text-white">
+                    <div>
+                      Season {season.season_number}
+                      {season.name && <p className={`${doesNameSameLikeSeason(season) ? "hidden" : "text-xs line-clamp-1"}`}>({season.name})</p>}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="relative z-10 px-4 text-white">
                     {/* Parent container with defined size and relative position */}
                     <div className="flex flex-col gap-2">
                       <p className="line-clamp-2 text-sm">{formatDesc(season.overview || data.overview || fallbackDesc)}</p>
@@ -65,11 +79,11 @@ function SeasonComponent({ data }: { data: TVInfo }) {
                           <ButtonWatch text="Not Yet Released" />
                       }
                     </div>
-                  </div>
+                  </AccordionContent>
                 </div >
-              </>
-            ))
-          }
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div >
       </div>
     </>

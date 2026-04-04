@@ -13,7 +13,7 @@ export default function CardImage({
   const [isImageLoading, setImageLoading] = useState(true);
 
   return (
-    <div className="card mb-1 max-h-44 h-44 w-32 overflow-hidden rounded sm:max-h-72 sm:h-72 sm:w-52">
+    <div className="mb-1 max-h-44 h-44 w-32 overflow-hidden rounded sm:max-h-72 sm:h-72 sm:w-52">
       <figure className="relative h-full w-full overflow-hidden">
         <Image
           unoptimized

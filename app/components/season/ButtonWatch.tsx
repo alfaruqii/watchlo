@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 function ButtonWatch({ text, season, ep = 1, id }: { text: string; season?: number; ep?: number; id?: number; isAnime?: boolean }) {
   const routes = { pathname: `/series/watch`, query: { id: id, season, ep } };
@@ -6,10 +7,10 @@ function ButtonWatch({ text, season, ep = 1, id }: { text: string; season?: numb
     <>
       {
         id ?
-          <Link href={routes}>
-            <button type="button" className="btn btn-sm w-fit rounded border-none font-bold md:text-lg">{text}</button>
-          </Link> :
-          <button type="button" className={`btn btn-sm w-fit rounded border-none font-bold md:text-lg ${text.toLowerCase().includes("not yet released") ? "pointer-events-none" : ""}`}>{text}</button>
+          <Button asChild size="sm" className="w-fit font-bold md:text-lg">
+            <Link href={routes}>{text}</Link>
+          </Button> :
+          <Button type="button" size="sm" className={`w-fit font-bold md:text-lg ${text.toLowerCase().includes("not yet released") ? "pointer-events-none" : ""}`}>{text}</Button>
       }
     </>
   )

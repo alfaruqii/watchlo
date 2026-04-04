@@ -5,6 +5,7 @@ import { AnimeDetails, AnimeInfo } from "@/types/anime.type";
 import { AnimeCardDetail } from "../card/AnimeCardDetail";
 import SkeletonEpisodes from "@/components/skeleton/SkeletonEpisodes";
 import { useThemeStore } from "@/store/themeStore";
+import { Button } from "@/components/ui/button";
 
 function EpisodesContainer(anime: AnimeInfo) {
   const { theme } = useThemeStore();
@@ -42,36 +43,40 @@ function EpisodesContainer(anime: AnimeInfo) {
     <div className="overflow-hidden sm:px-4 py-4">
       <div className="mb-2 flex gap-1">
         {anime.id_provider?.idGogoDub && (
-          <button
+          <Button
             type="button"
+            size="sm"
+            variant="outline"
             className={`${
               provider === anime.id_provider?.idGogo
                 ? `bg-gray-400 ${
                     !isWhiteMode() ? "text-gray-800 hover:text-gray-100" : ""
                   }`
                 : ``
-            } btn btn-sm`}
+            }`}
             onClick={() => setProvider(anime.id_provider?.idGogo)}
             disabled={!anime.id_provider?.idGogo}
           >
             Sub
-          </button>
+          </Button>
         )}
         {anime.id_provider?.idGogoDub && (
-          <button
+          <Button
             type="button"
+            size="sm"
+            variant="outline"
             className={`${
               provider === anime.id_provider?.idGogoDub
                 ? `bg-gray-400 ${
                     !isWhiteMode() ? "text-gray-800 hover:text-gray-100" : ""
                   }`
                 : ""
-            } btn btn-sm`}
+            }`}
             onClick={() => setProvider(anime.id_provider?.idGogoDub)}
             disabled={!anime.id_provider?.idGogoDub}
           >
             Dub
-          </button>
+          </Button>
         )}
       </div>
 

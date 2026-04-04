@@ -28,12 +28,8 @@ const config: Config = {
     },
   },
   plugins: [
-    require("daisyui"),
     require("tailwind-scrollbar"),
     require("@vidstack/react/tailwind.cjs"),
   ],
-  daisyui: {
-    themes: ["black", "garden"],
-  },
 };
 export default config;

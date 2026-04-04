@@ -1,6 +1,7 @@
 import { useThemeStore } from '@/store/themeStore';
 import { useModalStore } from '@/store/modalStore';
 import { FaSearch } from "react-icons/fa";
+import { Button } from '@/components/ui/button';
 
 function ToggleSearch() {
   const { theme } = useThemeStore();
@@ -16,12 +17,14 @@ function ToggleSearch() {
 
   return (
     <>
-      <button
+      <Button
         onClick={handleToggle}
-        className={`${theme === "garden" ? "border-gray-800" : "border-gray-300"} btn btn-sm rounded border-2 drop-shadow`}
+        variant="outline"
+        size="sm"
+        className={`${theme === "garden" ? "border-gray-800" : "border-gray-300"} rounded border-2 drop-shadow`}
       >
         <FaSearch size={16} />
-      </button>
+      </Button>
     </>
   );
 }

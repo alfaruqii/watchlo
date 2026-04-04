@@ -6,6 +6,7 @@ import parse from "html-react-parser";
 import Genre from "@/components/genre/Genre";
 import { Title, CoverImage } from "@/types/anime.type";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 type MediaProps = {
   id: number;
@@ -70,9 +71,13 @@ function HeroMedia({
             ))}
           </div>
         </div>
-        <div className="btn btn-sm w-fit backdrop-blur-xl rounded font-bold border-none text-black  md:text-lg bg-gray-300/70 hover:bg-gray-900 hover:text-gray-200">
+        <Button
+          asChild
+          size="sm"
+          className="w-fit rounded bg-gray-300/70 font-bold text-black backdrop-blur-xl hover:bg-gray-900 hover:text-gray-200 md:text-lg"
+        >
           <Link href={determineNavigateTo()}>Watch</Link>
-        </div>
+        </Button>
       </div>
     </div>
   );

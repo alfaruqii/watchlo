@@ -1,3 +1,5 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 function SkeletonSearch() {
   return (
     <>
@@ -8,15 +10,15 @@ function SkeletonSearch() {
             .map((_, k) => (
               <>
                 <div key={k} className="flex gap-2 rounded p-3">
-                  <div className="skeleton line-clamp-1 h-36 w-32 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl"></div>
+                  <Skeleton className="line-clamp-1 h-36 w-32 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl" />
                   <div className="flex w-5/6 flex-col gap-1">
-                    <div className="skeleton h-3 w-20"></div>
+                    <Skeleton className="h-3 w-20" />
                     <div className="flex items-center gap-1 text-sm">
-                      <span className="skeleton h-2 w-8"></span>
-                      <span className="skeleton h-2 w-8"></span>
+                      <Skeleton className="h-2 w-8" />
+                      <Skeleton className="h-2 w-8" />
                     </div>
-                    <div className="skeleton h-2 w-12"></div>
-                    <div className="skeleton h-2 w-12"></div>
+                    <Skeleton className="h-2 w-12" />
+                    <Skeleton className="h-2 w-12" />
                   </div>
                 </div>
               </>

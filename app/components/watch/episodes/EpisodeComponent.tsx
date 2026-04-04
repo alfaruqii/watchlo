@@ -3,6 +3,7 @@ import { useThemeStore } from "@/store/themeStore";
 import { AnimeEpisode } from "@/types/anime.type";
 import { SeriesEpisode } from "@/types/movies.type";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 type Episode = {
   isDub?: string;
@@ -61,7 +62,7 @@ function EpisodeComponent({
   };
 
   return (
-    <button
+    <Button
       onClick={() =>
         handleEpisodeClick(
           isAnime
@@ -69,16 +70,18 @@ function EpisodeComponent({
             : (episode as SeriesEpisode).episode_number
         )
       }
-      className={`btn ${activeEpisode(
+      size="sm"
+      variant="outline"
+      className={activeEpisode(
         isAnime
           ? (episode as AnimeEpisode).number
           : (episode as SeriesEpisode).episode_number
-      )}`}
+      )}
     >
       {isAnime
         ? (episode as AnimeEpisode).number
         : (episode as SeriesEpisode).episode_number}
-    </button>
+    </Button>
   );
 }
 

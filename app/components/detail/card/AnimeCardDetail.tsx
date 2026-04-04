@@ -31,7 +31,7 @@ export const AnimeCardDetail = ({
   return (
     <Link href={route}>
       <div className="group relative w-fit transform transition-transform duration-300 ease-out group-hover:scale-105 group-hover:drop-shadow-xl">
-        <div className="card mb-1 h-44 w-32 max-h-44 overflow-hidden rounded sm:h-72 sm:w-52 sm:max-h-72">
+        <div className="mb-1 h-44 w-32 max-h-44 overflow-hidden rounded sm:h-72 sm:w-52 sm:max-h-72">
           <figure className="relative h-full w-full overflow-hidden">
             {isImageLoading && (
               <div className="absolute inset-0 animate-pulse bg-gray-700" />

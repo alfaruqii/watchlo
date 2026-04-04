@@ -4,6 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useThemeStore } from '@/store/themeStore';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 
 const ModalDocs = () => {
   const { theme } = useThemeStore();
@@ -38,24 +42,21 @@ const ModalDocs = () => {
 
   // Rest of the component remains the same...
   const CheckboxComponent = ({ className = "" }) => (
-    <div className={`form-control w-fit ${className}`}>
-      <label className="label cursor-pointer gap-2 pt-0">
-        <input
-          checked={dontAskAgain}
-          type="checkbox"
-          className="checkbox checkbox-sm rounded"
-          onChange={handleCheckboxChange}
-        />
-        <span className="label-text">Don&apos;t ask me again</span>
-      </label>
+    <div className={`w-fit ${className}`}>
+      <div className="flex items-center gap-2 pt-0">
+        <Checkbox checked={dontAskAgain} onCheckedChange={handleCheckboxChange} id="dont-ask-again" />
+        <Label htmlFor="dont-ask-again">Don&apos;t ask me again</Label>
+      </div>
     </div>
   );
 
   return (
     <>
       {isOpen && pathname === "/" && (
-        <dialog id="my_modal_3" className="modal-open backdrop-blur modal" open={isOpen}>
-          <div className={`modal-box border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} rounded shadow-lg`}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent className={`border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} rounded shadow-lg`}>
+            <DialogTitle className="sr-only">Warning</DialogTitle>
+            <DialogDescription className="sr-only">Read docs before playing for the best experience.</DialogDescription>
             {/* Modal content remains the same */}
             <div className="flex gap-4">
               <div className="w-32">
@@ -64,19 +65,17 @@ const ModalDocs = () => {
               <div>
                 <h3 className="-mt-2 font-bold text-warning sm:text-lg">WARNING</h3>
                 <p className="pb-1 text-sm sm:text-base text-balance">
-                  For best experience please read the <Link href="/docs" className="link">docs</Link> first before playing
+                  For best experience please read the <Link href="/docs" className="underline underline-offset-2">docs</Link> first before playing
                 </p>
                 <CheckboxComponent className="hidden sm:block" />
               </div>
             </div>
-            <div className="modal-action mt-0.5 items-center justify-between sm:justify-end">
+            <DialogFooter className="mt-0.5 items-center justify-between sm:justify-end">
               <CheckboxComponent className="block sm:hidden" />
-              <form method="dialog">
-                <button className="btn btn-sm rounded" onClick={closeModal}>Close</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
+              <Button variant="secondary" size="sm" onClick={closeModal}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );

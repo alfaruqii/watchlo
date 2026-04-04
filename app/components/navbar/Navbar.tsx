@@ -42,7 +42,7 @@ const Navbar = () => {
       <div
         className={`${
           theme === "garden"
-            ? "bg-base-100 border-gray-700/20"
+            ? "bg-white border-gray-700/20"
             : "bg-black border-gray-300/20"
         } sticky top-0 z-[90] flex items-center justify-between border-b px-4 transition-all  duration-300 lg:px-12 sm:py-2`}
       >
@@ -68,13 +68,13 @@ const Navbar = () => {
             <Link
               key={label}
               href={href}
-              className={
+              className={`relative inline-flex ${
                 badge
                   ? disabled
-                    ? "pointer-events-none indicator"
-                    : "indicator"
+                    ? "pointer-events-none"
+                    : ""
                   : ""
-              }
+              }`}
               {...(external ? { target: "_blank" } : {})}
             >
               <span
@@ -85,15 +85,15 @@ const Navbar = () => {
                 {label}
               </span>
               {badge && (
-                <div
+                <span
                   className={`${
                     badge.theme === "black"
-                      ? "border-gray-400 "
-                      : "border-gray-400"
-                  } badge indicator-item indicator-end indicator-top mt-1 w-fit rounded px-1 text-xs font-bold`}
+                      ? "border-gray-400 bg-black text-white"
+                      : "border-gray-400 bg-white text-black"
+                  } absolute -right-3 -top-2 w-fit rounded border px-1 text-xs font-bold`}
                 >
                   {badge.text}
-                </div>
+                </span>
               )}
             </Link>
           ))}

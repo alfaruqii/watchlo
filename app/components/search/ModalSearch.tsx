@@ -7,6 +7,7 @@ import Searched from './Searched';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePathname } from 'next/navigation'; // Use usePathname to track route changes
 import { useThemeStore } from '@/store/themeStore';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 
 function ModalSearch() {
   const { isOpen, closeModal } = useModalStore();
@@ -46,10 +47,12 @@ function ModalSearch() {
   }, [pathname]); // Depend on pathname to detect actual path changes
 
   return (
-    <dialog open={isOpen} className={`z-[1000] backdrop-blur-md ${isOpen ? "modal modal-middle modal-open" : "hidden"}`}>
-      <div className={`modal-box flex flex-col py-0 px-0 gap-2 bg-opacity-80 rounded-lg border ${isWhiteMode ? "border-gray-700/60" : "border-gray-600/80"} backdrop-blur-lg max-h-96`}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) closeModal(); }}>
+      <DialogContent className={`z-[1000] flex max-h-96 flex-col gap-2 rounded-lg border px-0 py-0 ${isWhiteMode ? "border-gray-700/60 bg-white text-black" : "border-gray-600/80 bg-neutral-900 text-white"}`}>
+        <DialogTitle className="sr-only">Search media</DialogTitle>
+        <DialogDescription className="sr-only">Search for movies, series, or anime titles.</DialogDescription>
         <div className={`w-full ${query.length > 0 ? `border-b ${isWhiteMode ? "border-gray-400 " : "border-gray-700 "}` : ""} px-4 py-3`}>
-          <label className="input pl-0 h-8 border-none !outline-none flex items-center bg-transparent rounded-none">
+          <label className="flex h-8 items-center rounded-none bg-transparent pl-0 outline-none">
             <GoSearch size={20} />
             <input
               ref={inputRef} // Attach the ref to the input element
@@ -57,16 +60,13 @@ function ModalSearch() {
               placeholder="Search"
               value={query}
               onChange={(e) => handleSearch(e.target.value)}
-              className="input h-full w-full outline-none border-none placeholder-gray-500"
+              className="h-full w-full border-none bg-transparent pl-2 outline-none placeholder-gray-500"
             />
           </label>
         </div>
         <Searched searchedText={debouncedQuery} />
-      </div>
-      <form method="dialog" className="modal-backdrop">
-        <button onClick={closeModal}>close</button>
-      </form>
-    </dialog>
+      </DialogContent>
+    </Dialog>
   );
 }
 

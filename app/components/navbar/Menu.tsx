@@ -19,7 +19,7 @@ function Menu({
     { href: "/", icon: <GiFilmSpool size={24} />, label: "Movies" },
     {
       href: "/anime",
-      icon: <GiShintoShrine size={24} />,
+                ? "bg-white border-gray-700/20"
       label: "Anime (No ads)",
     },
     { href: "/docs", icon: <GiNotebook size={24} />, label: "Docs" },
@@ -44,7 +44,7 @@ function Menu({
             border-b pb-2
             ${
               theme === "garden"
-                ? "bg-base-100 border-gray-700/20"
+                ? "bg-white border-gray-700/20"
                 : "bg-black border-gray-300/20"
             }
             drop-shadow-xl 

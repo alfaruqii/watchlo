@@ -3,7 +3,7 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig = {
   experimental: {
-    optimizePackageImports: ['react-icons', 'daisyui', 'framer-motion'],
+    optimizePackageImports: ['react-icons', 'framer-motion'],
   },
   images: {
     remotePatterns: [

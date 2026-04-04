@@ -3,6 +3,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 import sourcesMap from "@/data/watchlo-source.json";
 import { Provider } from "@/types/movies.type";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type EmbededProps = {
   id: string;
@@ -85,32 +92,21 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
 
       {/* Provider changer below the iframe */}
       <div className="flex items-center justify-between">
-        <div
-          className={`${
-            doesTV ? "dropdown-bottom sm:dropdown-top" : "dropdown-top"
-          }
-          dropdown rounded`}
-        >
-          <label
-            tabIndex={0}
-            className="btn btn-ghost rounded border border-base-300 px-4 text-xs"
-          >
-            <AiOutlineSetting className="size-4" />
-            <span>{provider.label}</span>
-          </label>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu z-10 w-52 rounded-box bg-base-100 p-2 text-xs shadow"
-          >
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="rounded px-4 text-xs">
+              <AiOutlineSetting className="size-4" />
+              <span>{provider.label}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="z-10 w-52 p-2 text-xs">
             {sourcesMap.map((source, index) => (
-              <li key={index}>
-                <a onClick={() => handleProviderChange(source.name)}>
-                  {source.label}
-                </a>
-              </li>
+              <DropdownMenuItem key={index} onClick={() => handleProviderChange(source.name)}>
+                {source.label}
+              </DropdownMenuItem>
             ))}
-          </ul>
-        </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

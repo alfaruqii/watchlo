@@ -1,3 +1,5 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 function SkeletonEpisodeNum() {
   return (
     <div className="flex flex-col pt-1.5 col-span-2">
@@ -5,7 +7,7 @@ function SkeletonEpisodeNum() {
         {Array(18)
           .fill(0)
           .map((_: number, i: number) => (
-            <div key={i} className="skeleton h-10 w-full"></div>
+            <Skeleton key={i} className="h-10 w-full" />
           ))}
       </div>
     </div>
