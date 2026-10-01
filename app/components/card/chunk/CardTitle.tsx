@@ -1,11 +1,14 @@
 function CardTitle({ title }: { title: string }) {
   return (
-    <>
-      <div className="w-32 sm:w-52">
-        <p className="line-clamp-2 text-sm font-bold">{title}</p>
-      </div>
-    </>
-  )
+    <div className="w-full">
+      <p
+        className="line-clamp-1 font-display text-sm font-bold tracking-tight text-foreground transition-colors group-hover:text-gold"
+        title={title}
+      >
+        {title}
+      </p>
+    </div>
+  );
 }
 
-export default CardTitle
+export default CardTitle;

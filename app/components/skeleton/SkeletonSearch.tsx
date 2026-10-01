@@ -2,30 +2,33 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function SkeletonSearch() {
   return (
-    <>
-      <div className="p-4">
-        <div className="no-scrollbar relative flex w-full flex-col gap-4 overflow-x-scroll">
-          {Array(10)
-            .fill(0)
-            .map((_, k) => (
-              <>
-                <div key={k} className="flex gap-2 rounded p-3">
-                  <Skeleton className="line-clamp-1 h-36 w-32 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl" />
-                  <div className="flex w-5/6 flex-col gap-1">
-                    <Skeleton className="h-3 w-20" />
-                    <div className="flex items-center gap-1 text-sm">
-                      <Skeleton className="h-2 w-8" />
-                      <Skeleton className="h-2 w-8" />
-                    </div>
-                    <Skeleton className="h-2 w-12" />
-                    <Skeleton className="h-2 w-12" />
-                  </div>
+    <div className="flex flex-col divide-y divide-hairline/60">
+      {Array(5)
+        .fill(0)
+        .map((_, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between gap-4 p-3"
+          >
+            <div className="flex items-center gap-3">
+              {/* 2:3 Archival Poster Thumbnail Skeleton */}
+              <Skeleton className="h-20 w-14 shrink-0 rounded-sm" />
+
+              {/* Result Meta & Title Skeletons */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-12" />
                 </div>
-              </>
-            ))}
-        </div>
-      </div>
-    </>
+                <Skeleton className="h-4 w-44 sm:w-64" />
+                <Skeleton className="h-3 w-32" />
+              </div>
+            </div>
+
+            <Skeleton className="size-4 shrink-0 rounded-sm" />
+          </div>
+        ))}
+    </div>
   );
 }
 

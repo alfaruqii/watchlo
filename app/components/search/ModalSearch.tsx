@@ -1,74 +1,97 @@
-'use client';
+"use client";
 
-import { useModalStore } from '@/store/modalStore';
-import { GoSearch } from 'react-icons/go';
-import { useState, useCallback, useEffect, useRef } from 'react';
-import Searched from './Searched';
-import { useDebounce } from '@/hooks/useDebounce';
-import { usePathname } from 'next/navigation'; // Use usePathname to track route changes
-import { useThemeStore } from '@/store/themeStore';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { useModalStore } from "@/store/modalStore";
+import { Search } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import Searched from "./Searched";
+import { useDebounce } from "@/hooks/useDebounce";
+import { usePathname } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 function ModalSearch() {
   const { isOpen, closeModal } = useModalStore();
-  const { theme } = useThemeStore();
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState<string>("");
   const debouncedQuery = useDebounce(query, 300);
-  const pathname = usePathname(); // Get current path
-  const prevPathnameRef = useRef<string>(pathname); // Store the previous pathname
-  const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input element
+  const pathname = usePathname();
+  const prevPathnameRef = useRef<string>(pathname);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const isWhiteMode = theme === "garden";
+  const isAnimeCatalog = pathname.split("/")[1]?.toLowerCase() === "anime";
+  const isMangaCatalog = pathname.split("/")[1]?.toLowerCase() === "manga";
 
   const handleSearch = useCallback((value: string) => {
     setQuery(value);
   }, []);
 
-  // Focus the input when the modal opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isOpen]); // Depend on isOpen to trigger focus when modal is opened
+  }, [isOpen]);
 
-  // Close the modal when the path changes
-  useEffect(() => {
-    if (isOpen) {
-      closeModal(); // Close modal if the path changes
-    }
-  }, [pathname]); // Depend on the pathname to detect changes
-
-  // Clear the search input only if there is a real pathname change
   useEffect(() => {
     if (pathname !== prevPathnameRef.current) {
-      setQuery('');  // Clear the search input
-      prevPathnameRef.current = pathname; // Update the previous pathname
+      setQuery("");
+      closeModal();
+      prevPathnameRef.current = pathname;
     }
-  }, [pathname]); // Depend on pathname to detect actual path changes
+  }, [pathname, closeModal]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) closeModal(); }}>
-      <DialogContent className={`z-[1000] flex max-h-96 flex-col gap-2 rounded-lg border px-0 py-0 ${isWhiteMode ? "border-gray-700/60 bg-white text-black" : "border-gray-600/80 bg-neutral-900 text-white"}`}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal();
+      }}
+    >
+      <DialogContent className="z-[1000] flex max-h-[28rem] flex-col gap-0 overflow-hidden rounded-sm border border-hairline bg-surface-1 px-0 py-0 text-foreground shadow-sleeve">
         <DialogTitle className="sr-only">Search media</DialogTitle>
-        <DialogDescription className="sr-only">Search for movies, series, or anime titles.</DialogDescription>
-        <div className={`w-full ${query.length > 0 ? `border-b ${isWhiteMode ? "border-gray-400 " : "border-gray-700 "}` : ""} px-4 py-3`}>
-          <label className="flex h-8 items-center rounded-none bg-transparent pl-0 outline-none">
-            <GoSearch size={20} />
-            <input
-              ref={inputRef} // Attach the ref to the input element
+        <DialogDescription className="sr-only">
+          Search for movies, series, or anime titles.
+        </DialogDescription>
+        <div
+          className={`w-full ${
+            query.length > 0 ? "border-b border-hairline" : ""
+          } bg-surface-2/60 px-4 py-3.5`}
+        >
+          <Label className="flex h-8 items-center gap-2.5 bg-transparent">
+            <Search className="size-4 shrink-0 text-gold" strokeWidth={1.75} />
+            <Input
+              ref={inputRef}
               type="text"
-              placeholder="Search"
+              placeholder={
+                isMangaCatalog
+                  ? "Search Manga, Manhwa & Webtoons..."
+                  : isAnimeCatalog
+                  ? "Search Anime Archive..."
+                  : "Search Movies & TV Series..."
+              }
               value={query}
               onChange={(e) => handleSearch(e.target.value)}
-              className="h-full w-full border-none bg-transparent pl-2 outline-none placeholder-gray-500"
+              className="h-full w-full border-none bg-transparent px-0 py-0 font-sans text-base text-foreground shadow-none outline-none placeholder:text-muted-foreground focus-visible:ring-0 sm:text-sm"
             />
-          </label>
+            <span className="hidden shrink-0 rounded-sm border border-hairline bg-surface-1 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gold sm:inline-block">
+              {isMangaCatalog
+                ? "MANGA INDEX"
+                : isAnimeCatalog
+                ? "ANIME INDEX"
+                : "CINEMA INDEX"}
+            </span>
+          </Label>
         </div>
-        <Searched searchedText={debouncedQuery} />
+        <div className="overflow-y-auto">
+          <Searched searchedText={debouncedQuery} />
+        </div>
       </DialogContent>
     </Dialog>
   );
 }
 
 export default ModalSearch;
-

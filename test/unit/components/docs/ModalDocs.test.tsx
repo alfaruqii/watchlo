@@ -47,14 +47,14 @@ describe('ModalDocs Component', () => {
 
     render(<ModalDocs />);
 
-    const warningText = screen.getByText('WARNING');
-    expect(warningText).toBeInTheDocument();
+    const noteText = screen.getByText(/SCREENING NOTE:/i);
+    expect(noteText).toBeInTheDocument();
 
-    const docsLink = screen.getByText('docs');
+    const docsLink = screen.getByText(/Playback Dossier \(Docs\)/i);
     expect(docsLink).toBeInTheDocument();
 
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    expect(closeButton).toBeInTheDocument();
+    const dismissButton = screen.getByRole('button', { name: /dismiss/i });
+    expect(dismissButton).toBeInTheDocument();
   });
 
   it('does not display modal on non-root path', () => {

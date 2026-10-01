@@ -9,7 +9,7 @@ describe('Answer Component', () => {
 
     const answerElement = screen.getByText(testText);
     expect(answerElement).toBeInTheDocument();
-    expect(answerElement).toHaveClass('text-balance');
+    expect(answerElement).toHaveClass('text-pretty');
   });
 
   it('applies custom class when provided', () => {
@@ -19,7 +19,7 @@ describe('Answer Component', () => {
 
     const answerElement = screen.getByText(testText);
     expect(answerElement).toHaveClass(customClass);
-    expect(answerElement).toHaveClass('text-balance');
+    expect(answerElement).toHaveClass('text-pretty');
   });
 
   it('renders empty paragraph when no text provided', () => {
@@ -28,6 +28,6 @@ describe('Answer Component', () => {
     const paragraphElement = container.querySelector('p');
     expect(paragraphElement).toBeInTheDocument();
     expect(paragraphElement).toHaveTextContent('');
-    expect(paragraphElement).toHaveClass('text-balance');
+    expect(paragraphElement).toHaveClass('text-pretty');
   });
 });

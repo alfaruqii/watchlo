@@ -1,27 +1,37 @@
+import { Star } from "lucide-react";
+
 interface RatingComponentProps {
   score: number;
 }
 
 const RatingComponent: React.FC<RatingComponentProps> = ({ score }) => {
-  const stars = Math.round(score); // Keep the score as it is (out of 10)
+  const normalizedScore = Math.max(0, Math.min(10, Math.round(score || 0)));
+  const filledStars = normalizedScore / 2;
 
   return (
-    <div className="rating rating-half flex items-center pointer-events-none">
-      {Array.from({ length: 10 }, (_, index) => {
-        const isFilled = index + 1 === stars; // Check if this star should be filled
-        const halfStarClass = index % 2 === 0 ? "mask-half-1" : "mask-half-2"; // Alternate between half-1 and half-2
-
-        return (
-          <input
-            key={index}
-            type="radio"
-            className={`mask mask-star-2 bg-orange-400 ${halfStarClass}`}
-            defaultChecked={isFilled}
-            disabled // Disable inputs for display-only rating
-          />
-        );
-      })}
-      <span className="ml-2 text-sm">{stars}/10</span>
+    <div
+      className="pointer-events-none flex items-center gap-1"
+      aria-label={`Rating ${normalizedScore} out of 10`}
+    >
+      <div className="flex items-center gap-0.5">
+        {Array.from({ length: 5 }, (_, index) => {
+          const fillRatio = Math.max(0, Math.min(1, filledStars - index));
+          return (
+            <span key={index} className="relative inline-flex h-4 w-4">
+              <Star className="h-4 w-4 text-gray-500/50" fill="currentColor" />
+              {fillRatio > 0 && (
+                <span
+                  className="absolute inset-y-0 left-0 overflow-hidden"
+                  style={{ width: `${fillRatio * 100}%` }}
+                >
+                  <Star className="h-4 w-4 text-orange-400" fill="currentColor" />
+                </span>
+              )}
+            </span>
+          );
+        })}
+      </div>
+      <span className="ml-1 text-sm">{normalizedScore}/10</span>
     </div>
   );
 };

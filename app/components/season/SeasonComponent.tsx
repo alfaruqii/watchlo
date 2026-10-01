@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { Layers } from "lucide-react";
 import RatingComponent from "../rating/RatingComponent";
 import ButtonWatch from "./ButtonWatch";
 import { formatDesc } from "@/utils/formatted";
 import fallbackDesc from "@/utils/fallbackDesc.json";
-import { Seasons, TVInfo } from "@/types/movies.type"
+import { Seasons, TVInfo } from "@/types/movies.type";
 import {
   Accordion,
   AccordionContent,
@@ -18,77 +19,120 @@ function SeasonComponent({ data }: { data: TVInfo }) {
   const now = Date.now();
 
   const alreadyReleased = (season: Seasons): boolean => {
-    return !!(season.air_date &&
-      new Date(season.air_date).getTime() < now)
-  }
+    return !!(season.air_date && new Date(season.air_date).getTime() < now);
+  };
 
   const doesNameSameLikeSeason = (season: Seasons): boolean => {
     return `season ${season.season_number}` === season.name?.toLowerCase();
-  }
+  };
 
   const filteredSeason = data.seasons.filter((season: Seasons) => {
     return (
       season.season_number !== 0 &&
       season.episode_count > 0 &&
-      (season.air_date ??
-        new Date(season.air_date).getTime() < now)
+      Boolean(season.air_date && new Date(season.air_date).getTime() < now)
     );
   });
 
   return (
-    <>
-      <div className="overflow-hidden">
-        <p className="mb-2 mt-4 w-full text-center text-xl font-bold">Seasons 📽️</p>
-        <div className="scrollbar-w-8 scrollbar-thumb-rounded-full scrollbar-track-rounded-full max-h-[23rem] overflow-y-scroll rounded scrollbar scrollbar-track-gray-400 scrollbar-thumb-gray-900 ">
-          <Accordion type="single" collapsible defaultValue={filteredSeason[0] ? `season-${filteredSeason[0].season_number}` : undefined}>
-            {filteredSeason.map((season) => (
-              <AccordionItem
-                className="mb-1 rounded bg-neutral-800 font-bold drop-shadow-lg lg:mb-3"
-                key={season.season_number}
-                value={`season-${season.season_number}`}
-              >
-                <div className="relative">
-                  <div className="absolute inset-0 z-0 h-full w-full">
-                    <Image
-                      unoptimized
-                      src={season.poster_path ?? data.poster_path ?? "/fallback-card.webp"}
-                      alt={data.name}
-                      fill
-                      onLoad={() => setImageLoading(false)}
-                      className={`rounded object-cover transition-custom-blur ${isImageLoading ? 'scale-110 blur-2xl' : 'scale-100 blur-0'}`}
-                    />
-                    <div className="absolute h-full w-full bg-gradient-to-r from-black/80 via-black/50 to-black/40" ></div>
-                  </div>
-                  <AccordionTrigger className="relative z-10 px-4 text-lg font-medium text-white">
-                    <div>
-                      Season {season.season_number}
-                      {season.name && <p className={`${doesNameSameLikeSeason(season) ? "hidden" : "text-xs line-clamp-1"}`}>({season.name})</p>}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="relative z-10 px-4 text-white">
-                    {/* Parent container with defined size and relative position */}
-                    <div className="flex flex-col gap-2">
-                      <p className="line-clamp-2 text-sm">{formatDesc(season.overview || data.overview || fallbackDesc)}</p>
-                      {
-                        alreadyReleased(season) ?
-                          <>
-                            <RatingComponent score={season.vote_average} />
-                            <ButtonWatch text="Watch" season={season.season_number} ep={1} id={data.id} />
-                          </>
-                          :
-                          <ButtonWatch text="Not Yet Released" />
-                      }
-                    </div>
-                  </AccordionContent>
-                </div >
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div >
+    <section className="flex flex-col overflow-hidden rounded-sm border border-hairline bg-surface-1 p-4 sm:p-5">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 border-b border-hairline pb-2.5">
+        <h2 className="flex items-center gap-2 font-display text-base font-bold tracking-tight text-foreground sm:text-lg">
+          <Layers className="size-4 shrink-0 text-gold" strokeWidth={1.75} />
+          <span>Season Volumes</span>
+        </h2>
+        <span className="shrink-0 whitespace-nowrap font-mono text-[10px] uppercase tracking-wider text-muted-foreground tabular-nums sm:text-[11px]">
+          {filteredSeason.length} VOLUMES
+        </span>
       </div>
-    </>
+
+      <div className="max-h-[24rem] overflow-y-auto pr-1">
+        <Accordion
+          type="single"
+          collapsible
+          defaultValue={
+            filteredSeason[0]
+              ? `season-${filteredSeason[0].season_number}`
+              : undefined
+          }
+        >
+          {filteredSeason.map((season) => (
+            <AccordionItem
+              className="mb-2 overflow-hidden rounded-sm border border-hairline bg-surface-2 last:mb-0"
+              key={season.season_number}
+              value={`season-${season.season_number}`}
+            >
+              <div className="relative">
+                <div className="absolute inset-0 z-0 h-full w-full">
+                  <Image
+                    unoptimized
+                    src={
+                      (season.poster_path && season.poster_path.trim()) ||
+                      (data.poster_path && data.poster_path.trim()) ||
+                      "/fallback-card.webp"
+                    }
+                    alt={data.name}
+                    fill
+                    onLoad={() => setImageLoading(false)}
+                    onError={() => setImageLoading(false)}
+                    className={`object-cover transition-custom-blur ${
+                      isImageLoading
+                        ? "scale-110 blur-2xl"
+                        : "scale-100 blur-0"
+                    }`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0d0c0a]/90 via-[#0d0c0a]/80 to-[#0d0c0a]/65" />
+                </div>
+                <AccordionTrigger className="relative z-10 px-4 py-3 font-display text-base font-bold text-[#f2ece1] hover:no-underline">
+                  <div className="flex items-center gap-3 text-left">
+                    <span className="font-mono text-xs text-[#e09f3e] tabular-nums">
+                      VOL. #{String(season.season_number).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <span>Season {season.season_number}</span>
+                      {season.name && (
+                        <p
+                          className={`${
+                            doesNameSameLikeSeason(season)
+                              ? "hidden"
+                              : "line-clamp-1 font-sans text-xs font-normal text-[#f2ece1]/75"
+                          }`}
+                        >
+                          ({season.name})
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="relative z-10 border-t border-[#f2ece1]/15 px-4 pb-4 pt-3 text-[#f2ece1]">
+                  <div className="flex flex-col gap-3">
+                    <p className="line-clamp-2 max-w-[65ch] text-sm text-[#f2ece1]/85">
+                      {formatDesc(
+                        season.overview || data.overview || fallbackDesc
+                      )}
+                    </p>
+                    {alreadyReleased(season) ? (
+                      <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                        <RatingComponent score={season.vote_average} />
+                        <ButtonWatch
+                          text="Watch"
+                          season={season.season_number}
+                          ep={1}
+                          id={data.id}
+                        />
+                      </div>
+                    ) : (
+                      <ButtonWatch text="Not Yet Released" />
+                    )}
+                  </div>
+                </AccordionContent>
+              </div>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </section>
   );
 }
 
 export default SeasonComponent;
-
