@@ -10,6 +10,7 @@ jest.mock("@/services", () => ({
     getMovieReviews: jest.fn(),
     getMovieSimilar: jest.fn(),
     getMovieRecommendations: jest.fn(),
+    getMovieCredits: jest.fn(),
   },
 }));
 
@@ -37,6 +38,9 @@ describe("Movie detail page", () => {
       data: { results: [{ id: "trailer-1", type: "Trailer", key: "abc" }] },
     } as any);
     movieServiceMock.getMovieReviews.mockResolvedValue({ data: { results: [] } } as any);
+    movieServiceMock.getMovieCredits.mockResolvedValue({
+      data: { cast: [], crew: [] },
+    } as any);
   });
 
   it("renders recommendations and similar sections when results are available", async () => {
@@ -50,8 +54,8 @@ describe("Movie detail page", () => {
     const ui = await DetailPage({ params: Promise.resolve({ id: "1" }) });
     render(ui);
 
-    expect(screen.getByText("Recommendations 👌")).toBeInTheDocument();
-    expect(screen.getByText("Similar 📍")).toBeInTheDocument();
+    expect(screen.getByText("Curated Recommendations")).toBeInTheDocument();
+    expect(screen.getByText("Similar Archival Editions")).toBeInTheDocument();
   });
 
   it("does not render recommendations and similar sections when results are empty", async () => {

@@ -1,34 +1,28 @@
 "use client";
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useThemeStore } from '@/store/themeStore';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ShieldAlert, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const ModalDocs = () => {
-  const { theme } = useThemeStore();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [dontAskAgain, setDontAskAgain] = useState<boolean>(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    // Check localStorage when component mounts
     const storedValue = localStorage.getItem("dontAskAgain");
     const shouldNotShow = JSON.parse(storedValue || "false");
     setDontAskAgain(shouldNotShow);
 
-    // Show modal only on root path and when shouldNotShow is false
     if (pathname === "/" && !shouldNotShow) {
       setIsOpen(true);
     } else {
-      // Close modal on any other path
       setIsOpen(false);
     }
-  }, [pathname]); // This effect runs whenever pathname changes
+  }, [pathname]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -37,47 +31,64 @@ const ModalDocs = () => {
   const handleCheckboxChange = () => {
     const newState = !dontAskAgain;
     setDontAskAgain(newState);
-    localStorage.setItem('dontAskAgain', JSON.stringify(newState));
+    localStorage.setItem("dontAskAgain", JSON.stringify(newState));
   };
 
-  // Rest of the component remains the same...
-  const CheckboxComponent = ({ className = "" }) => (
-    <div className={`w-fit ${className}`}>
-      <div className="flex items-center gap-2 pt-0">
-        <Checkbox checked={dontAskAgain} onCheckedChange={handleCheckboxChange} id="dont-ask-again" />
-        <Label htmlFor="dont-ask-again">Don&apos;t ask me again</Label>
-      </div>
-    </div>
-  );
+  if (!isOpen || pathname !== "/") return null;
 
   return (
-    <>
-      {isOpen && pathname === "/" && (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className={`border ${theme === "garden" ? "border-gray-700/60" : "border-gray-600/80"} rounded shadow-lg`}>
-            <DialogTitle className="sr-only">Warning</DialogTitle>
-            <DialogDescription className="sr-only">Read docs before playing for the best experience.</DialogDescription>
-            {/* Modal content remains the same */}
-            <div className="flex gap-4">
-              <div className="w-32">
-                <Image alt="Warning Emoji" src="/warning-emoji.webp" width={100} height={100} />
-              </div>
-              <div>
-                <h3 className="-mt-2 font-bold text-warning sm:text-lg">WARNING</h3>
-                <p className="pb-1 text-sm sm:text-base text-balance">
-                  For best experience please read the <Link href="/docs" className="underline underline-offset-2">docs</Link> first before playing
-                </p>
-                <CheckboxComponent className="hidden sm:block" />
-              </div>
-            </div>
-            <DialogFooter className="mt-0.5 items-center justify-between sm:justify-end">
-              <CheckboxComponent className="block sm:hidden" />
-              <Button variant="secondary" size="sm" onClick={closeModal}>Close</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
+    <aside
+      role="region"
+      aria-label="Screening room playback notice"
+      className="border-b border-hairline bg-surface-2/90 px-4 py-2.5 sm:px-6 lg:px-10"
+    >
+      <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 text-xs sm:text-sm">
+          <ShieldAlert
+            className="size-4 shrink-0 text-gold"
+            strokeWidth={1.75}
+          />
+          <p className="text-foreground">
+            <span className="mr-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-gold">
+              SCREENING NOTE:
+            </span>
+            For the cleanest ad-free playback &amp; DNS setup, read the{" "}
+            <Link
+              href="/docs"
+              className="font-semibold text-gold underline underline-offset-4 hover:opacity-85"
+            >
+              Playback Dossier (Docs)
+            </Link>{" "}
+            before starting.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex shrink-0 items-center gap-2">
+            <Checkbox
+              checked={dontAskAgain}
+              onCheckedChange={handleCheckboxChange}
+              id="dont-ask-again"
+            />
+            <Label
+              htmlFor="dont-ask-again"
+              className="cursor-pointer whitespace-nowrap font-mono text-[11px] text-muted-foreground"
+            >
+              Don&apos;t ask me again
+            </Label>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={closeModal}
+            className="h-7 shrink-0 gap-1 px-2 font-mono text-[11px]"
+          >
+            <span>Dismiss</span>
+            <X className="size-3.5" strokeWidth={1.75} />
+          </Button>
+        </div>
+      </div>
+    </aside>
   );
 };
 

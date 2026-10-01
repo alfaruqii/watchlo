@@ -8,7 +8,10 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      magnatbold: ["var(--font-magnatBold)"],
+      sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+      display: ["var(--font-display)", "var(--font-magnatBold)", "sans-serif"],
+      mono: ["var(--font-mono)", "monospace"],
+      magnatbold: ["var(--font-display)", "var(--font-magnatBold)", "sans-serif"],
     },
     container: {
       screens: {
@@ -24,6 +27,22 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        surface: {
+          1: "var(--surface-1)",
+          2: "var(--surface-2)",
+          3: "var(--surface-3)",
+        },
+        muted: {
+          DEFAULT: "var(--surface-2)",
+          foreground: "var(--muted-foreground)",
+        },
+        gold: "var(--accent-gold)",
+        vermilion: "var(--accent-vermilion)",
+        hairline: "var(--border-hairline)",
+      },
+      boxShadow: {
+        sleeve: "0 14px 34px -10px rgba(0, 0, 0, 0.55)",
+        "sleeve-light": "0 12px 28px -10px rgba(20, 18, 16, 0.16)",
       },
     },
   },

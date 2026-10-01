@@ -136,6 +136,46 @@ export interface Video {
   thumbnail: string;
 }
 
+export interface TMDBCastMember {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+
+export interface TMDBCrewMember {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
+export interface TMDBCreditsResponse {
+  id: number;
+  cast: TMDBCastMember[];
+  crew: TMDBCrewMember[];
+}
+
+export interface TMDBGenre {
+  id: number;
+  name: string;
+}
+
 export interface CrewMember {
   id: number;
   name: string;

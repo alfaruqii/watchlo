@@ -1,5 +1,4 @@
 "use client";
-import { useThemeStore } from "@/store/themeStore";
 import { AnimeEpisode } from "@/types/anime.type";
 import { SeriesEpisode } from "@/types/movies.type";
 import { useRouter } from "next/navigation";
@@ -24,28 +23,21 @@ function EpisodeComponent({
   ep,
   handleEpisodeChange,
 }: Episode) {
-  const { theme } = useThemeStore();
   const router = useRouter();
 
-  const isWhiteMode = (): boolean => theme === "garden";
+  const epNum =
+    (isAnime
+      ? (episode as AnimeEpisode).number
+      : (episode as SeriesEpisode).episode_number ?? (episode as AnimeEpisode).number) ?? 1;
 
-  const activeEpisode = (episodeNumber: number): string => {
-    const isActive = String(episodeNumber) === String(ep);
-    if (isActive && isWhiteMode()) {
-      return "bg-gray-700 text-white";
-    }
-    if (isActive && !isWhiteMode()) {
-      return "bg-gray-600";
-    }
-    return "";
-  };
+  const isActive = String(epNum) === String(ep);
 
   const handleEpisodeClick = (episodeNumber: number, episodeId?: string) => {
     const query = isAnime
       ? {
           id,
           ep: episodeNumber,
-          ...(isDub && { isDub: true }), // Only add isDub if it's true
+          ...(isDub && { isDub: true }),
         }
       : { id, season, ep: episodeNumber };
     const queryString = new URLSearchParams(
@@ -65,22 +57,15 @@ function EpisodeComponent({
     <Button
       onClick={() =>
         handleEpisodeClick(
-          isAnime
-            ? (episode as AnimeEpisode).number
-            : (episode as SeriesEpisode).episode_number
+          epNum,
+          isAnime ? (episode as AnimeEpisode).id : undefined
         )
       }
       size="sm"
-      variant="outline"
-      className={activeEpisode(
-        isAnime
-          ? (episode as AnimeEpisode).number
-          : (episode as SeriesEpisode).episode_number
-      )}
+      variant={isActive ? "default" : "outline"}
+      className="font-mono text-xs tabular-nums"
     >
-      {isAnime
-        ? (episode as AnimeEpisode).number
-        : (episode as SeriesEpisode).episode_number}
+      {epNum}
     </Button>
   );
 }

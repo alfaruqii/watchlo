@@ -1,52 +1,27 @@
 [
   {
-    "name": "vidlink",
-    "label": "VidLink",
-    "url": "https://vidlink.pro"
+    "name": "videasy",
+    "label": "Videasy (Sub Indo / Multi-Sub)",
+    "url": "https://player.videasy.to"
   },
   {
-    "name": "embed.su",
-    "label": "Embedded SU",
-    "url": "https://embed.su/embed"
-  },
-  {
-    "name": "vidsrc.cc/v3",
-    "label": "Vidsrc CC v3",
-    "url": "https://vidsrc.cc/v3/embed"
-  },
-  {
-    "name": "smashystream",
-    "label": "Smashy Stream",
-    "url": "https://player.smashy.stream"
-  },
-  {
-    "name": "AutoEmbe",
-    "label": "AutoEmbe",
-    "url": "https://player.autoembed.cc/embed"
-  },
-  {
-    "name": "vidbinge",
-    "label": "Vidbinge 4K",
-    "url": "https://vidbinge.dev/embed"
-  },
-  {
-    "name": "vidsrc.vip",
-    "label": "Premium Stream",
-    "url": "https://vidsrc.vip/embed"
-  },
-  {
-    "name": "vidsrc.icu",
-    "label": "Backup Stream",
-    "url": "https://vidsrc.icu/embed"
-  },
-  {
-    "name": "vidsrc.pro",
-    "label": "Main Stream",
-    "url": "https://vidsrc.pro/embed"
-  },
-  {
-    "name": "vidsrc.xyz",
-    "label": "Alternative Stream",
+    "name": "vidsrc.to",
+    "label": "Vidsrc TO (Fast HD)",
     "url": "https://vidsrc.to/embed"
+  },
+  {
+    "name": "vidsrc.pm",
+    "label": "Vidsrc PM (HD Mirror)",
+    "url": "https://vidsrc.pm/embed"
+  },
+  {
+    "name": "vidsrc.sh",
+    "label": "Vidsrc SH (Mirror)",
+    "url": "https://vidsrc.sh/embed"
+  },
+  {
+    "name": "vidlink",
+    "label": "VidLink (Backup)",
+    "url": "https://vidlink.pro"
   }
 ]

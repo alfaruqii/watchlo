@@ -1,104 +1,173 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Film } from "lucide-react";
 import { AnimeDetails, AnimeInfo } from "@/types/anime.type";
 import { AnimeCardDetail } from "../card/AnimeCardDetail";
 import SkeletonEpisodes from "@/components/skeleton/SkeletonEpisodes";
-import { useThemeStore } from "@/store/themeStore";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNavigation,
+  CarouselFadeMask,
+} from "@/components/ui/carousel";
 
 function EpisodesContainer(anime: AnimeInfo) {
-  const { theme } = useThemeStore();
-  const [provider, setProvider] = useState<string | undefined>(
-    anime.id_provider?.idGogo
-  );
+  const defaultProvider =
+    anime.id_provider?.idAnikoto ||
+    anime.id_provider?.idGogo ||
+    anime.title?.romaji ||
+    anime.title?.english;
+
+  const [provider, setProvider] = useState<string | undefined>(defaultProvider);
   const [episodes, setEpisodes] = useState<AnimeDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isWhiteMode = (): boolean => theme === "garden";
+  const titleHint = Array.from(
+    new Set(
+      [
+        anime.title?.english,
+        anime.title?.romaji,
+        anime.title?.userPreferred,
+      ].filter(Boolean)
+    )
+  ).join("|||");
+
+  const coverImageHint =
+    anime.coverImage?.extraLarge ||
+    anime.coverImage?.large ||
+    anime.coverImage?.medium ||
+    anime.bannerImage ||
+    "";
 
   useEffect(() => {
+    let cancelled = false;
     async function fetchEpisodes() {
-      if (provider) {
+      if (provider || anime.id) {
         setLoading(true);
         try {
-          const response = await fetch(`/api/anime-infov1?query=${provider}`);
+          const isAdult = Boolean(anime.isAdult || anime.genres?.includes("Hentai"));
+          const params = new URLSearchParams();
+          if (provider) params.set("query", provider);
+          if (anime.id) params.set("id", String(anime.id));
+          if (titleHint) {
+            params.set("title", titleHint);
+          }
+          if (coverImageHint) {
+            params.set("image", coverImageHint);
+          }
+          if (isAdult) {
+            params.set("isAdult", "true");
+          }
+          const response = await fetch(`/api/anime-infov1?${params.toString()}`);
           if (!response.ok) {
-            throw new Error("Failed to fetch search results");
+            if (!cancelled) setEpisodes(null);
+            return;
           }
           const data = await response.json();
-          setEpisodes(data);
-        } catch (error) {
-          console.error("Failed to fetch episodes:", error);
+          if (!cancelled) {
+            setEpisodes(data);
+          }
+        } catch {
+          if (!cancelled) {
+            setEpisodes(null);
+          }
         } finally {
-          setLoading(false);
+          if (!cancelled) {
+            setLoading(false);
+          }
         }
+      } else {
+        setLoading(false);
       }
     }
 
     fetchEpisodes();
-  }, [provider]);
+    return () => {
+      cancelled = true;
+    };
+  }, [provider, titleHint, coverImageHint, anime.id, anime.isAdult, anime.genres]);
 
   return (
-    <div className="overflow-hidden sm:px-4 py-4">
-      <div className="mb-2 flex gap-1">
+    <section className="my-6 overflow-hidden rounded-sm border border-hairline bg-surface-1 p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-hairline pb-3">
+        <h2 className="flex items-center gap-2 font-display text-lg font-bold tracking-tight text-foreground">
+          <Film className="size-4 text-gold" strokeWidth={1.75} />
+          <span>Episode Reels</span>
+        </h2>
+
         {anime.id_provider?.idGogoDub && (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            className={`${
-              provider === anime.id_provider?.idGogo
-                ? `bg-gray-400 ${
-                    !isWhiteMode() ? "text-gray-800 hover:text-gray-100" : ""
-                  }`
-                : ``
-            }`}
-            onClick={() => setProvider(anime.id_provider?.idGogo)}
-            disabled={!anime.id_provider?.idGogo}
-          >
-            Sub
-          </Button>
-        )}
-        {anime.id_provider?.idGogoDub && (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            className={`${
-              provider === anime.id_provider?.idGogoDub
-                ? `bg-gray-400 ${
-                    !isWhiteMode() ? "text-gray-800 hover:text-gray-100" : ""
-                  }`
-                : ""
-            }`}
-            onClick={() => setProvider(anime.id_provider?.idGogoDub)}
-            disabled={!anime.id_provider?.idGogoDub}
-          >
-            Dub
-          </Button>
+          <div className="flex items-center gap-1.5">
+            <Button
+              type="button"
+              size="sm"
+              variant={
+                provider === anime.id_provider?.idGogo ? "default" : "outline"
+              }
+              onClick={() => setProvider(anime.id_provider?.idGogo)}
+              disabled={!anime.id_provider?.idGogo}
+            >
+              SUB EDITION
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={
+                provider === anime.id_provider?.idGogoDub
+                  ? "default"
+                  : "outline"
+              }
+              onClick={() => setProvider(anime.id_provider?.idGogoDub)}
+              disabled={!anime.id_provider?.idGogoDub}
+            >
+              DUB EDITION
+            </Button>
+          </div>
         )}
       </div>
 
       {loading ? (
         <SkeletonEpisodes noMargin />
-      ) : episodes?.episodes.length ? (
-        <div className="embla__container scrollbar-thumb-rounded-full scrollbar-track-rounded-full relative flex w-full gap-4 overflow-x-scroll pb-2 scrollbar-track-gray-300 scrollbar-thumb-gray-800">
-          {episodes.episodes.map((episode) => (
-            <AnimeCardDetail
-              key={episode.id}
-              animeImage={episodes.image}
-              id={String(anime.id)}
-              episodeNumber={episode.number}
-              // example: jujutsu-kaisen-tv-episode-1
-              episodeId={episode.id}
-            />
-          ))}
-        </div>
+      ) : episodes?.episodes?.length ? (
+        <Carousel className="w-full">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              {episodes.episodes.length} Episodes Indexed // Drag or navigate
+            </span>
+            <CarouselNavigation />
+          </div>
+          <div className="relative">
+            <CarouselFadeMask fromColor="from-background" />
+            <CarouselContent className="-ml-3 pt-2 pb-3">
+              {episodes.episodes.map((episode) => {
+                const reelCover =
+                  episodes.image ||
+                  episodes.image_url ||
+                  coverImageHint ||
+                  "/fallback-card.webp";
+
+                return (
+                  <CarouselItem key={episode.id} className="pl-3 basis-auto">
+                    <AnimeCardDetail
+                      animeImage={reelCover}
+                      id={String(anime.id)}
+                      episodeNumber={episode.number}
+                      episodeId={episode.id}
+                    />
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+          </div>
+        </Carousel>
       ) : (
-        <div>No episodes available</div>
+        <p className="font-mono text-xs text-muted-foreground">
+          No episode reels currently indexed for this edition.
+        </p>
       )}
-    </div>
+    </section>
   );
 }
 

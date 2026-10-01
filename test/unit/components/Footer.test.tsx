@@ -16,35 +16,30 @@ describe("Footer component", () => {
     useThemeStore.setState({ theme: "black", setTheme: jest.fn() });
 
     render(<Footer />);
-    const disclaimerText = screen.getByText(/disclaimer/i);
+    const noticeText = screen.getByText(/ARCHIVE NOTICE:/i);
 
     // Check that the footer text content is rendered
-    expect(disclaimerText).toBeInTheDocument();
+    expect(noticeText).toBeInTheDocument();
     expect(
       screen.getByText(
-        /please use this site wisely, dont use it to search some inappropriate film/i
+        /Watchlo is an experimental, non-commercial catalog index/i
       )
     ).toBeInTheDocument();
-    expect(screen.getByText(/copyright © 2024 watchlo/i)).toBeInTheDocument();
+    expect(screen.getByText(/WATCHLO \/\/ CREATED BY/i)).toBeInTheDocument();
 
-    // // Access the parent div
+    // Access the parent container
     const footerDiv = screen.getByTestId(/footer-container/i);
 
-    // Check if footerDiv exists and verify the theme-specific class
+    // Check if footerDiv exists and has hairline border
     expect(footerDiv).toBeInTheDocument();
-    expect(footerDiv).toHaveClass("border-gray-300/20");
+    expect(footerDiv).toHaveClass("border-hairline");
   });
 
-  test("applies 'garden' theme styles correctly", () => {
-    // Mock the theme as "garden"
-    useThemeStore.setState({ theme: "garden", setTheme: jest.fn() });
-
+  test("renders navigation links to repertory and docs", () => {
     render(<Footer />);
-    const footerDiv = screen.getByTestId(/footer-container/i);
-
-    // Check if footerDiv exists and verify the theme-specific class
-    expect(footerDiv).toBeInTheDocument();
-    // Check that the "garden" theme border class is applied
-    expect(footerDiv).toHaveClass("border-gray-700/20");
+    expect(screen.getByText("Cinema & TV")).toBeInTheDocument();
+    expect(screen.getByText("Anime Series")).toBeInTheDocument();
+    expect(screen.getByText("Manga Shelf")).toBeInTheDocument();
+    expect(screen.getByText("Playback Guide & DNS")).toBeInTheDocument();
   });
 });
