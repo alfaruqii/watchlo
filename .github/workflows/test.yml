@@ -20,5 +20,5 @@ jobs:
         with:
           node-version: 24
 
-      - run: npm ci
+      - run: npm ci || npm install
       - run: npm run test
