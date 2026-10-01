@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Settings2, Tv } from "lucide-react";
 import sourcesMap from "@/data/watchlo-source.json";
 import { Provider } from "@/types/movies.type";
@@ -43,17 +43,35 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
     sourcesMap.length > 0
       ? sourcesMap[0]
       : {
-          name: "videasy",
-          label: "Videasy (Sub Indo / Multi-Sub)",
-          url: "https://player.videasy.to",
+          name: "vidsrc.to",
+          label: "Vidsrc TO (Fast HD)",
+          url: "https://vidsrc.to/embed",
         };
   const [provider, setProvider] = useState<Provider>(initialProvider);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("watchlo_embed_provider");
+      if (saved) {
+        const found = sourcesMap.find((source) => source.name === saved);
+        if (found) setProvider(found);
+      }
+    } catch {
+      // ignore storage access errors
+    }
+  }, []);
 
   const handleProviderChange = (providerName: string) => {
     const selectedProvider = sourcesMap.find(
       (source) => source.name === providerName
     );
-    setProvider(selectedProvider || sourcesMap[0]);
+    const chosen = selectedProvider || sourcesMap[0];
+    setProvider(chosen);
+    try {
+      localStorage.setItem("watchlo_embed_provider", chosen.name);
+    } catch {
+      // ignore storage access errors
+    }
   };
 
   const doesTV = type?.toLowerCase() === "tv";
