@@ -11,6 +11,9 @@
     "test:cover": "jest --coverage",
     "test:watch": "jest --watch"
   },
+  "engines": {
+    "node": "24.x"
+  },
   "dependencies": {
     "@next/bundle-analyzer": "^15.0.3",
     "@radix-ui/react-accordion": "^1.2.12",
