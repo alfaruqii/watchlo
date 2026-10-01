@@ -41,6 +41,7 @@ const nextConfig = {
     optimizePackageImports: ["react-icons", "framer-motion"],
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

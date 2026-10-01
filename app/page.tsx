@@ -8,6 +8,8 @@ import { Button } from "./components/ui/button";
 import { Badge } from "./components/ui/badge";
 import GenreFilter from "./components/genre/GenreFilter";
 
+export const revalidate = 300; // Cache on edge for 5 minutes
+
 interface HomePageProps {
   searchParams: Promise<{ genre?: string }>;
 }

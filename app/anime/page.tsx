@@ -4,7 +4,7 @@ import AnimeGenreFilter from "@/components/genre/AnimeGenreFilter";
 import { AnimeServiceV1, AnimeServiceV2 } from "../services";
 import { Anime } from "@/types/anime.type";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // Cache on edge for 5 minutes
 
 interface AnimePageProps {
   searchParams: Promise<{ genre?: string }>;

@@ -221,7 +221,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control": "public, s-maxage=120, stale-while-revalidate=300",
+      },
+    });
   } catch (error) {
     console.error("Failed to give anime stream", error);
     return NextResponse.json(

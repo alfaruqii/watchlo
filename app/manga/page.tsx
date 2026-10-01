@@ -7,7 +7,7 @@ import SkeletonMangaShelf from "@/components/skeleton/SkeletonMangaShelf";
 import { MangaService } from "@/services";
 import { MangaItem, MangaSubtype } from "@/types/manga.type";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // Cache on edge for 5 minutes
 
 interface MangaPageProps {
   searchParams: Promise<{ subtype?: string; genre?: string }>;
