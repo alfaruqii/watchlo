@@ -159,4 +159,33 @@ describe("Embeded component", () => {
     );
     expect(localStorage.getItem("watchlo_embed_provider")).toBe("multiembed");
   });
+
+  test("switches provider when quick server pill is clicked", () => {
+    render(<Embeded id="1126166" type="movie" />);
+
+    // Click on VidSrc Official pill
+    const pills = screen.getAllByRole("button", { name: /^VidSrc/i });
+    expect(pills.length).toBeGreaterThan(0);
+    fireEvent.click(pills[0]);
+
+    const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
+    expect(iframe).toHaveAttribute(
+      "src",
+      "https://vidsrc.me/embed/movie/1126166"
+    );
+    expect(localStorage.getItem("watchlo_embed_provider")).toBe("vidsrcme");
+  });
+
+  test("renders fallback search links when title is provided", () => {
+    render(<Embeded id="268922" type="movie" title="Marmut Merah Jambu" />);
+
+    expect(screen.getByText(/Google Search/i)).toBeInTheDocument();
+    expect(screen.getByText(/JustWatch ID/i)).toBeInTheDocument();
+
+    const googleLink = screen.getByRole("link", { name: /Google Search/i });
+    expect(googleLink).toHaveAttribute(
+      "href",
+      expect.stringContaining("Marmut%20Merah%20Jambu")
+    );
+  });
 });

@@ -47,7 +47,13 @@ async function WatchPage(props: WatchPageParams) {
       </header>
 
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-5">
-        <Embeded id={id} type="tv" season={season} ep={ep} />
+        <Embeded
+          id={id}
+          type="tv"
+          season={season}
+          ep={ep}
+          title={tvInfo?.name}
+        />
         <EpisodesComponent
           item={tvInfo}
           id={id}

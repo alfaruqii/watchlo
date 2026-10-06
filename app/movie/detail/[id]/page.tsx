@@ -67,7 +67,12 @@ async function DetailPage(props: { params: Promise<{ id: string }> }) {
               <div className="aspect-video w-full rounded-sm border border-hairline bg-surface-2 animate-pulse" />
             }
           >
-            <Embeded type="movie" id={id} />
+            <Embeded
+              type="movie"
+              id={id}
+              title={dataInfo.title}
+              imdbId={dataInfo.imdb_id}
+            />
           </Suspense>
         </div>
       </div>

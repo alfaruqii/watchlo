@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Settings2, Tv, Info, Check } from "lucide-react";
+import { Settings2, Tv, Info, Check, ExternalLink } from "lucide-react";
 import sourcesMap from "@/data/watchlo-source.json";
 import { Provider } from "@/types/movies.type";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ type EmbededProps = {
   type: "movie" | "tv";
   season?: string;
   ep?: string;
+  title?: string;
+  imdbId?: string;
 };
 
 export function generateUrl(
@@ -24,16 +26,18 @@ export function generateUrl(
   id: string,
   season: string = "1",
   ep: string = "1",
-  providerName?: string
+  providerName?: string,
+  imdbId?: string
 ): string {
   const isMovie = type?.toLowerCase() === "movie";
   const name = (providerName || "").toLowerCase();
 
   // 1. SuperEmbed / MultiEmbed: query parameter convention (Supports Indonesian & Asian Catalog)
   if (name === "multiembed" || base.includes("multiembed.mov")) {
+    const videoParam = imdbId ? `video_id=${imdbId}` : `video_id=${id}&tmdb=1`;
     return isMovie
-      ? `${base}/?video_id=${id}&tmdb=1`
-      : `${base}/?video_id=${id}&tmdb=1&s=${season}&e=${ep}`;
+      ? `${base}/?${videoParam}`
+      : `${base}/?${videoParam}&s=${season}&e=${ep}`;
   }
 
   // 2. AnyEmbed (SmashyStream Infrastructure): query parameter convention
@@ -64,7 +68,7 @@ export function generateUrl(
     : `${base}/tv/${id}/${season}/${ep}`;
 }
 
-function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
+function Embeded({ id, type, season = "1", ep = "1", title, imdbId }: EmbededProps) {
   const initialProvider =
     sourcesMap.length > 0
       ? sourcesMap[0]
@@ -167,7 +171,7 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
         <iframe
           key={`${provider.name}-${id}-${season}-${ep}`}
           title={`Watchlo Screening Room ${id}`}
-          src={generateUrl(provider.url, type, id, season, ep, provider.name)}
+          src={generateUrl(provider.url, type, id, season, ep, provider.name, imdbId)}
           allowFullScreen
           referrerPolicy="origin"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -175,14 +179,68 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
         />
       </div>
 
-      <div className="mt-3 flex items-start gap-2 rounded-sm border border-hairline/60 bg-surface-2/40 px-3 py-2 text-[11px] text-muted-foreground font-mono leading-relaxed">
-        <Info className="size-3.5 shrink-0 text-gold mt-0.5" strokeWidth={1.75} />
-        <div>
-          <span className="text-foreground font-medium">Tips Player:</span>{" "}
-          Gunakan <span className="text-gold font-semibold">SuperEmbed</span> untuk film Indonesia & Asia. Untuk film Barat & subtitle multi-bahasa, gunakan{" "}
-          <span className="text-gold font-semibold">VidSrc Official</span> atau{" "}
-          <span className="text-gold font-semibold">Videasy</span>.
+      {/* Quick Server Switcher Pills */}
+      <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-hairline/40 pt-3">
+        <span className="mr-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
+          Server:
+        </span>
+        {sourcesMap.map((source) => {
+          const isActive = provider.name === source.name;
+          const shortLabel = source.label.split(" ")[0];
+          return (
+            <button
+              key={source.name}
+              type="button"
+              onClick={() => handleProviderChange(source.name)}
+              className={`rounded-xs border px-2 py-0.5 font-mono text-[11px] transition-colors ${
+                isActive
+                  ? "border-gold/60 bg-gold/15 font-bold text-gold shadow-xs"
+                  : "border-hairline bg-surface-2/60 text-muted-foreground hover:border-hairline-high hover:text-foreground"
+              }`}
+            >
+              {shortLabel}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Info & Local Title Fallback Helper */}
+      <div className="mt-2.5 flex flex-col gap-2 rounded-sm border border-hairline/60 bg-surface-2/40 p-3 text-[11px] font-mono leading-relaxed text-muted-foreground">
+        <div className="flex items-start gap-2">
+          <Info className="size-3.5 shrink-0 text-gold mt-0.5" strokeWidth={1.75} />
+          <div>
+            <span className="text-foreground font-medium">Tips Player:</span>{" "}
+            Jika satu server menampilkan pesan <em>&quot;No sources yet&quot;</em> atau buffering, klik pill server di atas untuk berganti instan (misal ke <span className="text-gold font-semibold">VidSrc</span> atau <span className="text-gold font-semibold">2Embed</span>).
+          </div>
         </div>
+
+        {title && (
+          <div className="mt-1 flex flex-col gap-1.5 border-t border-hairline/40 pt-2 sm:flex-row sm:items-center sm:justify-between">
+            <span className="text-[10px] text-muted-foreground">
+              Film lokal tidak tersedia di server publik global?
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <a
+                href={`https://www.google.com/search?q=nonton+${encodeURIComponent(title)}+streaming+indonesia`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-xs border border-hairline bg-surface-1 px-2 py-0.5 text-[10px] text-foreground transition-colors hover:border-gold/60 hover:text-gold"
+              >
+                <ExternalLink className="size-2.5 text-gold" />
+                <span>Google Search</span>
+              </a>
+              <a
+                href={`https://www.justwatch.com/id/cari?q=${encodeURIComponent(title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-xs border border-hairline bg-surface-1 px-2 py-0.5 text-[10px] text-foreground transition-colors hover:border-gold/60 hover:text-gold"
+              >
+                <ExternalLink className="size-2.5 text-gold" />
+                <span>JustWatch ID</span>
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
