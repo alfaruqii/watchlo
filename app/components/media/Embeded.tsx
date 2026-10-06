@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Settings2, Tv } from "lucide-react";
+import { Settings2, Tv, Info, Check } from "lucide-react";
 import sourcesMap from "@/data/watchlo-source.json";
 import { Provider } from "@/types/movies.type";
 import { Button } from "@/components/ui/button";
@@ -18,24 +18,43 @@ type EmbededProps = {
   ep?: string;
 };
 
-function generateUrl(
+export function generateUrl(
   base: string,
   type: string,
   id: string,
-  season: string,
-  ep: string,
+  season: string = "1",
+  ep: string = "1",
   providerName?: string
-) {
+): string {
   const isMovie = type?.toLowerCase() === "movie";
-  let url = isMovie
-    ? `${base}/movie/${id}`
-    : `${base}/tv/${id}/${season}/${ep}`;
+  const name = (providerName || "").toLowerCase();
 
-  if (providerName === "vidlink" || base.includes("vidlink.pro")) {
-    url += "?primaryColor=f59e0b&secondaryColor=141416&iconColor=f59e0b";
+  // 1. SuperEmbed / MultiEmbed: query parameter convention for Asian & Indonesian catalog
+  if (name === "multiembed" || base.includes("multiembed.mov")) {
+    return isMovie
+      ? `${base}/?video_id=${id}&tmdb=1`
+      : `${base}/?video_id=${id}&tmdb=1&s=${season}&e=${ep}`;
   }
 
-  return url;
+  // 2. SmashyStream: TV uses query parameter convention ?s= &e=
+  if (name === "smashystream" || base.includes("smashystream.xyz")) {
+    return isMovie
+      ? `${base}/movie/${id}`
+      : `${base}/tv/${id}?s=${season}&e=${ep}`;
+  }
+
+  // 3. VidLink with dark gold theme tokens
+  if (name === "vidlink" || base.includes("vidlink.pro")) {
+    const url = isMovie
+      ? `${base}/movie/${id}`
+      : `${base}/tv/${id}/${season}/${ep}`;
+    return `${url}?primaryColor=f59e0b&secondaryColor=141416&iconColor=f59e0b`;
+  }
+
+  // 4. Standard path-based providers (Embed.su, AutoEmbed, VidSrc CC, VidSrc TO, VidSrc PM, Videasy)
+  return isMovie
+    ? `${base}/movie/${id}`
+    : `${base}/tv/${id}/${season}/${ep}`;
 }
 
 function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
@@ -43,9 +62,9 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
     sourcesMap.length > 0
       ? sourcesMap[0]
       : {
-          name: "vidsrc.to",
-          label: "Vidsrc TO (Fast HD)",
-          url: "https://vidsrc.to/embed",
+          name: "embedsu",
+          label: "Embed.su (Fast HD · Multi-Sub / Indo)",
+          url: "https://embed.su/embed",
         };
   const [provider, setProvider] = useState<Provider>(initialProvider);
 
@@ -75,8 +94,6 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
   };
 
   const doesTV = type?.toLowerCase() === "tv";
-
-
 
   return (
     <section
@@ -112,30 +129,47 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="z-50 w-64 rounded-sm border border-hairline bg-surface-1 p-1.5 font-mono text-xs text-foreground sm:w-56"
+            className="z-50 w-72 rounded-sm border border-hairline bg-surface-1 p-1.5 font-mono text-xs text-foreground sm:w-64"
           >
-            {sourcesMap.map((source, index) => (
-              <DropdownMenuItem
-                key={index}
-                onClick={() => handleProviderChange(source.name)}
-                className="cursor-pointer rounded-sm px-2.5 py-2 hover:bg-surface-2 hover:text-gold"
-              >
-                {source.label}
-              </DropdownMenuItem>
-            ))}
+            {sourcesMap.map((source, index) => {
+              const isActive = provider.name === source.name;
+              return (
+                <DropdownMenuItem
+                  key={index}
+                  onClick={() => handleProviderChange(source.name)}
+                  className={`flex items-center justify-between cursor-pointer rounded-sm px-2.5 py-2 hover:bg-surface-2 hover:text-gold ${
+                    isActive ? "text-gold font-semibold bg-surface-2/40" : ""
+                  }`}
+                >
+                  <span className="truncate">{source.label}</span>
+                  {isActive && <Check className="size-3.5 ml-2 shrink-0 text-gold" />}
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       <div className="obi-frame-corners relative aspect-video w-full overflow-hidden rounded-sm border border-hairline bg-[#0d0c0a]">
         <iframe
+          key={`${provider.name}-${id}-${season}-${ep}`}
           title={`Watchlo Screening Room ${id}`}
           src={generateUrl(provider.url, type, id, season, ep, provider.name)}
           allowFullScreen
-          referrerPolicy="no-referrer"
+          referrerPolicy="origin"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           className="h-full w-full border-0"
         />
+      </div>
+
+      <div className="mt-3 flex items-start gap-2 rounded-sm border border-hairline/60 bg-surface-2/40 px-3 py-2 text-[11px] text-muted-foreground font-mono leading-relaxed">
+        <Info className="size-3.5 shrink-0 text-gold mt-0.5" strokeWidth={1.75} />
+        <div>
+          <span className="text-foreground font-medium">Tips Player:</span>{" "}
+          Gunakan <span className="text-gold font-semibold">Embed.su</span> atau{" "}
+          <span className="text-gold font-semibold">AutoEmbed</span> untuk subtitle Indonesia & multi-server. Jika film Indonesia/Asia bertuliskan <em>unavailable</em>, ganti SOURCE ke{" "}
+          <span className="text-gold font-semibold">SuperEmbed</span>.
+        </div>
       </div>
     </section>
   );

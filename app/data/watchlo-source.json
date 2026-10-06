@@ -1,5 +1,25 @@
 [
   {
+    "name": "embedsu",
+    "label": "Embed.su (Fast HD · Multi-Sub / Indo)",
+    "url": "https://embed.su/embed"
+  },
+  {
+    "name": "autoembed",
+    "label": "AutoEmbed (Multi-Server · Sub Indo)",
+    "url": "https://player.autoembed.cc/embed"
+  },
+  {
+    "name": "multiembed",
+    "label": "SuperEmbed (Indonesian & Asian Movies)",
+    "url": "https://multiembed.mov"
+  },
+  {
+    "name": "vidsrccc",
+    "label": "VidSrc CC (V2 Fast HD)",
+    "url": "https://vidsrc.cc/v2/embed"
+  },
+  {
     "name": "vidsrc.to",
     "label": "Vidsrc TO (Fast HD)",
     "url": "https://vidsrc.to/embed"
@@ -10,18 +30,18 @@
     "url": "https://vidsrc.pm/embed"
   },
   {
-    "name": "vidsrc.sh",
-    "label": "Vidsrc SH (Mirror)",
-    "url": "https://vidsrc.sh/embed"
-  },
-  {
     "name": "videasy",
-    "label": "Videasy (Sub Indo / Multi-Sub)",
+    "label": "Videasy (Multi-Sub Backup)",
     "url": "https://player.videasy.to"
   },
   {
+    "name": "smashystream",
+    "label": "SmashyStream (Multi-Mirror)",
+    "url": "https://player.smashystream.xyz"
+  },
+  {
     "name": "vidlink",
-    "label": "VidLink (Backup)",
+    "label": "VidLink (Backup Player)",
     "url": "https://vidlink.pro"
   }
 ]
