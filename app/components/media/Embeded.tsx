@@ -29,21 +29,28 @@ export function generateUrl(
   const isMovie = type?.toLowerCase() === "movie";
   const name = (providerName || "").toLowerCase();
 
-  // 1. SuperEmbed / MultiEmbed: query parameter convention for Asian & Indonesian catalog
+  // 1. SuperEmbed / MultiEmbed: query parameter convention (Supports Indonesian & Asian Catalog)
   if (name === "multiembed" || base.includes("multiembed.mov")) {
     return isMovie
       ? `${base}/?video_id=${id}&tmdb=1`
       : `${base}/?video_id=${id}&tmdb=1&s=${season}&e=${ep}`;
   }
 
-  // 2. SmashyStream: TV uses query parameter convention ?s= &e=
-  if (name === "smashystream" || base.includes("smashystream.xyz")) {
+  // 2. AnyEmbed (SmashyStream Infrastructure): query parameter convention
+  if (name === "anyembed" || base.includes("smashystream.com")) {
     return isMovie
-      ? `${base}/movie/${id}`
-      : `${base}/tv/${id}?s=${season}&e=${ep}`;
+      ? `${base}/playere.php?tmdb=${id}`
+      : `${base}/playere.php?tmdb=${id}&season=${season}&episode=${ep}`;
   }
 
-  // 3. VidLink with dark gold theme tokens
+  // 3. 2Embed: embedtv for series, embed for movies
+  if (name === "2embed" || base.includes("2embed.cc")) {
+    return isMovie
+      ? `${base}/embed/${id}`
+      : `${base}/embedtv/${id}&s=${season}&e=${ep}`;
+  }
+
+  // 4. VidLink with dark gold theme tokens
   if (name === "vidlink" || base.includes("vidlink.pro")) {
     const url = isMovie
       ? `${base}/movie/${id}`
@@ -51,7 +58,7 @@ export function generateUrl(
     return `${url}?primaryColor=f59e0b&secondaryColor=141416&iconColor=f59e0b`;
   }
 
-  // 4. Standard path-based providers (Embed.su, AutoEmbed, VidSrc CC, VidSrc TO, VidSrc PM, Videasy)
+  // 5. Standard path-based providers (VidSrc Official, Videasy, VidSrc PM, VidSrc TO)
   return isMovie
     ? `${base}/movie/${id}`
     : `${base}/tv/${id}/${season}/${ep}`;
@@ -62,9 +69,9 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
     sourcesMap.length > 0
       ? sourcesMap[0]
       : {
-          name: "embedsu",
-          label: "Embed.su (Fast HD · Multi-Sub / Indo)",
-          url: "https://embed.su/embed",
+          name: "multiembed",
+          label: "SuperEmbed (Indonesian & Asian Cinema)",
+          url: "https://multiembed.mov",
         };
   const [provider, setProvider] = useState<Provider>(initialProvider);
 
@@ -73,7 +80,13 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
       const saved = localStorage.getItem("watchlo_embed_provider");
       if (saved) {
         const found = sourcesMap.find((source) => source.name === saved);
-        if (found) setProvider(found);
+        if (found) {
+          setProvider(found);
+        } else {
+          // Reset if stored provider was decommissioned
+          setProvider(sourcesMap[0]);
+          localStorage.setItem("watchlo_embed_provider", sourcesMap[0].name);
+        }
       }
     } catch {
       // ignore storage access errors
@@ -166,9 +179,9 @@ function Embeded({ id, type, season = "1", ep = "1" }: EmbededProps) {
         <Info className="size-3.5 shrink-0 text-gold mt-0.5" strokeWidth={1.75} />
         <div>
           <span className="text-foreground font-medium">Tips Player:</span>{" "}
-          Gunakan <span className="text-gold font-semibold">Embed.su</span> atau{" "}
-          <span className="text-gold font-semibold">AutoEmbed</span> untuk subtitle Indonesia & multi-server. Jika film Indonesia/Asia bertuliskan <em>unavailable</em>, ganti SOURCE ke{" "}
-          <span className="text-gold font-semibold">SuperEmbed</span>.
+          Gunakan <span className="text-gold font-semibold">SuperEmbed</span> untuk film Indonesia & Asia. Untuk film Barat & subtitle multi-bahasa, gunakan{" "}
+          <span className="text-gold font-semibold">VidSrc Official</span> atau{" "}
+          <span className="text-gold font-semibold">Videasy</span>.
         </div>
       </div>
     </section>

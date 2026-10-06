@@ -24,26 +24,21 @@ jest.mock("@/components/ui/dropdown-menu", () => ({
 
 describe("generateUrl helper", () => {
   test("generates correct URL for standard path-based movie and tv providers", () => {
-    // Embed.su
-    expect(generateUrl("https://embed.su/embed", "movie", "123")).toBe(
-      "https://embed.su/embed/movie/123"
+    // VidSrc Official
+    expect(generateUrl("https://vidsrc.me/embed", "movie", "123")).toBe(
+      "https://vidsrc.me/embed/movie/123"
     );
-    expect(generateUrl("https://embed.su/embed", "tv", "123", "2", "5")).toBe(
-      "https://embed.su/embed/tv/123/2/5"
+    expect(generateUrl("https://vidsrc.me/embed", "tv", "123", "2", "5")).toBe(
+      "https://vidsrc.me/embed/tv/123/2/5"
     );
 
-    // AutoEmbed
+    // Videasy (.net)
     expect(
-      generateUrl("https://player.autoembed.cc/embed", "movie", "456")
-    ).toBe("https://player.autoembed.cc/embed/movie/456");
+      generateUrl("https://player.videasy.net", "movie", "456")
+    ).toBe("https://player.videasy.net/movie/456");
     expect(
-      generateUrl("https://player.autoembed.cc/embed", "tv", "456", "1", "3")
-    ).toBe("https://player.autoembed.cc/embed/tv/456/1/3");
-
-    // VidSrc CC
-    expect(generateUrl("https://vidsrc.cc/v2/embed", "movie", "789")).toBe(
-      "https://vidsrc.cc/v2/embed/movie/789"
-    );
+      generateUrl("https://player.videasy.net", "tv", "456", "1", "3")
+    ).toBe("https://player.videasy.net/tv/456/1/3");
   });
 
   test("generates correct query-param URL for SuperEmbed / multiembed", () => {
@@ -56,14 +51,24 @@ describe("generateUrl helper", () => {
     ).toBe("https://multiembed.mov/?video_id=1399&tmdb=1&s=3&e=7");
   });
 
-  test("generates correct URL for SmashyStream TV and movie", () => {
+  test("generates correct URL for AnyEmbed (SmashyStream)", () => {
     expect(
-      generateUrl("https://player.smashystream.xyz", "movie", "550", "1", "1", "smashystream")
-    ).toBe("https://player.smashystream.xyz/movie/550");
+      generateUrl("https://embed.smashystream.com", "movie", "550", "1", "1", "anyembed")
+    ).toBe("https://embed.smashystream.com/playere.php?tmdb=550");
 
     expect(
-      generateUrl("https://player.smashystream.xyz", "tv", "1399", "2", "4", "smashystream")
-    ).toBe("https://player.smashystream.xyz/tv/1399?s=2&e=4");
+      generateUrl("https://embed.smashystream.com", "tv", "1399", "2", "4", "anyembed")
+    ).toBe("https://embed.smashystream.com/playere.php?tmdb=1399&season=2&episode=4");
+  });
+
+  test("generates correct URL for 2Embed", () => {
+    expect(
+      generateUrl("https://www.2embed.cc", "movie", "550", "1", "1", "2embed")
+    ).toBe("https://www.2embed.cc/embed/550");
+
+    expect(
+      generateUrl("https://www.2embed.cc", "tv", "1399", "1", "2", "2embed")
+    ).toBe("https://www.2embed.cc/embedtv/1399&s=1&e=2");
   });
 
   test("appends custom styling parameters for vidlink", () => {
@@ -85,17 +90,17 @@ describe("Embeded component", () => {
     localStorage.clear();
   });
 
-  test("renders screening room for movie with default provider", () => {
+  test("renders screening room for movie with default provider (SuperEmbed)", () => {
     render(<Embeded id="1126166" type="movie" />);
 
     expect(screen.getByText("Screening Room — Feature")).toBeInTheDocument();
-    expect(screen.getByText(/SOURCE: Embed.su/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOURCE: SuperEmbed/i)).toBeInTheDocument();
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute(
       "src",
-      "https://embed.su/embed/movie/1126166"
+      "https://multiembed.mov/?video_id=1126166&tmdb=1"
     );
     expect(iframe).toHaveAttribute("referrerpolicy", "origin");
   });
@@ -110,34 +115,48 @@ describe("Embeded component", () => {
     const iframe = screen.getByTitle("Watchlo Screening Room 1399");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://embed.su/embed/tv/1399/2/8"
+      "https://multiembed.mov/?video_id=1399&tmdb=1&s=2&e=8"
     );
   });
 
   test("switches provider when selected from dropdown and updates iframe src", () => {
     render(<Embeded id="1126166" type="movie" />);
 
-    const superEmbedOption = screen.getByText(/SuperEmbed \(Indonesian & Asian Movies\)/i);
-    fireEvent.click(superEmbedOption);
+    const vidsrcOption = screen.getByText(/VidSrc Official \(Fast HD\)/i);
+    fireEvent.click(vidsrcOption);
 
+    const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
+    expect(iframe).toHaveAttribute(
+      "src",
+      "https://vidsrc.me/embed/movie/1126166"
+    );
+    expect(localStorage.getItem("watchlo_embed_provider")).toBe("vidsrcme");
+  });
+
+  test("restores previously saved provider from localStorage", () => {
+    localStorage.setItem("watchlo_embed_provider", "videasy");
+
+    render(<Embeded id="1126166" type="movie" />);
+
+    expect(screen.getByText(/SOURCE: Videasy/i)).toBeInTheDocument();
+    const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
+    expect(iframe).toHaveAttribute(
+      "src",
+      "https://player.videasy.net/movie/1126166"
+    );
+  });
+
+  test("resets to default provider when an outdated/decommissioned provider is found in localStorage", () => {
+    localStorage.setItem("watchlo_embed_provider", "embedsu");
+
+    render(<Embeded id="1126166" type="movie" />);
+
+    expect(screen.getByText(/SOURCE: SuperEmbed/i)).toBeInTheDocument();
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toHaveAttribute(
       "src",
       "https://multiembed.mov/?video_id=1126166&tmdb=1"
     );
     expect(localStorage.getItem("watchlo_embed_provider")).toBe("multiembed");
-  });
-
-  test("restores previously saved provider from localStorage", () => {
-    localStorage.setItem("watchlo_embed_provider", "autoembed");
-
-    render(<Embeded id="1126166" type="movie" />);
-
-    expect(screen.getByText(/SOURCE: AutoEmbed/i)).toBeInTheDocument();
-    const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
-    expect(iframe).toHaveAttribute(
-      "src",
-      "https://player.autoembed.cc/embed/movie/1126166"
-    );
   });
 });

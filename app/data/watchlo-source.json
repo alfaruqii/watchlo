@@ -1,43 +1,38 @@
 [
   {
-    "name": "embedsu",
-    "label": "Embed.su (Fast HD · Multi-Sub / Indo)",
-    "url": "https://embed.su/embed"
-  },
-  {
-    "name": "autoembed",
-    "label": "AutoEmbed (Multi-Server · Sub Indo)",
-    "url": "https://player.autoembed.cc/embed"
-  },
-  {
     "name": "multiembed",
-    "label": "SuperEmbed (Indonesian & Asian Movies)",
+    "label": "SuperEmbed (Indonesian & Asian Cinema)",
     "url": "https://multiembed.mov"
   },
   {
-    "name": "vidsrccc",
-    "label": "VidSrc CC (V2 Fast HD)",
-    "url": "https://vidsrc.cc/v2/embed"
-  },
-  {
-    "name": "vidsrc.to",
-    "label": "Vidsrc TO (Fast HD)",
-    "url": "https://vidsrc.to/embed"
-  },
-  {
-    "name": "vidsrc.pm",
-    "label": "Vidsrc PM (HD Mirror)",
-    "url": "https://vidsrc.pm/embed"
+    "name": "vidsrcme",
+    "label": "VidSrc Official (Fast HD)",
+    "url": "https://vidsrc.me/embed"
   },
   {
     "name": "videasy",
-    "label": "Videasy (Multi-Sub Backup)",
-    "url": "https://player.videasy.to"
+    "label": "Videasy (Multi-Sub / Sub Indo)",
+    "url": "https://player.videasy.net"
   },
   {
-    "name": "smashystream",
-    "label": "SmashyStream (Multi-Mirror)",
-    "url": "https://player.smashystream.xyz"
+    "name": "2embed",
+    "label": "2Embed (Fast Mirror)",
+    "url": "https://www.2embed.cc"
+  },
+  {
+    "name": "anyembed",
+    "label": "AnyEmbed (Smashy Multi-Server)",
+    "url": "https://embed.smashystream.com"
+  },
+  {
+    "name": "vidsrc.pm",
+    "label": "VidSrc PM (HD Mirror)",
+    "url": "https://vidsrc.pm/embed"
+  },
+  {
+    "name": "vidsrc.to",
+    "label": "VidSrc TO (Fast HD)",
+    "url": "https://vidsrc.to/embed"
   },
   {
     "name": "vidlink",
