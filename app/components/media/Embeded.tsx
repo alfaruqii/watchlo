@@ -73,9 +73,9 @@ function Embeded({ id, type, season = "1", ep = "1", title, imdbId }: EmbededPro
     sourcesMap.length > 0
       ? sourcesMap[0]
       : {
-          name: "multiembed",
-          label: "SuperEmbed (Indonesian & Asian Cinema)",
-          url: "https://multiembed.mov",
+          name: "instaplay",
+          label: "Instaplay · Default · Progress",
+          url: "https://media.instantplay.click/embed",
         };
   const [provider, setProvider] = useState<Provider>(initialProvider);
 
@@ -146,7 +146,7 @@ function Embeded({ id, type, season = "1", ep = "1", title, imdbId }: EmbededPro
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="z-50 w-72 rounded-sm border border-hairline bg-surface-1 p-1.5 font-mono text-xs text-foreground sm:w-64"
+            className="z-50 max-h-80 w-80 overflow-y-auto rounded-sm border border-hairline bg-surface-1 p-1.5 font-mono text-xs text-foreground sm:w-72"
           >
             {sourcesMap.map((source, index) => {
               const isActive = provider.name === source.name;

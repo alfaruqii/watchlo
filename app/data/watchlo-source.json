@@ -1,47 +1,72 @@
 [
   {
-    "name": "multiembed",
-    "label": "SuperEmbed (Indonesian & Asian Cinema)",
-    "url": "https://multiembed.mov"
+    "name": "instaplay",
+    "label": "Instaplay · Default · Progress",
+    "url": "https://media.instantplay.click/embed"
   },
   {
-    "name": "vidsrcme",
-    "label": "VidSrc Official (Fast HD)",
-    "url": "https://vidsrc.me/embed"
+    "name": "vidsrc_buzz",
+    "label": "VidSrc · Ads Multi-Sub",
+    "url": "https://vidsrc.buzz/embed"
   },
   {
-    "name": "videasy",
-    "label": "Videasy (Multi-Sub / Sub Indo)",
-    "url": "https://player.videasy.net"
+    "name": "vidcore",
+    "label": "VidCore · Ads · Progress",
+    "url": "https://vidcore.io"
   },
   {
-    "name": "2embed",
-    "label": "2Embed (Fast Mirror)",
-    "url": "https://www.2embed.cc"
+    "name": "vembed",
+    "label": "VEmbed · Ads · Progress",
+    "url": "https://vsembed.ru/embed"
   },
   {
-    "name": "anyembed",
-    "label": "AnyEmbed (Smashy Multi-Server)",
-    "url": "https://embed.smashystream.com"
+    "name": "vidnest",
+    "label": "VidNest · Ads · Progress",
+    "url": "https://vidnest.fun"
   },
   {
-    "name": "vidsrc.pm",
-    "label": "VidSrc PM (HD Mirror)",
-    "url": "https://vidsrc.pm/embed"
-  },
-  {
-    "name": "vidsrc.to",
-    "label": "VidSrc TO (Fast HD)",
-    "url": "https://vidsrc.to/embed"
+    "name": "vidfast",
+    "label": "VidFast · Ads · Progress",
+    "url": "https://vidfast.pro"
   },
   {
     "name": "vidlink",
-    "label": "VidLink (Backup Player)",
+    "label": "VidLink · 1080p · Progress",
     "url": "https://vidlink.pro"
   },
   {
+    "name": "vidsrc",
+    "label": "VidSrc Pro · 1080p Multi-Sub",
+    "url": "https://vidsrc.to/embed"
+  },
+  {
+    "name": "multiembed",
+    "label": "SuperEmbed HD · 1080p High Speed",
+    "url": "https://multiembed.mov"
+  },
+  {
+    "name": "vidspark",
+    "label": "VidSpark · Progress",
+    "url": "https://vidspark.to"
+  },
+  {
+    "name": "peachify",
+    "label": "Peachify · 1080p · Progress",
+    "url": "https://peachify.top/embed"
+  },
+  {
+    "name": "moviesapi",
+    "label": "MoviesAPI · 1080p · Progress",
+    "url": "https://moviesapi.to"
+  },
+  {
     "name": "autoembed",
-    "label": "AutoEmbed (Multi-Server VIP)",
+    "label": "AutoEmbed · Multi-Server VIP",
     "url": "https://player.autoembed.co/embed"
+  },
+  {
+    "name": "videasy",
+    "label": "Videasy · Multi-Sub / Sub Indo",
+    "url": "https://player.videasy.net"
   }
 ]

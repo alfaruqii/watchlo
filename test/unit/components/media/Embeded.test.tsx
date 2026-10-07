@@ -90,17 +90,17 @@ describe("Embeded component", () => {
     localStorage.clear();
   });
 
-  test("renders screening room for movie with default provider (SuperEmbed)", () => {
+  test("renders screening room for movie with default provider (Instaplay)", () => {
     render(<Embeded id="1126166" type="movie" />);
 
     expect(screen.getByText("Screening Room — Feature")).toBeInTheDocument();
-    expect(screen.getByText(/SOURCE: SuperEmbed/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOURCE: Instaplay/i)).toBeInTheDocument();
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute(
       "src",
-      "https://multiembed.mov/?video_id=1126166&tmdb=1"
+      "https://media.instantplay.click/embed/movie/1126166"
     );
     expect(iframe).toHaveAttribute("referrerpolicy", "origin");
   });
@@ -115,22 +115,22 @@ describe("Embeded component", () => {
     const iframe = screen.getByTitle("Watchlo Screening Room 1399");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://multiembed.mov/?video_id=1399&tmdb=1&s=2&e=8"
+      "https://media.instantplay.click/embed/tv/1399/2/8"
     );
   });
 
   test("switches provider when selected from dropdown and updates iframe src", () => {
     render(<Embeded id="1126166" type="movie" />);
 
-    const vidsrcOption = screen.getByText(/VidSrc Official \(Fast HD\)/i);
-    fireEvent.click(vidsrcOption);
+    const superembedOption = screen.getByText(/SuperEmbed HD/i);
+    fireEvent.click(superembedOption);
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://vidsrc.me/embed/movie/1126166"
+      "https://multiembed.mov/?video_id=1126166&tmdb=1"
     );
-    expect(localStorage.getItem("watchlo_embed_provider")).toBe("vidsrcme");
+    expect(localStorage.getItem("watchlo_embed_provider")).toBe("multiembed");
   });
 
   test("restores previously saved provider from localStorage", () => {
@@ -147,23 +147,23 @@ describe("Embeded component", () => {
   });
 
   test("resets to default provider when an outdated/decommissioned provider is found in localStorage", () => {
-    localStorage.setItem("watchlo_embed_provider", "embedsu");
+    localStorage.setItem("watchlo_embed_provider", "decommissioned_old_provider");
 
     render(<Embeded id="1126166" type="movie" />);
 
-    expect(screen.getByText(/SOURCE: SuperEmbed/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOURCE: Instaplay/i)).toBeInTheDocument();
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://multiembed.mov/?video_id=1126166&tmdb=1"
+      "https://media.instantplay.click/embed/movie/1126166"
     );
-    expect(localStorage.getItem("watchlo_embed_provider")).toBe("multiembed");
+    expect(localStorage.getItem("watchlo_embed_provider")).toBe("instaplay");
   });
 
   test("switches provider to AutoEmbed when selected from dropdown", () => {
     render(<Embeded id="1126166" type="movie" />);
 
-    const autoembedOption = screen.getByText(/AutoEmbed \(Multi-Server VIP\)/i);
+    const autoembedOption = screen.getByText(/AutoEmbed/i);
     fireEvent.click(autoembedOption);
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
