@@ -73,9 +73,9 @@ function Embeded({ id, type, season = "1", ep = "1", title, imdbId }: EmbededPro
     sourcesMap.length > 0
       ? sourcesMap[0]
       : {
-          name: "instaplay",
-          label: "Instaplay · Default · Progress",
-          url: "https://media.instantplay.click/embed",
+          name: "vidsrcme",
+          label: "VidSrc Official (Fast HD)",
+          url: "https://vidsrc.me/embed",
         };
   const [provider, setProvider] = useState<Provider>(initialProvider);
 

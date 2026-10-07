@@ -90,17 +90,17 @@ describe("Embeded component", () => {
     localStorage.clear();
   });
 
-  test("renders screening room for movie with default provider (Instaplay)", () => {
+  test("renders screening room for movie with default provider (VidSrc Official)", () => {
     render(<Embeded id="1126166" type="movie" />);
 
     expect(screen.getByText("Screening Room — Feature")).toBeInTheDocument();
-    expect(screen.getByText(/SOURCE: Instaplay/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOURCE: VidSrc Official/i)).toBeInTheDocument();
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute(
       "src",
-      "https://media.instantplay.click/embed/movie/1126166"
+      "https://vidsrc.me/embed/movie/1126166"
     );
     expect(iframe).toHaveAttribute("referrerpolicy", "origin");
   });
@@ -115,14 +115,14 @@ describe("Embeded component", () => {
     const iframe = screen.getByTitle("Watchlo Screening Room 1399");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://media.instantplay.click/embed/tv/1399/2/8"
+      "https://vidsrc.me/embed/tv/1399/2/8"
     );
   });
 
   test("switches provider when selected from dropdown and updates iframe src", () => {
     render(<Embeded id="1126166" type="movie" />);
 
-    const superembedOption = screen.getByText(/SuperEmbed HD/i);
+    const superembedOption = screen.getByText(/SuperEmbed/i);
     fireEvent.click(superembedOption);
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
@@ -151,13 +151,13 @@ describe("Embeded component", () => {
 
     render(<Embeded id="1126166" type="movie" />);
 
-    expect(screen.getByText(/SOURCE: Instaplay/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOURCE: VidSrc Official/i)).toBeInTheDocument();
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://media.instantplay.click/embed/movie/1126166"
+      "https://vidsrc.me/embed/movie/1126166"
     );
-    expect(localStorage.getItem("watchlo_embed_provider")).toBe("instaplay");
+    expect(localStorage.getItem("watchlo_embed_provider")).toBe("vidsrcme");
   });
 
   test("switches provider to AutoEmbed when selected from dropdown", () => {
