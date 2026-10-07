@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import Link from "next/link";
 import CardImage from "../chunk/CardImage";
 import CardTitle from "../chunk/CardTitle";
@@ -21,7 +22,7 @@ interface Routes {
   };
 }
 
-export const MoviesCard = ({
+const MoviesCardComponent = ({
   movie,
   spineIndex,
   isDetail,
@@ -97,3 +98,5 @@ export const MoviesCard = ({
     </Link>
   );
 };
+
+export const MoviesCard = memo(MoviesCardComponent);

@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import Link from "next/link";
 import { MangaItem } from "@/types/manga.type";
 import CardImage from "../chunk/CardImage";
@@ -9,7 +10,7 @@ interface MangaCardProps {
   spineIndex?: number;
 }
 
-export default function MangaCard({ manga, spineIndex }: MangaCardProps) {
+function MangaCardComponent({ manga, spineIndex }: MangaCardProps) {
   const mangaTitle =
     manga.title?.userPreferred ||
     manga.title?.english ||
@@ -78,3 +79,6 @@ export default function MangaCard({ manga, spineIndex }: MangaCardProps) {
     </Link>
   );
 }
+
+const MangaCard = memo(MangaCardComponent);
+export default MangaCard;

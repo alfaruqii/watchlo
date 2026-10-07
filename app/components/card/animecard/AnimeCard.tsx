@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import { Anime, AnimeRecent, AnimeType } from "@/types/anime.type";
 import Link from "next/link";
 import CardImage from "../chunk/CardImage";
@@ -10,7 +11,7 @@ interface AnimeCardProps {
   spineIndex?: number;
 }
 
-const AnimeCard = ({ anime, spineIndex }: AnimeCardProps) => {
+const AnimeCardComponent = ({ anime, spineIndex }: AnimeCardProps) => {
   const isPopularAnime = (anime: AnimeType): anime is Anime =>
     "coverImage" in anime;
 
@@ -90,4 +91,5 @@ const AnimeCard = ({ anime, spineIndex }: AnimeCardProps) => {
   );
 };
 
+const AnimeCard = memo(AnimeCardComponent);
 export default AnimeCard;

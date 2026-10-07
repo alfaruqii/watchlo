@@ -15,7 +15,8 @@ export default function CardImage({
   const [imgSrc, setImgSrc] = useState<string>(safeImage);
 
   useEffect(() => {
-    setImgSrc(image && image.trim() !== "" ? image : "/fallback-card.webp");
+    const nextSafe = image && image.trim() !== "" ? image : "/fallback-card.webp";
+    setImgSrc(nextSafe);
   }, [image]);
 
   return (
@@ -35,8 +36,8 @@ export default function CardImage({
               setImgSrc("/fallback-card.webp");
             }
           }}
-          className={`object-cover transition-custom-blur ${
-            isImageLoading ? "scale-110 blur-2xl" : "scale-100 blur-0"
+          className={`object-cover transition-opacity duration-300 ${
+            isImageLoading ? "opacity-0" : "opacity-100"
           } group-hover:scale-105 group-hover:duration-300`}
           src={imgSrc}
           alt={alt || "Card thumbnail"}

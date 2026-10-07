@@ -13,6 +13,8 @@ import fallbackTrailer from "@/utils/fallbackTrailer.json";
 import { Review, TVInfo, Video, TMDBCreditsResponse, MovieInfo } from "@/types/movies.type";
 import ReviewsComponent from "@/components/reviews/ReviewsComponent";
 
+export const revalidate = 3600; // Cache on edge for 1 hour
+
 async function DetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;

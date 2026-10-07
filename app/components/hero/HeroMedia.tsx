@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import parse from "html-react-parser";
@@ -36,11 +36,16 @@ function HeroMedia({
   const pathName = usePathname();
   const pathType = pathName.split("/")[1];
   const isManga = pathType?.toLowerCase() === "manga";
-  const cleanDesc = description
-    ?.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    ?.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
-    ?.replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
-    ?.replace(/<br\s*\/?>/gi, "");
+
+  const parsedDescription = useMemo(() => {
+    if (!description) return null;
+    const cleaned = description
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
+      .replace(/<br\s*\/?>/gi, "");
+    return parse(cleaned);
+  }, [description]);
 
   const displayTitle = typeof title === "string" ? title : title.userPreferred;
   const displayCoverImage =
@@ -171,7 +176,7 @@ function HeroMedia({
 
           {description && (
             <p className="line-clamp-2 max-w-[65ch] text-xs leading-relaxed text-[#f2ece1]/85 sm:line-clamp-3 sm:text-sm">
-              {parse(cleanDesc ?? "")}
+              {parsedDescription}
             </p>
           )}
 
@@ -197,4 +202,4 @@ function HeroMedia({
   );
 }
 
-export default HeroMedia;
+export default memo(HeroMedia);

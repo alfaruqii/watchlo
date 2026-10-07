@@ -4,14 +4,24 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { ChevronLeft, ChevronRight, Film, Disc, BookOpen } from "lucide-react";
-import Media from "@/components/media/Media";
+import dynamic from "next/dynamic";
+import SkeletonMediaPlayer from "@/components/skeleton/SkeletonMediaPlayer";
 import AnimeReelRack from "@/components/watch/anime/AnimeReelRack";
 import AnimeDossierCard from "@/components/watch/anime/AnimeDossierCard";
-import AnimeShortcutsModal from "@/components/watch/anime/AnimeShortcutsModal";
 import ErrorView from "@/error";
 import Loading from "./loading";
 import { AnimeDetails, AnimeInfo } from "@/types/anime.type";
 import { Button } from "@/components/ui/button";
+
+const Media = dynamic(() => import("@/components/media/Media"), {
+  ssr: false,
+  loading: () => <SkeletonMediaPlayer />,
+});
+
+const AnimeShortcutsModal = dynamic(
+  () => import("@/components/watch/anime/AnimeShortcutsModal"),
+  { ssr: false }
+);
 
 type WatchPageParams = {
   searchParams: Promise<{ id: string; ep?: string; isDub?: string }>;

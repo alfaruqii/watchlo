@@ -89,19 +89,38 @@ export default function MangaReaderStage({
     }
   }, []);
 
-  // Auto-hide top bar on scroll down, show on scroll up
+  const controlsVisibleRef = useRef(true);
+
+  // Auto-hide top bar on scroll down, show on scroll up with RAF throttle
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY < 60) {
-        setIsControlsVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY - lastScrollY > 15) {
-        setIsControlsVisible(false);
-      } else if (lastScrollY - currentScrollY > 15) {
-        setIsControlsVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          if (currentScrollY < 60) {
+            if (!controlsVisibleRef.current) {
+              controlsVisibleRef.current = true;
+              setIsControlsVisible(true);
+            }
+          } else if (currentScrollY > lastScrollY && currentScrollY - lastScrollY > 20) {
+            if (controlsVisibleRef.current) {
+              controlsVisibleRef.current = false;
+              setIsControlsVisible(false);
+            }
+          } else if (lastScrollY - currentScrollY > 20) {
+            if (!controlsVisibleRef.current) {
+              controlsVisibleRef.current = true;
+              setIsControlsVisible(true);
+            }
+          }
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      lastScrollY = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -487,6 +506,7 @@ export default function MangaReaderStage({
                     pageRefs.current[idx] = el;
                   }}
                   data-page={pageNum}
+                  style={{ contentVisibility: "auto", containIntrinsicSize: "800px" }}
                   className="relative w-full flex flex-col items-center bg-[#070605]"
                 >
                   {hasFailed ? (

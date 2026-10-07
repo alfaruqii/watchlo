@@ -16,6 +16,8 @@ import SkeletonEpisodes from "@/components/skeleton/SkeletonEpisodes";
 import { AnimeServiceV2 } from "@/services";
 import { AnimeInfo, RelationOrRecommendation, AnimeCreditsResponse } from "@/types/anime.type";
 
+export const revalidate = 3600; // Cache on edge for 1 hour
+
 async function DetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;

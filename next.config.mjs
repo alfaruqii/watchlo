@@ -38,7 +38,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
   experimental: {
-    optimizePackageImports: ["react-icons", "framer-motion"],
+    optimizePackageImports: ["lucide-react", "react-icons", "framer-motion", "@vidstack/react"],
   },
   images: {
     unoptimized: true,

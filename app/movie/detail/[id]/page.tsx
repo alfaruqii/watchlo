@@ -12,6 +12,8 @@ import Embeded from "@/components/media/Embeded";
 import ReviewsComponent from "@/components/reviews/ReviewsComponent";
 import { MoviesContainerCard } from "@/components/card/moviescard/MoviesContainterCard";
 
+export const revalidate = 3600; // Cache on edge for 1 hour
+
 async function DetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;

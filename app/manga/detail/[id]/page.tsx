@@ -10,7 +10,7 @@ import { MangaService } from "@/services";
 import { MangaDetailInfo, MangaChaptersResponse, MangaItem } from "@/types/manga.type";
 import { AnimeCreditsResponse } from "@/types/anime.type";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // Cache on edge for 30 minutes
 
 interface MangaDetailPageProps {
   params: Promise<{ id: string }>;
