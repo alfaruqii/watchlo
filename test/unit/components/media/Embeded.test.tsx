@@ -160,20 +160,18 @@ describe("Embeded component", () => {
     expect(localStorage.getItem("watchlo_embed_provider")).toBe("multiembed");
   });
 
-  test("switches provider when quick server pill is clicked", () => {
+  test("switches provider to AutoEmbed when selected from dropdown", () => {
     render(<Embeded id="1126166" type="movie" />);
 
-    // Click on VidSrc Official pill
-    const pills = screen.getAllByRole("button", { name: /^VidSrc/i });
-    expect(pills.length).toBeGreaterThan(0);
-    fireEvent.click(pills[0]);
+    const autoembedOption = screen.getByText(/AutoEmbed \(Multi-Server VIP\)/i);
+    fireEvent.click(autoembedOption);
 
     const iframe = screen.getByTitle("Watchlo Screening Room 1126166");
     expect(iframe).toHaveAttribute(
       "src",
-      "https://vidsrc.me/embed/movie/1126166"
+      "https://player.autoembed.co/embed/movie/1126166"
     );
-    expect(localStorage.getItem("watchlo_embed_provider")).toBe("vidsrcme");
+    expect(localStorage.getItem("watchlo_embed_provider")).toBe("autoembed");
   });
 
   test("renders fallback search links when title is provided", () => {

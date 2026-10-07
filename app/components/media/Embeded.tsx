@@ -179,38 +179,13 @@ function Embeded({ id, type, season = "1", ep = "1", title, imdbId }: EmbededPro
         />
       </div>
 
-      {/* Quick Server Switcher Pills */}
-      <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-hairline/40 pt-3">
-        <span className="mr-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
-          Server:
-        </span>
-        {sourcesMap.map((source) => {
-          const isActive = provider.name === source.name;
-          const shortLabel = source.label.split(" ")[0];
-          return (
-            <button
-              key={source.name}
-              type="button"
-              onClick={() => handleProviderChange(source.name)}
-              className={`rounded-xs border px-2 py-0.5 font-mono text-[11px] transition-colors ${
-                isActive
-                  ? "border-gold/60 bg-gold/15 font-bold text-gold shadow-xs"
-                  : "border-hairline bg-surface-2/60 text-muted-foreground hover:border-hairline-high hover:text-foreground"
-              }`}
-            >
-              {shortLabel}
-            </button>
-          );
-        })}
-      </div>
-
       {/* Info & Local Title Fallback Helper */}
-      <div className="mt-2.5 flex flex-col gap-2 rounded-sm border border-hairline/60 bg-surface-2/40 p-3 text-[11px] font-mono leading-relaxed text-muted-foreground">
+      <div className="mt-3 flex flex-col gap-2 rounded-sm border border-hairline/60 bg-surface-2/40 p-3 text-[11px] font-mono leading-relaxed text-muted-foreground">
         <div className="flex items-start gap-2">
           <Info className="size-3.5 shrink-0 text-gold mt-0.5" strokeWidth={1.75} />
           <div>
             <span className="text-foreground font-medium">Tips Player:</span>{" "}
-            Jika satu server menampilkan pesan <em>&quot;No sources yet&quot;</em> atau buffering, klik pill server di atas untuk berganti instan (misal ke <span className="text-gold font-semibold">VidSrc</span> atau <span className="text-gold font-semibold">2Embed</span>).
+            Jika satu server menampilkan pesan <em>&quot;No sources yet&quot;</em> atau buffering, gunakan dropdown <span className="text-gold font-semibold">SOURCE</span> di atas untuk berganti server alternatif.
           </div>
         </div>
 
