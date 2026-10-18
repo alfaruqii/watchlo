@@ -51,6 +51,12 @@ export default function MangaSubtypeFilter({
   const [isPending, startTransition] = useTransition();
   const [pendingSubtype, setPendingSubtype] = useState<MangaSubtype | null>(null);
 
+  const urlSubtype = searchParams.get("subtype");
+  const resolvedSubtype: MangaSubtype =
+    urlSubtype === "manhwa" || urlSubtype === "manga" || urlSubtype === "manhua"
+      ? urlSubtype
+      : activeSubtype;
+
   const handleSelect = (subtype: MangaSubtype) => {
     setPendingSubtype(subtype);
     const params = new URLSearchParams(searchParams.toString());
@@ -78,7 +84,7 @@ export default function MangaSubtypeFilter({
         {/* Right: Segmented Filter Buttons */}
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {FILTER_OPTIONS.map((opt) => {
-            const isSelected = activeSubtype === opt.key;
+            const isSelected = resolvedSubtype === opt.key;
             const isOptionPending = isPending && pendingSubtype === opt.key;
             return (
               <Button
