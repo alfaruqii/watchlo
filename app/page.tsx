@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Play, Star, Award } from "lucide-react";
 import { MoviesContainerCard } from "./components/card/moviescard/MoviesContainterCard";
 import HeroMediaCarousel from "./components/hero/HeroMediaCarousel";
@@ -7,33 +8,24 @@ import { MovieService } from "./services";
 import { Button } from "./components/ui/button";
 import { Badge } from "./components/ui/badge";
 import GenreFilter from "./components/genre/GenreFilter";
+import GenreFilterFallback from "./components/genre/GenreFilterFallback";
+import GenreShelf from "./components/genre/GenreShelf";
 
 export const revalidate = 300; // Cache on edge for 5 minutes
 
-interface HomePageProps {
-  searchParams: Promise<{ genre?: string }>;
-}
-
-export default async function Home({ searchParams }: HomePageProps) {
-  const resolvedSearchParams = await searchParams;
-  const activeGenre = resolvedSearchParams?.genre?.trim() || "";
-
+export default async function Home() {
   const [
     popularSettled,
     topRatedSettled,
     trendingSettled,
     tvTopRatedSettled,
     tvTrendingSettled,
-    genreSearchSettled,
   ] = await Promise.allSettled([
     MovieService.getMoviesPopular(),
     MovieService.getMoviesTopRated(),
     MovieService.getMoviesTrending(),
     MovieService.getTvTopRated(),
     MovieService.getTvTrending(),
-    activeGenre
-      ? MovieService.searchMovie(activeGenre)
-      : Promise.resolve({ data: { results: [] } }),
   ]);
 
   const dataMoviesPopular =
@@ -56,60 +48,30 @@ export default async function Home({ searchParams }: HomePageProps) {
     tvTrendingSettled.status === "fulfilled"
       ? tvTrendingSettled.value.data
       : { results: [] };
-  const genreSearchRes =
-    genreSearchSettled.status === "fulfilled"
-      ? genreSearchSettled.value
-      : null;
 
   const curatorPick = dataMoviesTopRated?.results?.[0];
 
-  // Aggregate and deduplicate genre matches
-  const genreResults = activeGenre
-    ? (() => {
-        const pool = [
-          ...(genreSearchRes?.data?.results || []),
-          ...(dataMoviesPopular.results || []),
-          ...(dataMoviesTrending.results || []),
-          ...(dataMoviesTopRated.results || []),
-          ...(dataTvTrending.results || []),
-          ...(dataTvTopRated.results || []),
-        ];
-        const seen = new Set<number>();
-        return pool.filter((item) => {
-          if (!item?.id || seen.has(item.id)) return false;
-          seen.add(item.id);
-          return (
-            item.genre_names?.some(
-              (g: string) => g.toLowerCase() === activeGenre.toLowerCase()
-            ) ?? true
-          );
-        });
-      })()
-    : [];
+  // Aggregate pool for client-side genre filtering (deduplicated in GenreShelf)
+  const genrePool = [
+    ...(dataMoviesPopular.results || []),
+    ...(dataMoviesTrending.results || []),
+    ...(dataMoviesTopRated.results || []),
+    ...(dataTvTrending.results || []),
+    ...(dataTvTopRated.results || []),
+  ];
 
   return (
     <div className="flex min-h-fit flex-col pb-8">
       <HeroMediaCarousel items={dataMoviesPopular.results} />
 
-      <GenreFilter mediaType="movie" activeGenre={activeGenre || "all"} />
+      <Suspense fallback={<GenreFilterFallback />}>
+        <GenreFilter mediaType="movie" />
+      </Suspense>
 
       {/* Filtered Genre Shelf if active */}
-      {activeGenre && (
-        <div className="px-4 sm:px-0">
-          {genreResults.length > 0 ? (
-            <MoviesContainerCard
-              containerTitle={`Genre Archive — ${activeGenre}`}
-              movies={genreResults}
-            />
-          ) : (
-            <div className="mx-4 my-6 rounded-sm border border-hairline bg-surface-1 p-6 text-center sm:mx-6 lg:mx-10">
-              <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
-                No titles cataloged under genre &ldquo;{activeGenre}&rdquo; in current collection.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+      <Suspense fallback={null}>
+        <GenreShelf pool={genrePool} />
+      </Suspense>
 
       <div className="px-4 sm:px-0">
         <MoviesContainerCard
