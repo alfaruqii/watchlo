@@ -14,6 +14,7 @@ jest.mock("@/services", () => ({
   },
   AnimeServiceV2: {
     searchAnimeV2: jest.fn(),
+    advancedSearchAnime: jest.fn(),
   },
 }));
 
@@ -62,14 +63,34 @@ describe("API search routes", () => {
     expect(body).toEqual({ error: "Failed to search movie" });
   });
 
-  it("returns 400 when anime-search query is missing", async () => {
+  it("returns 400 when anime-search query and genre are missing", async () => {
     const request = new NextRequest("http://localhost/api/anime-search");
 
     const response = await getAnimeSearch(request);
     const body = await response.json();
 
     expect(response.status).toBe(400);
-    expect(body).toEqual({ error: "Query parameter is required" });
+    expect(body).toEqual({ error: "Query or genre parameter is required" });
+  });
+
+  it("returns genre results when anime-search genre is provided", async () => {
+    animeServiceMock.advancedSearchAnime.mockResolvedValue({
+      data: { results: [{ id: 5, title: "Action Show" }] },
+    } as any);
+
+    const request = new NextRequest(
+      "http://localhost/api/anime-search?genre=Action"
+    );
+    const response = await getAnimeSearch(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(animeServiceMock.advancedSearchAnime).toHaveBeenCalledWith({
+      genres: ["Action"],
+      size: 24,
+      sort: ["TRENDING_DESC", "POPULARITY_DESC"],
+    });
+    expect(body).toEqual({ results: [{ id: 5, title: "Action Show" }] });
   });
 
   it("returns anime search data when query is valid", async () => {
