@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { SearchX } from "lucide-react";
 import SearchedResult from "./SearchedResult";
 import SkeletonSearch from "../skeleton/SkeletonSearch";
@@ -18,9 +18,10 @@ function Searched({ searchedText }: SearchedProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSearchResults = useCallback(async () => {
+  useEffect(() => {
     if (!searchedText) return;
 
+    const controller = new AbortController();
     setIsLoading(true);
     setError(null);
 
@@ -33,24 +34,26 @@ function Searched({ searchedText }: SearchedProps) {
       ? `/api/anime-search?query=${encodeURIComponent(searchedText)}`
       : `/api/movie-search?query=${encodeURIComponent(searchedText)}`;
 
-    try {
-      const response = await fetch(fetchUrl);
-      if (!response.ok) {
-        throw new Error("Failed to fetch search results");
+    const run = async () => {
+      try {
+        const response = await fetch(fetchUrl, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error("Failed to fetch search results");
+        }
+        const data = await response.json();
+        setSearchedData(data.results ?? []);
+      } catch (error) {
+        if ((error as Error).name === "AbortError") return;
+        console.error("Failed to fetch search results", error);
+        setError("Unable to retrieve catalog results. Please try again.");
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
       }
-      const data = await response.json();
-      setSearchedData(data.results ?? []);
-    } catch (error) {
-      console.error("Failed to fetch search results", error);
-      setError("Unable to retrieve catalog results. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [searchedText, pathType]);
+    };
 
-  useEffect(() => {
-    fetchSearchResults();
-  }, [fetchSearchResults]);
+    run();
+    return () => controller.abort();
+  }, [searchedText, pathType]);
 
   if (!searchedText) return null;
 
