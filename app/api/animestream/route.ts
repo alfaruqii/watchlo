@@ -75,14 +75,18 @@ export async function GET(request: NextRequest) {
         data = resV1.data;
       } catch {
         // Fallback to V2 stream/multi
-        const resV2 = await AnimeServiceV2.getAnimeStreamV2({
-          watchId: query,
-          id: id || undefined,
-          ep: ep || undefined,
-          provider,
-          dub,
-        });
-        data = resV2.data;
+        try {
+          const resV2 = await AnimeServiceV2.getAnimeStreamV2({
+            watchId: query,
+            id: id || undefined,
+            ep: ep || undefined,
+            provider,
+            dub,
+          });
+          data = resV2.data;
+        } catch {
+          // Fall back to step 3 or let it return 404
+        }
       }
     }
 
