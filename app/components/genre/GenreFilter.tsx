@@ -88,6 +88,9 @@ export default function GenreFilter({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const urlGenre = searchParams.get("genre")?.trim() || "";
+  const resolvedGenre = urlGenre || activeGenre;
+
   const genreList = useMemo(() => {
     if (customGenres && customGenres.length > 0) return customGenres;
     switch (mediaType) {
@@ -151,15 +154,15 @@ export default function GenreFilter({
 
   // Auto-scroll to selected genre on mount or change
   useEffect(() => {
-    if (!emblaApi || !activeGenre || activeGenre.toLowerCase() === "all") return;
+    if (!emblaApi || !resolvedGenre || resolvedGenre.toLowerCase() === "all") return;
     const targetIdx = genreList.findIndex(
-      (g) => g.toLowerCase() === activeGenre.toLowerCase()
+      (g) => g.toLowerCase() === resolvedGenre.toLowerCase()
     );
     if (targetIdx >= 0) {
       // +1 to account for "All Genres" button at index 0
       emblaApi.scrollTo(targetIdx + 1);
     }
-  }, [emblaApi, activeGenre, genreList]);
+  }, [emblaApi, resolvedGenre, genreList]);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -175,7 +178,7 @@ export default function GenreFilter({
   const handleSelect = (genre: string) => {
     setPendingGenre(genre);
     const params = new URLSearchParams(searchParams.toString());
-    if (genre === "all" || genre.toLowerCase() === activeGenre.toLowerCase()) {
+    if (genre === "all" || genre.toLowerCase() === resolvedGenre.toLowerCase()) {
       params.delete("genre");
     } else {
       params.set("genre", genre);
@@ -186,7 +189,9 @@ export default function GenreFilter({
     });
   };
 
-  const isFiltered = Boolean(activeGenre && activeGenre.toLowerCase() !== "all");
+  const isFiltered = Boolean(
+    resolvedGenre && resolvedGenre.toLowerCase() !== "all"
+  );
 
   return (
     <section
@@ -293,7 +298,8 @@ export default function GenreFilter({
 
             {/* Individual Genre Filter Slides */}
             {genreList.map((genre) => {
-              const isActive = activeGenre.toLowerCase() === genre.toLowerCase();
+              const isActive =
+                resolvedGenre.toLowerCase() === genre.toLowerCase();
               const isItemPending = isPending && pendingGenre === genre;
               return (
                 <Button

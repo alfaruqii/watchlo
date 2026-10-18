@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/carousel";
 
 interface MoviesContainerProps {
-  movies: MovieInfo[] | TVInfo[];
+  movies: (MovieInfo | TVInfo)[];
   containerTitle: string;
   isDetail?: boolean;
   season?: number;
