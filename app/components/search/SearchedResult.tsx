@@ -90,6 +90,7 @@ function SearchedResult(props: SearchedParams) {
     <Link
       onClick={closeModal}
       href={targetHref}
+      prefetch={false}
       className="group rounded-sm p-2.5 transition-colors hover:bg-surface-2"
     >
       <div className="flex w-full gap-3">

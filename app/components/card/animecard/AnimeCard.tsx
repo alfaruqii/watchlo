@@ -47,6 +47,7 @@ const AnimeCardComponent = ({ anime, spineIndex }: AnimeCardProps) => {
   return (
     <Link
       href={determineRoutes(anime)}
+      prefetch={false}
       className="block w-[164px] shrink-0 sm:w-[228px]"
     >
       <div

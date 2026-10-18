@@ -47,6 +47,7 @@ function MangaCardComponent({ manga, spineIndex }: MangaCardProps) {
   return (
     <Link
       href={`/manga/detail/${manga.id}`}
+      prefetch={false}
       className="block w-[164px] shrink-0 sm:w-[228px]"
     >
       <div className="group relative flex w-full flex-col rounded-sm border border-hairline bg-surface-1 p-2.5 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-gold hover:bg-surface-2 hover:z-10 hover:shadow-sleeve">
