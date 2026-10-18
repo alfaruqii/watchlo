@@ -79,7 +79,11 @@ function WatchPage(props: WatchPageParams) {
   const { data: animeInfoV2, error: errorInfoV2 } = useSWR<AnimeInfo>(
     doesIdNumber(id) ? id : null,
     fetchAnimeInfoV2,
-    { revalidateOnFocus: false, revalidateOnReconnect: false }
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 300000,
+    }
   );
 
   const isAdultAnime = Boolean(
@@ -113,7 +117,11 @@ function WatchPage(props: WatchPageParams) {
   const { data: animeInfoV1, error: errorInfoV1 } = useSWR<AnimeDetails>(
     idProvider || effectiveAnilistId ? [idProvider, titleHint, effectiveAnilistId, isAdultAnime, "v1"] : null,
     () => fetchAnimeInfoV1(idProvider || "", titleHint, effectiveAnilistId, isAdultAnime),
-    { revalidateOnFocus: false, revalidateOnReconnect: false }
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 300000,
+    }
   );
 
   // Sync episode ID when anime data or current ep parameter changes

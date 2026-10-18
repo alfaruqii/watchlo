@@ -14,7 +14,12 @@ export async function GET(request: NextRequest) {
 
   try {
     const { data } = await MovieService.searchMovie(query);
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control":
+          "public, max-age=120, s-maxage=600, stale-while-revalidate=3600",
+      },
+    });
   } catch (error) {
     console.error("Failed to search movie", error);
     return NextResponse.json(

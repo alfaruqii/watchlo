@@ -39,7 +39,11 @@ export const AnimeCardDetail = ({
   };
 
   return (
-    <Link href={route} className="block w-36 shrink-0 sm:w-52">
+    <Link
+      href={route}
+      prefetch={false}
+      className="block w-36 shrink-0 sm:w-52"
+    >
       <div className="group relative flex w-full flex-col rounded-sm border border-hairline bg-surface-2 p-2 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-gold hover:z-10 hover:shadow-sleeve">
         <div className="mb-1.5 flex items-center justify-between border-b border-hairline pb-1 font-mono text-[10px] uppercase tracking-wider text-gold tabular-nums">
           <span>REEL #{String(episodeNumber).padStart(2, "0")}</span>

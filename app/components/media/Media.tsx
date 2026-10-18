@@ -127,6 +127,7 @@ const Media = ({
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       revalidateIfStale: false,
+      dedupingInterval: 300000,
     }
   );
 
@@ -138,6 +139,7 @@ const Media = ({
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       revalidateIfStale: false,
+      dedupingInterval: 300000,
     }
   );
 

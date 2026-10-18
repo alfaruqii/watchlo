@@ -1,36 +1,20 @@
+import { Suspense } from "react";
 import HeroMediaCarousel from "@/components/hero/HeroMediaCarousel";
 import AnimeContainerCard from "../components/card/animecard/AnimeContainerCard";
 import AnimeGenreFilter from "@/components/genre/AnimeGenreFilter";
+import AnimeGenreShelf from "@/components/genre/AnimeGenreShelf";
+import GenreFilterFallback from "@/components/genre/GenreFilterFallback";
 import { AnimeServiceV1, AnimeServiceV2 } from "../services";
-import { Anime } from "@/types/anime.type";
 
 export const revalidate = 300; // Cache on edge for 5 minutes
 
-interface AnimePageProps {
-  searchParams: Promise<{ genre?: string }>;
-}
-
-export default async function AnimePage({ searchParams }: AnimePageProps) {
-  const resolvedSearchParams = await searchParams;
-  const activeGenre = resolvedSearchParams?.genre?.trim() || "";
-
-  const [
-    trendingSettled,
-    recentSettled,
-    popularSettled,
-    genreFilterSettled,
-  ] = await Promise.allSettled([
-    AnimeServiceV2.getTrendingAnime(),
-    AnimeServiceV1.getRecentEpisodeGogo(),
-    AnimeServiceV2.getPopularAnime(),
-    activeGenre
-      ? AnimeServiceV2.advancedSearchAnime({
-          genres: [activeGenre],
-          size: 24,
-          sort: ["TRENDING_DESC", "POPULARITY_DESC"],
-        })
-      : Promise.resolve({ data: { results: [] } }),
-  ]);
+export default async function AnimePage() {
+  const [trendingSettled, recentSettled, popularSettled] =
+    await Promise.allSettled([
+      AnimeServiceV2.getTrendingAnime(),
+      AnimeServiceV1.getRecentEpisodeGogo(),
+      AnimeServiceV2.getPopularAnime(),
+    ]);
 
   const dataTrending =
     trendingSettled.status === "fulfilled"
@@ -45,40 +29,19 @@ export default async function AnimePage({ searchParams }: AnimePageProps) {
       ? popularSettled.value.data
       : { results: [] };
 
-  const genreResults: Anime[] =
-    genreFilterSettled.status === "fulfilled"
-      ? genreFilterSettled.value.data?.results || []
-      : [];
-
-  const heroItems =
-    activeGenre && genreResults.length > 0
-      ? genreResults.slice(0, 5)
-      : dataTrending.results;
-
   return (
     <div className="flex min-h-fit flex-col pb-8">
-      <HeroMediaCarousel items={heroItems} />
+      <HeroMediaCarousel items={dataTrending.results} />
 
       {/* Interactive Archival Genre Filter Bar */}
-      <AnimeGenreFilter activeGenre={activeGenre || "all"} />
+      <Suspense fallback={<GenreFilterFallback />}>
+        <AnimeGenreFilter />
+      </Suspense>
 
       {/* Filtered Genre Shelf if active */}
-      {activeGenre && (
-        <div className="px-4 sm:px-0">
-          {genreResults.length > 0 ? (
-            <AnimeContainerCard
-              containerTitle={`Genre Archive — ${activeGenre}`}
-              animes={genreResults}
-            />
-          ) : (
-            <div className="mx-4 my-6 rounded-sm border border-hairline bg-surface-1 p-6 text-center sm:mx-6 lg:mx-10">
-              <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
-                No anime cataloged under genre &ldquo;{activeGenre}&rdquo; in current collection.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+      <Suspense fallback={null}>
+        <AnimeGenreShelf />
+      </Suspense>
 
       {dataRecent?.results?.length > 0 && (
         <div className="px-4 sm:px-0">
