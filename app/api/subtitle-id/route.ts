@@ -128,7 +128,8 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "text/vtt; charset=utf-8",
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control":
+          "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
         "Access-Control-Allow-Origin": "*",
       },
     });
@@ -214,7 +215,8 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "text/vtt; charset=utf-8",
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control":
+          "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
         "Access-Control-Allow-Origin": "*",
       },
     });
