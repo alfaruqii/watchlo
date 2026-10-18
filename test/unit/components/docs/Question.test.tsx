@@ -9,10 +9,8 @@ describe('Question Component', () => {
 
     const questionElement = screen.getByText(testText);
     expect(questionElement).toBeInTheDocument();
-    expect(questionElement).toHaveClass('text-pretty');
-    expect(questionElement).toHaveClass('font-magnatbold');
-    expect(questionElement).toHaveClass('text-xl');
-    expect(questionElement).toHaveClass('sm:text-3xl');
+    expect(questionElement).toHaveClass('text-balance');
+    expect(questionElement).toHaveClass('font-display');
   });
 
   it('applies custom class when provided', () => {
@@ -22,19 +20,17 @@ describe('Question Component', () => {
 
     const questionElement = screen.getByText(testText);
     expect(questionElement).toHaveClass(customClass);
-    expect(questionElement).toHaveClass('text-pretty');
-    expect(questionElement).toHaveClass('font-magnatbold');
+    expect(questionElement).toHaveClass('text-balance');
+    expect(questionElement).toHaveClass('font-display');
   });
 
-  it('renders empty string when no text provided', () => {
+  it('renders empty heading when no text provided', () => {
     const { container } = render(<Question text="" />);
 
-    const paragraphElement = container.querySelector('p');
-    expect(paragraphElement).toBeInTheDocument();
-    expect(paragraphElement).toHaveTextContent('');
-    expect(paragraphElement).toHaveClass('text-pretty');
-    expect(paragraphElement).toHaveClass('font-magnatbold');
-    expect(paragraphElement).toHaveClass('text-xl');
-    expect(paragraphElement).toHaveClass('sm:text-3xl')
+    const headingElement = container.querySelector('h2');
+    expect(headingElement).toBeInTheDocument();
+    expect(headingElement).toHaveTextContent('');
+    expect(headingElement).toHaveClass('text-balance');
+    expect(headingElement).toHaveClass('font-display');
   });
 });

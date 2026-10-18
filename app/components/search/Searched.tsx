@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
+import { SearchX } from "lucide-react";
 import SearchedResult from "./SearchedResult";
 import SkeletonSearch from "../skeleton/SkeletonSearch";
 import { usePathname } from "next/navigation";
-import { SearchedAnime } from "@/types/anime.type";
+import { SearchedParams } from "@/utils/mediaTypeChecker";
 
 interface SearchedProps {
   searchedText: string;
@@ -12,52 +13,65 @@ interface SearchedProps {
 
 function Searched({ searchedText }: SearchedProps) {
   const pathName = usePathname();
-  const pathType = pathName.split('/')[1]; // This gives you either 'anime' or other (movie/tv)
-  const [searchedData, setSearchedData] = useState<SearchedAnime[]>([]);
+  const pathType = pathName.split("/")[1];
+  const [searchedData, setSearchedData] = useState<SearchedParams[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const determineFetchURL = (): string => {
-    if (pathType.toLowerCase() === "anime") return `/api/anime-search?query=${encodeURIComponent(searchedText)}`
-    return `/api/movie-search?query=${encodeURIComponent(searchedText)}`
-  }
 
-  const fetchSearchResults = useCallback(async () => {
+  useEffect(() => {
     if (!searchedText) return;
 
+    const controller = new AbortController();
     setIsLoading(true);
     setError(null);
 
-    try {
-      const response = await fetch(determineFetchURL())
-      if (!response.ok) {
-        throw new Error('Failed to fetch search results')
-      }
-      const data = await response.json()
-      setSearchedData(data.results); // Adjust this based on your API response structure
-    } catch (error) {
-      console.error("Failed to fetch search results", error);
-      setError("Failed to fetch search results.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [searchedText]);
+    const isManga = pathType?.toLowerCase() === "manga";
+    const isAnime = pathType?.toLowerCase() === "anime";
 
-  useEffect(() => {
-    fetchSearchResults();
-  }, [fetchSearchResults]);
+    const fetchUrl = isManga
+      ? `/api/manga-search?query=${encodeURIComponent(searchedText)}`
+      : isAnime
+      ? `/api/anime-search?query=${encodeURIComponent(searchedText)}`
+      : `/api/movie-search?query=${encodeURIComponent(searchedText)}`;
+
+    const run = async () => {
+      try {
+        const response = await fetch(fetchUrl, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error("Failed to fetch search results");
+        }
+        const data = await response.json();
+        setSearchedData(data.results ?? []);
+      } catch (error) {
+        if ((error as Error).name === "AbortError") return;
+        console.error("Failed to fetch search results", error);
+        setError("Unable to retrieve catalog results. Please try again.");
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
+      }
+    };
+
+    run();
+    return () => controller.abort();
+  }, [searchedText, pathType]);
 
   if (!searchedText) return null;
 
   return (
-    <div className="flex flex-col px-2 pb-2">
+    <div className="flex flex-col divide-y divide-hairline/60 px-2 py-2">
       {isLoading && <SkeletonSearch />}
-      {error && <p>{error}</p>}
+      {error && (
+        <p className="px-3 py-4 font-mono text-xs text-vermilion">{error}</p>
+      )}
       {!isLoading && searchedData.length > 0 ? (
-        searchedData.map((item) => (
-          <SearchedResult key={item.id} {...item} />
-        ))
+        searchedData.map((item) => <SearchedResult key={item.id} {...item} />)
       ) : (
-        !isLoading && <p className="px-2 pb-2">No results found 😿</p>
+        !isLoading && (
+          <div className="flex items-center gap-2 px-3 py-4 text-xs text-muted-foreground">
+            <SearchX className="size-4 text-gold" strokeWidth={1.75} />
+            <span>No matching editions found in this catalog index.</span>
+          </div>
+        )
       )}
     </div>
   );

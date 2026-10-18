@@ -45,29 +45,15 @@ describe("AnimeContainerCard Component", () => {
     expect(screen.getByText(containerTitle)).toBeInTheDocument();
   });
 
-  it("applies the correct border color for black theme", () => {
+  it("renders container title and editions counter", () => {
     render(
       <AnimeContainerCard
         animes={[popularAnime]}
         containerTitle={containerTitle}
       />
     );
-    const titleElement = screen.getByText(containerTitle);
-    expect(titleElement).toHaveClass("border-gray-200");
-  });
-
-  it("applies the correct border color for white (garden) theme", () => {
-    // Update the theme state to simulate a non-garden theme
-    useThemeStore.setState({ theme: "garden" });
-
-    render(
-      <AnimeContainerCard
-        animes={[popularAnime]}
-        containerTitle={containerTitle}
-      />
-    );
-    const titleElement = screen.getByText(containerTitle);
-    expect(titleElement).toHaveClass("border-black");
+    expect(screen.getByText(containerTitle)).toBeInTheDocument();
+    expect(screen.getByText("1 EDITIONS")).toBeInTheDocument();
   });
 
   it("renders a list of AnimeCard components", () => {

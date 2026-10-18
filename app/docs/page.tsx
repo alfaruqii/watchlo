@@ -1,76 +1,103 @@
 import Answer from "@/components/docs/Answer";
 import Question from "@/components/docs/Question";
 import Link from "next/link";
+import { BookOpen } from "lucide-react";
+
+const linkClassName =
+  "font-semibold text-gold underline underline-offset-4 transition-opacity hover:opacity-80";
 
 function DocsPage() {
   return (
-    <div className="p-4 sm:px-28 lg:px-[23%] flex flex-col gap-6">
-      <div>
-        <Question text={`"Why you created this?"`} />
-        <Answer text="So that if there’s a movie that directly or indirectly supports Israel (🐷), you can watch it for free here without giving any financial support to the film." />
-      </div>
-      <div>
-        <Question text={`"I got error when try to use a subtitle"`} />
-        <p>
-          Usually this happen because you need to use a open dns like Google;
-          for more information, you can look up to{" "}
-          <Link
-            href="https://www.geeksforgeeks.org/how-to-enable-or-disable-dns-in-google-chrome-browser/"
-            className="link"
-          >
-            this (desktop [same method for android])
-          </Link>{" "}
-          or{" "}
-          <Link href="https://geekdon.com/google-dns-ios" className="link">
-            this one for iOS
-          </Link>
-          .
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-10">
+      <header className="mb-8 border-b border-hairline pb-5">
+        <h1 className="flex items-center gap-3 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+          <BookOpen className="size-6 text-gold" strokeWidth={1.75} />
+          <span>Screening Notes &amp; Technical FAQ</span>
+        </h1>
+        <p className="mt-2 max-w-[65ch] text-sm text-muted-foreground sm:text-base">
+          Essential configuration notes for DNS resolution, subtitles, and
+          ad-free third-party playback in the Watchlo Screening Room.
         </p>
-      </div>
-      <div>
-        <Question text={`"Why is there no subtitle?"`} />
-        <p>
-          Yeah, sorry, I might have a skill issue here. But you can try finding
-          the subtitles on websites like{" "}
-          <Link href="https://subdl.com" className="link">
-            Subdl
-          </Link>{" "}
-          or{" "}
-          <Link href="https://www.opensubtitles.org/id" className="link">
-            OpenSubtitles
-          </Link>
-          .
-        </p>
-      </div>
-      <div>
-        <Question
-          text={`"Why are there so many ads when we try to watch the movie?"`}
-        />
-        <Answer text="It&#39;s because the provider I use places ads there. Oh, by the way, this website itself doesn&#39;t have any ads, and I make zero money from it. If you install an ad blocker or use a browser that can block those ads (I&#39;ll explain how below), you&#39;ll be safe from all the ads." />
-      </div>
-      <div>
-        <Question
-          text={`"What adblocker do you usually use, and which browser do you use to deal with all those ads?"`}
-        />
-        <Answer text="The web browsers I usually use are Brave, Stargon, and FAB Adblocker (on Android). As for adblockers, I definitely use uBlock Origin and AdBlock (the one with the hand logo) to block ads across the web. Oh, just a heads-up, if you use Stargon, you might notice some weird styling, like star ratings looking strange. So, Brave with aggressive mode might be the best choice for iPhone/Android." />
-      </div>
-      <div>
-        <Question
-          text={`"Is there another alternative besides this website to watch free movies?"`}
-        />
-        <p>
-          <Link href="https://vip.idlixofficialx.net" className="link">
-            Idlix
-          </Link>
-          , but I don&#39;t really like it. First, it has a lot of online
-          gambling ads, and second, it&#39;s really slow. It doesn&#39;t lag,
-          but it&#39;s just slow—constantly loading and buffering. Not to brag,
-          but I&#39;m using a 50Mbps connection, and it still buffers a lot.
-        </p>
-      </div>
-      <div>
-        <Question text={`"Can I contribute to this project?"`} />
-        <Answer text="Yes brother (russian accent)." />
+      </header>
+
+      <div className="flex flex-col gap-6">
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question text={`"Why did you create this?"`} />
+          <Answer text="So that if there is a film or series you want to watch without giving financial support to its production entities, you can watch it freely here." />
+        </article>
+
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question text={`"Why do I get an error when loading subtitles?"`} />
+          <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
+            This usually happens when your internet provider blocks third-party subtitle hosts. Switching your connection to an open DNS resolver like Google DNS or Cloudflare fixes the issue. Follow the setup guide for{" "}
+            <Link
+              href="https://www.geeksforgeeks.org/how-to-enable-or-disable-dns-in-google-chrome-browser/"
+              className={linkClassName}
+            >
+              Desktop / Android Chrome
+            </Link>{" "}
+            or{" "}
+            <Link
+              href="https://geekdon.com/google-dns-ios"
+              className={linkClassName}
+            >
+              iOS
+            </Link>
+            .
+          </p>
+        </article>
+
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question text={`"Why are subtitles missing on some titles?"`} />
+          <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Some upstream video streams do not bundle subtitle tracks. When that happens, you can find subtitle files on community repositories like{" "}
+            <Link href="https://subdl.com" className={linkClassName}>
+              Subdl
+            </Link>{" "}
+            or{" "}
+            <Link
+              href="https://www.opensubtitles.org/id"
+              className={linkClassName}
+            >
+              OpenSubtitles
+            </Link>
+            .
+          </p>
+        </article>
+
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question
+            text={`"Why are there ads when playing video?"`}
+          />
+          <Answer text="External streaming hosts insert those ads. Watchlo itself contains zero ads and generates no revenue. If you use a browser with ad filtering or install an extension, you will not see them." />
+        </article>
+
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question
+            text={`"Which browsers and ad blockers do you recommend?"`}
+          />
+          <Answer text="Brave works reliably on both desktop and mobile because its Shields feature blocks popups by default. On Chrome or Firefox, installing uBlock Origin or AdBlock provides the cleanest playback." />
+        </article>
+
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question
+            text={`"Are there alternative websites to watch movies?"`}
+          />
+          <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
+            <Link
+              href="https://vip.idlixofficialx.net"
+              className={linkClassName}
+            >
+              Idlix
+            </Link>{" "}
+            is one option, though it carries intrusive gambling ads and suffers from frequent buffering even on fast internet connections.
+          </p>
+        </article>
+
+        <article className="rounded-sm border border-hairline bg-surface-1 p-5 sm:p-6">
+          <Question text={`"Can I contribute to this project?"`} />
+          <Answer text="Yes. Pull requests, bug reports, and suggestions are welcome on GitHub." />
+        </article>
       </div>
     </div>
   );

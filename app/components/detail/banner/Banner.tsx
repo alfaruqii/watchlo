@@ -3,22 +3,23 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimeInfo } from "@/types/anime.type";
 import { MovieInfo, TVInfo } from "@/types/movies.type";
+import { MangaItem, MangaDetailInfo } from "@/types/manga.type";
 
 interface BannerProps {
   item:
     | AnimeInfo
     | Omit<MovieInfo, "genre_names">
-    | Omit<TVInfo, "genre_names">;
+    | Omit<TVInfo, "genre_names">
+    | MangaItem
+    | MangaDetailInfo;
 }
 
 const Banner = ({ item }: BannerProps) => {
   const fallBackBanner = "/fallback-banner.webp";
   const [isImageLoading, setImageLoading] = useState(true);
 
-  // Function to determine the title
   const determineAlt = (): string => {
     if ("title" in item) {
-      // For anime or movie
       if (typeof item.title === "object") {
         return (
           item.title.userPreferred ||
@@ -30,13 +31,11 @@ const Banner = ({ item }: BannerProps) => {
       }
       return item.title || "Unknown Title";
     } else if ("name" in item) {
-      // For TV shows
       return item.name || "Unknown Title";
     }
     return "Unknown Title";
   };
 
-  // Function to get the correct image URL (Anime or Movie)
   const getImageUrl = (): string => {
     if ("bannerImage" in item && item.bannerImage) {
       return item.bannerImage;
@@ -52,28 +51,41 @@ const Banner = ({ item }: BannerProps) => {
     if ("backdrop_path" in item && item.backdrop_path) {
       return item.backdrop_path;
     }
-    return fallBackBanner; // Fallback in case there's no image available
+    return fallBackBanner;
   };
 
   return (
-    <div className="relative flex w-full overflow-hidden" key={item.id}>
+    <div
+      className="obi-frame-corners relative flex h-52 w-full overflow-hidden border-b border-hairline bg-surface-1 sm:h-64 lg:h-80"
+      key={item.id}
+    >
       <div
-        className={`duration-600 ${
-          isImageLoading ? "blur-3xl" : "blur-0"
-        } absolute inset-0 z-0 transition-all
-        ease-in-out`}
+        className={`absolute inset-0 z-0 transition-all duration-700 ease-out ${
+          isImageLoading ? "scale-105 blur-2xl" : "scale-100 blur-0"
+        }`}
       >
         <Image
           unoptimized
           alt={determineAlt()}
           src={getImageUrl()}
           fill
+          priority
           className="inset-0 h-full w-full object-cover"
           onLoad={() => setImageLoading(false)}
         />
       </div>
 
-      <div className="relative inset-0 z-10 flex w-screen flex-col justify-around gap-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-20 text-white sm:gap-5 md:gap-6 md:p-24 lg:p-32"></div>
+      {/* Warm Obsidian & Surface Vignette */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-10 bg-gradient-to-t from-background via-background/65 to-[#0d0c0a]/30"
+      />
+
+      <div className="relative z-20 flex w-full items-start justify-end px-4 py-3 sm:mt-auto sm:items-center sm:px-6 lg:px-10">
+        <span className="rounded-sm border border-hairline bg-background/95 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground tabular-nums sm:px-2.5 sm:py-1 sm:text-[11px]">
+          DOSSIER // CAT #{item.id}
+        </span>
+      </div>
     </div>
   );
 };

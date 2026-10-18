@@ -1,28 +1,32 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { AnimeInfo } from "@/types/anime.type";
 import { MovieInfo, TVInfo } from "@/types/movies.type";
-import { usePathname } from "next/navigation";
+import { MangaItem, MangaDetailInfo } from "@/types/manga.type";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 interface CardBannerProps {
-  item: AnimeInfo | MovieInfo | TVInfo;
+  item: AnimeInfo | MovieInfo | TVInfo | MangaItem | MangaDetailInfo;
 }
 
 function CardBanner({ item }: CardBannerProps) {
-  const pathName = usePathname();
   const fallbackCard = "/fallback-card.webp";
   const [isImageLoading, setImageLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 640); // Tailwind's mobile breakpoint (sm: 640px)
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const isAnime = useMemo(() => pathName.split("/")[1] === "anime", [pathName]);
+  const targetBaseUrl = useMemo(() => {
+    if ("format" in item && (item.format === "MANGA" || item.format === "NOVEL" || item.format === "ONE_SHOT")) {
+      return "/manga";
+    }
+    if ("subtype" in item) {
+      return "/manga";
+    }
+    if ("studios" in item || "id_provider" in item) {
+      return "/anime";
+    }
+    return "/";
+  }, [item]);
 
   const title = useMemo(() => {
     if ("title" in item) {
@@ -42,9 +46,9 @@ function CardBanner({ item }: CardBannerProps) {
   const imageUrl = useMemo(() => {
     if ("coverImage" in item && item.coverImage) {
       return (
+        item.coverImage?.extraLarge ||
         item.coverImage?.large ||
         item.coverImage?.medium ||
-        item.coverImage?.color ||
         fallbackCard
       );
     }
@@ -54,68 +58,80 @@ function CardBanner({ item }: CardBannerProps) {
   }, [item]);
 
   const genres = useMemo(() => {
-    if ("genres" in item) {
-      if (item.genres?.length > 0) {
-        return typeof item.genres[0] === "string"
-          ? (item.genres as string[])
-          : (item.genres as { name: string }[]).map((genre) => genre.name);
-      }
-
-      const mergedArray = [];
-      if ("id_provider" in item) {
-        mergedArray.push(...item.tags.slice(0, 2).map((tag) => tag.name));
-      }
-      if ("imdb_id" in item) {
-        const spokenLang = (item as MovieInfo).spoken_languages
-          ?.slice(0, 2)
-          .map((lang) => lang.english_name);
-        const originCountry = (item as MovieInfo).origin_country?.slice(0, 2);
-        mergedArray.push(...(spokenLang || []), ...(originCountry || []));
-      }
-      return mergedArray;
+    if ("genres" in item && Array.isArray(item.genres) && item.genres.length > 0) {
+      return typeof item.genres[0] === "string"
+        ? (item.genres as string[])
+        : (item.genres as { name: string }[]).map((genre) => genre.name);
     }
-    return [];
+
+    const mergedArray: string[] = [];
+    if ("tags" in item && Array.isArray((item as AnimeInfo).tags)) {
+      mergedArray.push(...(item as AnimeInfo).tags.slice(0, 2).map((tag) => tag.name));
+    }
+    if ("imdb_id" in item) {
+      const spokenLang = (item as MovieInfo).spoken_languages
+        ?.slice(0, 2)
+        .map((lang) => lang.english_name);
+      const originCountry = (item as MovieInfo).origin_country?.slice(0, 2);
+      mergedArray.push(...(spokenLang || []), ...(originCountry || []));
+    }
+    return mergedArray;
   }, [item]);
 
-  const genreSlice = isMobile ? genres.slice(0, 2) : genres.slice(0, 3);
-
   return (
-    <div
-      className={`${
-        isAnime ? "top-[3.2rem] lg:top-[5.8rem]" : "top-[3rem] lg:top-[5.4rem]"
-      } absolute left-5 z-20 flex items-center gap-2 overflow-hidden drop-shadow-lg lg:left-32`}
-    >
-      <div className="relative h-32 w-24 min-w-24 overflow-hidden md:h-44 md:w-32 lg:h-56 lg:w-40">
-        <Image
-          unoptimized
-          alt={title ?? "Unknown Title"}
-          src={imageUrl}
-          layout="fill"
-          objectFit="cover"
-          onLoad={() => setImageLoading(false)}
-          className={`
-            transition-custom-blur ${
+    <div className="relative z-20 -mt-16 mb-6 flex flex-row items-end gap-3.5 sm:-mt-28 sm:gap-6">
+      {/* Collector Sleeve Poster Plate */}
+      <div className="w-fit shrink-0 rounded-sm border border-hairline bg-surface-1 p-1.5 shadow-sleeve sm:p-2">
+        <div className="mb-1 flex items-center justify-between gap-1 border-b border-hairline pb-1 font-mono text-[9px] uppercase tracking-wider text-gold tabular-nums sm:mb-1.5 sm:text-[10px]">
+          <span className="truncate">SPINE #{item.id}</span>
+          <span className="shrink-0 text-muted-foreground">ED.</span>
+        </div>
+        <div className="relative h-36 w-24 overflow-hidden rounded-sm bg-surface-2 sm:h-48 sm:w-36 lg:h-56 lg:w-40">
+          <Image
+            unoptimized
+            alt={title ?? "Unknown Title"}
+            src={imageUrl}
+            fill
+            sizes="(max-width: 640px) 96px, 160px"
+            onLoad={() => setImageLoading(false)}
+            onError={() => setImageLoading(false)}
+            className={`object-cover transition-custom-blur ${
               isImageLoading ? "scale-110 blur-2xl" : "scale-100 blur-0"
-            } rounded group-hover:scale-110
-          `}
-        />
+            }`}
+          />
+        </div>
       </div>
-      <div
-        className={`${
-          isAnime ? "top-3 sm:top-2" : "top-4"
-        } relative flex flex-col gap-1`}
-      >
-        <p className="line-clamp-1 max-w-full font-magnatbold text-white sm:text-xl lg:text-2xl">
+
+      {/* Heading-first Dossier Title & OBI Genre Strip */}
+      <div className="flex min-w-0 flex-1 flex-col gap-2 pb-0.5 sm:gap-2.5 sm:pb-1">
+        <h1 className="line-clamp-3 text-balance font-display text-lg font-extrabold leading-tight tracking-tight text-foreground sm:line-clamp-none sm:text-3xl lg:text-4xl">
           {title}
-        </p>
-        <div className="flex flex-wrap gap-1 text-xs text-white sm:gap-2 sm:text-base">
-          {genreSlice.map((genre: string, i: number) => (
-            <div
-              key={i}
-              className="flex items-center truncate rounded bg-gray-400 p-1 text-center font-semibold text-black sm:max-w-full"
+        </h1>
+        <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
+          {Boolean(
+            ("isAdult" in item && item.isAdult) ||
+              genres.some((g) => g.toLowerCase() === "hentai")
+          ) && (
+            <Badge
+              variant="outline"
+              className="border-vermilion/60 bg-vermilion/15 font-mono text-[10px] font-bold tracking-wider text-vermilion sm:text-xs"
             >
-              <p>{genre}</p>
-            </div>
+              18+ ADULT
+            </Badge>
+          )}
+          {genres.slice(0, 4).map((genre: string, i: number) => (
+            <Link
+              key={i}
+              href={`${targetBaseUrl}?genre=${encodeURIComponent(genre)}`}
+              className="inline-block"
+            >
+              <Badge
+                variant="secondary"
+                className="text-[10px] transition-colors hover:border-gold/40 hover:bg-gold/15 hover:text-gold sm:text-xs cursor-pointer"
+              >
+                {genre}
+              </Badge>
+            </Link>
           ))}
         </div>
       </div>

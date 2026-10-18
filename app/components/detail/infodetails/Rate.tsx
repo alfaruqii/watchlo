@@ -1,17 +1,18 @@
-import { useThemeStore } from "@/store/themeStore";
+import { Star } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 function Rate({ rate = "unknown" }: { rate: string }) {
-  const { theme } = useThemeStore();
+  const formattedRate =
+    rate && rate !== "undefined" && rate !== "NaN" ? rate : "NR";
+
   return (
-    <p
-      className={`text-xs uppercase rounded-sm ${
-        theme === "garden"
-          ? "bg-gray-700 text-gray-200"
-          : "bg-red-500 text-black"
-      } w-fit px-2 py-1`}
+    <Badge
+      variant="secondary"
+      className="inline-flex shrink-0 w-fit items-center gap-1 rounded-sm border border-hairline bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-gold tabular-nums"
     >
-      {rate}
-    </p>
+      <Star className="size-2.5 shrink-0 fill-gold text-gold" />
+      <span>{formattedRate}</span>
+    </Badge>
   );
 }
 

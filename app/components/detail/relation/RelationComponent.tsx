@@ -10,16 +10,14 @@ function RelationComponent({
     (i) => i.format === "TV" || i.format === "MOVIE" || i.format === "SPECIAL"
   );
   return (
-    <>
-      <div className="pt-4">
-        {filteredRelation.length > 0 && (
-          <AnimeContainerCard
-            animes={filteredRelation}
-            containerTitle="Relation 🧩"
-          />
-        )}
-      </div>
-    </>
+    <div className="pt-2">
+      {filteredRelation.length > 0 && (
+        <AnimeContainerCard
+          animes={filteredRelation}
+          containerTitle="Related Archival Editions"
+        />
+      )}
+    </div>
   );
 }
 

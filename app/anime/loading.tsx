@@ -1,14 +1,28 @@
-import SkeletonEpisodes from '@/components/skeleton/SkeletonEpisodes'
-import SkeletonHeroBanner from '@/components/skeleton/SkeletonHeroBanner'
+import SkeletonEpisodes from "@/components/skeleton/SkeletonEpisodes";
+import SkeletonHeroBanner from "@/components/skeleton/SkeletonHeroBanner";
 
-function loading() {
+function Loading() {
   return (
-    <>
+    <div className="flex min-h-fit flex-col pb-8">
+      {/* Hero Anime Stage Skeleton */}
       <SkeletonHeroBanner />
-      <SkeletonEpisodes />
-      <SkeletonEpisodes />
-    </>
-  )
+
+      {/* Simulcast Desk — Recently Updated Skeleton */}
+      <div className="px-4 sm:px-0">
+        <SkeletonEpisodes />
+      </div>
+
+      {/* Essential Catalog — Most Popular Anime Skeleton */}
+      <div className="px-4 sm:px-0">
+        <SkeletonEpisodes />
+      </div>
+
+      {/* Seasonal Index — Trending Now Skeleton */}
+      <div className="px-4 sm:px-0">
+        <SkeletonEpisodes />
+      </div>
+    </div>
+  );
 }
 
-export default loading
+export default Loading;

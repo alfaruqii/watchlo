@@ -1,7 +1,144 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* styles/globals.css */
+
+:root,
+html[data-theme="black"] {
+  --background: #0d0c0a;
+  --surface-1: #14120f;
+  --surface-2: #1c1915;
+  --surface-3: #26211c;
+  --foreground: #f2ece1;
+  --muted-foreground: #b5ab9c;
+  --accent-gold: #e09f3e;
+  --accent-vermilion: #c84b31;
+  --border-hairline: #2b2620;
+
+  /* shadcn/ui compatible HSL tokens */
+  --card: 34 15% 10%;
+  --card-foreground: 39 38% 92%;
+  --popover: 34 15% 10%;
+  --popover-foreground: 39 38% 92%;
+  --primary: 36 72% 56%;
+  --primary-foreground: 40 13% 5%;
+  --secondary: 34 14% 13%;
+  --secondary-foreground: 39 38% 92%;
+  --muted: 34 14% 13%;
+  --accent: 36 72% 56%;
+  --accent-foreground: 40 13% 5%;
+  --destructive: 10 61% 49%;
+  --destructive-foreground: 39 38% 92%;
+  --border: 33 15% 15%;
+  --input: 33 15% 15%;
+  --ring: 36 72% 56%;
+  --radius: 0.25rem;
+  color-scheme: dark;
+}
+
+html[data-theme="garden"] {
+  --background: #f2ece1;
+  --surface-1: #eae2d3;
+  --surface-2: #e2d8c5;
+  --surface-3: #d6c9b2;
+  --foreground: #141210;
+  --muted-foreground: #544b3e;
+  --accent-gold: #9a5b0d;
+  --accent-vermilion: #b53820;
+  --border-hairline: #cec2ae;
+
+  /* shadcn/ui compatible HSL tokens */
+  --card: 39 30% 87%;
+  --card-foreground: 30 11% 7%;
+  --popover: 39 38% 92%;
+  --popover-foreground: 30 11% 7%;
+  --primary: 33 84% 33%;
+  --primary-foreground: 39 38% 92%;
+  --secondary: 39 27% 83%;
+  --secondary-foreground: 30 11% 7%;
+  --muted: 39 27% 83%;
+  --accent: 33 84% 33%;
+  --accent-foreground: 39 38% 92%;
+  --destructive: 10 70% 42%;
+  --destructive-foreground: 39 38% 92%;
+  --border: 38 24% 75%;
+  --input: 38 24% 75%;
+  --ring: 33 84% 33%;
+  --radius: 0.25rem;
+  color-scheme: light;
+}
+
+/* Browser Surface Theming (Impeccable Craft Floor) */
+::selection {
+  background-color: var(--accent-gold);
+  color: #0d0c0a;
+}
+
+html {
+  caret-color: var(--accent-gold);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-underline-offset: 4px;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* Custom Archival Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hairline);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
+}
+
+/* Corner Safe-Area Bracket Utility (Raised from Viewfinder HUD) */
+.obi-frame-corners {
+  position: relative;
+}
+
+.obi-frame-corners::before,
+.obi-frame-corners::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 20;
+  transition: border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.obi-frame-corners::before {
+  top: 8px;
+  left: 8px;
+  border-top: 1.5px solid var(--accent-gold);
+  border-left: 1.5px solid var(--accent-gold);
+}
+
+.obi-frame-corners::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 1.5px solid var(--accent-gold);
+  border-right: 1.5px solid var(--accent-gold);
+}
 
 .embla {
   overflow: hidden;
@@ -18,23 +155,27 @@
   min-width: 100%;
 }
 
-/* add the code bellow */
 @layer utilities {
-
-  /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
-  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
   }
 
   .transition-custom-blur {
-    @apply transition-all duration-700 ease-in-out;
+    @apply transition-all duration-700 ease-out;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
+
+/* Ensure Vidstack never flashes poster or alt text during buffering or quality switches */
+.vds-poster {
+  display: none !important;
+}
+

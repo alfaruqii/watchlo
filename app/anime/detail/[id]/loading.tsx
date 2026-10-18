@@ -1,16 +1,5 @@
-import SkeletonEpisodes from '@/components/skeleton/SkeletonEpisodes';
-import SkeletonHeroBanner from '@/components/skeleton/SkeletonHeroBanner';
-import SkeletonText from '@/components/skeleton/SkeletonText';
+import SkeletonDetailDossier from "@/components/skeleton/SkeletonDetailDossier";
 
-function loading() {
-  return (
-    <>
-      <SkeletonHeroBanner />
-      <SkeletonText />
-      <SkeletonEpisodes />
-      <SkeletonEpisodes />
-    </>
-  )
+export default function Loading() {
+  return <SkeletonDetailDossier type="anime" />;
 }
-
-export default loading

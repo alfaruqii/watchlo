@@ -1,15 +1,14 @@
-type Genre = {
-  genre: string;
-}
+import { Badge } from "@/components/ui/badge";
 
-function Genre({ genre }: Genre) {
+function Genre({ genre }: { genre: string }) {
   return (
-    <span
-      className="rounded border border-gray-400/60 bg-gray-800/50 p-2 text-xs font-black drop-shadow backdrop-blur-md sm:text-base"
+    <Badge
+      variant="outline"
+      className="border-[#f2ece1]/30 bg-[#14120f] px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider text-[#f2ece1]"
     >
       {genre}
-    </span>
-  )
+    </Badge>
+  );
 }
 
-export default Genre
+export default Genre;

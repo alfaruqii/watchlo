@@ -1,20 +1,13 @@
-import { useThemeStore } from "@/store/themeStore";
+import { Badge } from "@/components/ui/badge";
 
-function SearchedGenre({ genre = "unknown" }: { genre: string }) {
-  const { theme } = useThemeStore();
+function SearchedGenre({ genre }: { genre: string }) {
   return (
-    <>
-      <span
-        className={`${
-          theme === "garden"
-            ? "bg-gray-700 text-gray-100"
-            : "bg-gray-400 text-gray-900"
-        } flex items-center w-fit rounded-sm p-1 text-center
-          text-xs`}
-      >
-        {genre}
-      </span>
-    </>
+    <Badge
+      variant="secondary"
+      className="border-hairline bg-surface-2 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-foreground"
+    >
+      {genre}
+    </Badge>
   );
 }
 

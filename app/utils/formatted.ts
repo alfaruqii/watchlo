@@ -13,6 +13,9 @@ export const formatDuration = (minutes: number): string => {
 
 export const formatDesc = (desc: string): string => {
   return desc
+    ?.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    ?.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+    ?.replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
     ?.replace(/<br\s*\/?>/gi, "")
     .replace(/\(Source:.*?\)/g, "")
     .replace(/\s*--\s*/g, " ") // Add a space after removing --

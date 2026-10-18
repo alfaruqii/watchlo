@@ -2,6 +2,7 @@
 
 import { AnimeDetails, AnimeInfo, SearchedAnime } from "@/types/anime.type";
 import { MovieInfo, SearchedMovies, TV, TVInfo } from "@/types/movies.type";
+import { MangaItem } from "@/types/manga.type";
 
 /**
  * Represents a union type of all possible media item types in the application.
@@ -9,7 +10,11 @@ import { MovieInfo, SearchedMovies, TV, TVInfo } from "@/types/movies.type";
  */
 export type MediaItem = AnimeInfo | MovieInfo | TVInfo;
 export type EpisodesItem = AnimeDetails | TV;
-export type SearchedParams = SearchedMovies | SearchedAnime;
+export type SearchedParams = SearchedMovies | SearchedAnime | MangaItem;
+
+export const isSearchedManga = (item: SearchedParams): item is MangaItem => {
+  return "subtype" in item || ("format" in item && !("seasonYear" in item));
+};
 
 /**
  * Type guard to check if a media item is of type AnimeInfo.
@@ -27,7 +32,7 @@ export const isAnimeInfo = (item: MediaItem): item is AnimeInfo =>
   "format" in item;
 
 export const isAnimeDetails = (item: EpisodesItem): item is AnimeDetails =>
-  "subOrDub" in item;
+  "subOrDub" in item || "otherName" in item || "genres" in item || !("overview" in item && "name" in item);
 
 /**
  * Type guard to determine if a SearchedParams is SearchedAnime
@@ -61,9 +66,9 @@ export const isSearchedMovie = (
 ): item is SearchedMovies => {
   return (
     "poster_path" in item &&
-    typeof item.title === "string" &&
-    "genres" in item &&
-    Array.isArray(item.genres)
+    (typeof item.title === "string" || typeof item.name === "string") &&
+    "genre_names" in item &&
+    Array.isArray(item.genre_names)
   );
 };
 
