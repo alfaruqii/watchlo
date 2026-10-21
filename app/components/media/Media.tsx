@@ -204,6 +204,14 @@ const Media = ({
     }, 1400);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (flashTimerRef.current) {
+        clearTimeout(flashTimerRef.current);
+      }
+    };
+  }, []);
+
   // Reset tracking when episode changes
   useEffect(() => {
     if (previousEp.current !== null && previousEp.current !== ep) {

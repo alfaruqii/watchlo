@@ -374,6 +374,7 @@ const AnimeServiceV1 = {
       const res = await API_V1({ timeout: 6000 }).get(`/info/${encodeURIComponent(resolvedId)}`);
 
       const returnedTitle = norm(res.data?.title || "");
+      const retWords = returnedTitle.split(" ").filter((w: string) => w.length >= 3);
       const hasTitleMismatch =
         titleCandidates.length > 0 &&
         Boolean(returnedTitle) &&
@@ -381,7 +382,6 @@ const AnimeServiceV1 = {
           if (!c) return false;
           if (returnedTitle.includes(c) || c.includes(returnedTitle)) return true;
           const candWords = c.split(" ").filter((w: string) => w.length >= 3);
-          const retWords = returnedTitle.split(" ").filter((w: string) => w.length >= 3);
           return candWords.some((w: string) => retWords.includes(w));
         });
 

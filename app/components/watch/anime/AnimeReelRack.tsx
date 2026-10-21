@@ -37,6 +37,13 @@ export default function AnimeReelRack({
 
   const activeBtnRef = useRef<HTMLButtonElement>(null);
   const chipsContainerRef = useRef<HTMLDivElement>(null);
+  const errorTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+    };
+  }, []);
 
   // Sync chunk index when currentEp changes
   useEffect(() => {
@@ -69,10 +76,11 @@ export default function AnimeReelRack({
 
   const handleJumpSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
     const targetEp = parseInt(jumpInput.trim(), 10);
     if (isNaN(targetEp) || targetEp < 1 || targetEp > totalEpisodes) {
       setJumpError(`1 - ${totalEpisodes}`);
-      setTimeout(() => setJumpError(""), 2500);
+      errorTimerRef.current = setTimeout(() => setJumpError(""), 2500);
       return;
     }
 
@@ -83,7 +91,7 @@ export default function AnimeReelRack({
       onEpisodeChange(targetEp, matchedEp.id);
     } else {
       setJumpError("Reel not found");
-      setTimeout(() => setJumpError(""), 2500);
+      errorTimerRef.current = setTimeout(() => setJumpError(""), 2500);
     }
   };
 

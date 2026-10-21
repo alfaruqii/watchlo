@@ -19,6 +19,9 @@ export function getServerCache<T>(key: string, ttlMs = DEFAULT_TTL_MS): T | null
   if (Date.now() - entry.timestamp > ttlMs) {
     return null;
   }
+  // Refresh key position to mark as recently used
+  cache.delete(key);
+  cache.set(key, entry);
   return entry.data as T;
 }
 
@@ -28,9 +31,11 @@ export function getStaleServerCache<T>(key: string): T | null {
 }
 
 export function setServerCache<T>(key: string, data: T): void {
+  // Delete existing entry so setting updates Map insertion order to most recent
+  cache.delete(key);
   if (cache.size >= MAX_CACHE_ENTRIES) {
     const oldestKey = cache.keys().next().value;
-    if (oldestKey) cache.delete(oldestKey);
+    if (oldestKey !== undefined) cache.delete(oldestKey);
   }
   cache.set(key, { data, timestamp: Date.now() });
 }
