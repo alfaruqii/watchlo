@@ -36,6 +36,13 @@ export default function AnimeDossierCard({
 }: AnimeDossierCardProps) {
   const [isNotesExpanded, setIsNotesExpanded] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const copyTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
 
   const currentEpNum = Number(ep) || 1;
   const totalEpisodes =
@@ -142,8 +149,9 @@ export default function AnimeDossierCard({
     try {
       if (typeof window !== "undefined") {
         await navigator.clipboard.writeText(window.location.href);
+        if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2500);
+        copyTimerRef.current = setTimeout(() => setCopied(false), 2500);
       }
     } catch {
       // ignore clipboard error

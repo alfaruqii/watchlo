@@ -11,24 +11,45 @@ const API_KEY =
   process.env.CUSTOM_API_KEY ||
   getEnv("CUSTOM_API_KEY");
 
-export const API_V0 = ({ headers = {}, params = {}, timeout = 6500 } = {}): AxiosInstance => {
-  const BASE_URL =
-    process.env.WATCHLO_API_V0 ||
-    process.env.NEXT_PUBLIC_WATCHLO_API_V0 ||
-    getEnv("WATCHLO_API_V0");
+const instanceCache = new Map<string, AxiosInstance>();
 
-  const instance = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      "Content-type": "application/json",
-      ...(API_KEY ? { "x-api-key": API_KEY } : {}),
-      ...headers,
-    },
-    params,
-    timeout,
-  });
+function getOrCreateInstance(
+  version: string,
+  getBaseUrl: () => string | undefined,
+  options: { headers?: Record<string, string>; params?: Record<string, unknown>; timeout?: number } = {}
+): AxiosInstance {
+  const { headers = {}, params = {}, timeout = 6500 } = options;
+  const hasCustomHeaders = Object.keys(headers).length > 0;
+  const hasCustomParams = Object.keys(params).length > 0;
+
+  // Cache key for reusing instances with identical configuration
+  const cacheKey = `${version}:${timeout}:${hasCustomHeaders ? JSON.stringify(headers) : ""}:${hasCustomParams ? JSON.stringify(params) : ""}`;
+
+  let instance = instanceCache.get(cacheKey);
+  if (!instance) {
+    const BASE_URL = getBaseUrl();
+    instance = axios.create({
+      baseURL: BASE_URL,
+      headers: {
+        "Content-type": "application/json",
+        ...(API_KEY ? { "x-api-key": API_KEY } : {}),
+        ...headers,
+      },
+      params,
+      timeout,
+    });
+    instanceCache.set(cacheKey, instance);
+  }
 
   return instance;
+}
+
+export const API_V0 = (options?: { headers?: Record<string, string>; params?: Record<string, unknown>; timeout?: number }): AxiosInstance => {
+  return getOrCreateInstance("v0", () => (
+    process.env.WATCHLO_API_V0 ||
+    process.env.NEXT_PUBLIC_WATCHLO_API_V0 ||
+    getEnv("WATCHLO_API_V0")
+  ), options);
 };
 
 const ANIME_API_BASE =
@@ -36,44 +57,20 @@ const ANIME_API_BASE =
   process.env.NEXT_PUBLIC_WATCHLO_ANIME_API ||
   getEnv("WATCHLO_ANIME_API");
 
-export const API_V1 = ({ headers = {}, params = {}, timeout = 6500 } = {}): AxiosInstance => {
-  const BASE_URL =
+export const API_V1 = (options?: { headers?: Record<string, string>; params?: Record<string, unknown>; timeout?: number }): AxiosInstance => {
+  return getOrCreateInstance("v1", () => (
     process.env.WATCHLO_API_V1 ||
     process.env.NEXT_PUBLIC_WATCHLO_API_V1 ||
     getEnv("WATCHLO_API_V1") ||
-    (ANIME_API_BASE ? `${ANIME_API_BASE}/v1` : undefined);
-
-  const instance = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      "Content-type": "application/json",
-      ...(API_KEY ? { "x-api-key": API_KEY } : {}),
-      ...headers,
-    },
-    params,
-    timeout,
-  });
-
-  return instance;
+    (ANIME_API_BASE ? `${ANIME_API_BASE}/v1` : undefined)
+  ), options);
 };
 
-export const API_V2 = ({ headers = {}, params = {}, timeout = 6500 } = {}): AxiosInstance => {
-  const BASE_URL =
+export const API_V2 = (options?: { headers?: Record<string, string>; params?: Record<string, unknown>; timeout?: number }): AxiosInstance => {
+  return getOrCreateInstance("v2", () => (
     process.env.WATCHLO_API_V2 ||
     process.env.NEXT_PUBLIC_WATCHLO_API_V2 ||
     getEnv("WATCHLO_API_V2") ||
-    (ANIME_API_BASE ? `${ANIME_API_BASE}/v2` : undefined);
-
-  const instance = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      "Content-type": "application/json",
-      ...(API_KEY ? { "x-api-key": API_KEY } : {}),
-      ...headers,
-    },
-    params,
-    timeout,
-  });
-
-  return instance;
+    (ANIME_API_BASE ? `${ANIME_API_BASE}/v2` : undefined)
+  ), options);
 };
