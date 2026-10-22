@@ -5,9 +5,30 @@ import {
   verifyInternalToken,
   COOKIE_NAME,
 } from "./app/lib/security";
+import {
+  checkRateLimit,
+  blockedReferrerResponse,
+  rateLimitResponse,
+  getClientIp,
+  isBlockedReferrer,
+  isLocalTraffic,
+} from "./app/lib/rateLimit";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Block known abusive referrer origins (spoofed referer spam / scraper sites)
+  if (isBlockedReferrer(request)) {
+    return blockedReferrerResponse();
+  }
+
+  // Per-IP burst + sustained rate limiting to blunt scraper traffic
+  if (!isLocalTraffic(request)) {
+    const rl = checkRateLimit(getClientIp(request));
+    if (!rl.allowed) {
+      return rateLimitResponse(rl.retryAfterSeconds);
+    }
+  }
 
   // Protect internal API endpoints from external leeching and hotlinking
   if (pathname.startsWith("/api/")) {
@@ -41,6 +62,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };
