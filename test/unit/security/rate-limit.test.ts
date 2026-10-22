@@ -5,6 +5,7 @@
 import type { NextRequest } from "next/server";
 import {
   checkRateLimit,
+  checkRouteRateLimit,
   isBlockedReferrer,
   getClientIp,
 } from "@/lib/rateLimit";
@@ -73,8 +74,44 @@ describe("Rate Limit Utility", () => {
   });
 });
 
-describe("Referrer Blocklist", () => {
-  it("blocks the known abusive referrer host", () => {
+describe("Route-Specific Rate Limit", () => {
+  it("applies the tight limit to /api/subtitle-id", () => {
+    const ip = uniqueIp(6);
+    for (let i = 0; i < 10; i++) {
+      expect(checkRouteRateLimit("/api/subtitle-id", ip).allowed).toBe(true);
+    }
+    const result = checkRouteRateLimit("/api/subtitle-id", ip);
+    expect(result.allowed).toBe(false);
+    expect(result.retryAfterSeconds).toBeGreaterThan(0);
+    expect(result.retryAfterSeconds).toBeLessThanOrEqual(60);
+  });
+
+  it("matches nested paths under the route prefix", () => {
+    const ip = uniqueIp(7);
+    for (let i = 0; i < 10; i++) {
+      checkRouteRateLimit("/api/subtitle-id?url=x.vtt", ip);
+    }
+    expect(checkRouteRateLimit("/api/subtitle-id?url=y.vtt", ip).allowed).toBe(false);
+  });
+
+  it("does not limit other API routes", () => {
+    const ip = uniqueIp(8);
+    for (let i = 0; i < 20; i++) {
+      expect(checkRouteRateLimit("/api/animestream", ip).allowed).toBe(true);
+    }
+  });
+
+  it("keeps route and global limiter buckets independent", () => {
+    const ip = uniqueIp(9);
+    for (let i = 0; i < 10; i++) {
+      checkRouteRateLimit("/api/subtitle-id", ip);
+    }
+    expect(checkRouteRateLimit("/api/subtitle-id", ip).allowed).toBe(false);
+    expect(checkRateLimit(uniqueIp(9)).allowed).toBe(true);
+  });
+});
+
+describe("Referrer Blocklist", () => {  it("blocks the known abusive referrer host", () => {
     const request = makeFakeRequest({
       referer: "https://dildoe-games.pages.dev/some-page",
     });
