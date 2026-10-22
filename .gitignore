@@ -44,3 +44,5 @@ cookies*.txt
 # design workflow scratch
 .impeccable/
 
+.env*
+!.env.example
