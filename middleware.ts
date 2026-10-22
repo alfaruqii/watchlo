@@ -7,6 +7,7 @@ import {
 } from "./app/lib/security";
 import {
   checkRateLimit,
+  checkRouteRateLimit,
   blockedReferrerResponse,
   rateLimitResponse,
   getClientIp,
@@ -24,9 +25,16 @@ export async function middleware(request: NextRequest) {
 
   // Per-IP burst + sustained rate limiting to blunt scraper traffic
   if (!isLocalTraffic(request)) {
-    const rl = checkRateLimit(getClientIp(request));
-    if (!rl.allowed) {
-      return rateLimitResponse(rl.retryAfterSeconds);
+    const ip = getClientIp(request);
+
+    const routeLimit = checkRouteRateLimit(pathname, ip);
+    if (routeLimit.matched && !routeLimit.allowed) {
+      return rateLimitResponse(routeLimit.retryAfterSeconds);
+    }
+
+    const globalLimit = checkRateLimit(ip);
+    if (!globalLimit.allowed) {
+      return rateLimitResponse(globalLimit.retryAfterSeconds);
     }
   }
 

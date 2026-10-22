@@ -10,24 +10,22 @@ interface ClientEntry {
   long: WindowEntry;
 }
 
-const SHORT_WINDOW_MS = 60_000;
-const SHORT_MAX = 90;
-const LONG_WINDOW_MS = 600_000;
-const LONG_MAX = 800;
+interface LimiterLimits {
+  shortMax: number;
+  shortWindowMs: number;
+  longMax: number;
+  longWindowMs: number;
+}
+
+const GLOBAL_LIMITS: LimiterLimits = {
+  shortMax: 90,
+  shortWindowMs: 60_000,
+  longMax: 800,
+  longWindowMs: 600_000,
+};
+
 const MAX_TRACKED_CLIENTS = 20_000;
 const PRUNE_INTERVAL_MS = 30_000;
-
-const clients = new Map<string, ClientEntry>();
-let lastPrune = 0;
-
-function pruneExpiredClients(now: number) {
-  lastPrune = now;
-  clients.forEach((entry, key) => {
-    if (entry.short.reset <= now && entry.long.reset <= now) {
-      clients.delete(key);
-    }
-  });
-}
 
 function tickWindow(win: WindowEntry, now: number, windowMs: number, max: number): number {
   if (now >= win.reset) {
@@ -41,6 +39,65 @@ function tickWindow(win: WindowEntry, now: number, windowMs: number, max: number
   return 0;
 }
 
+class RateLimiter {
+  private clients = new Map<string, ClientEntry>();
+  private lastPrune = 0;
+
+  constructor(private limits: LimiterLimits) {}
+
+  check(ip: string): { allowed: boolean; retryAfterSeconds: number } {
+    const now = Date.now();
+
+    if (now - this.lastPrune > PRUNE_INTERVAL_MS || this.clients.size > MAX_TRACKED_CLIENTS) {
+      this.prune(now);
+    }
+
+    let entry = this.clients.get(ip);
+    if (!entry) {
+      entry = {
+        short: { count: 0, reset: 0 },
+        long: { count: 0, reset: 0 },
+      };
+      this.clients.set(ip, entry);
+    }
+
+    const shortRetry = tickWindow(entry.short, now, this.limits.shortWindowMs, this.limits.shortMax);
+    if (shortRetry > 0) {
+      return { allowed: false, retryAfterSeconds: shortRetry };
+    }
+
+    const longRetry = tickWindow(entry.long, now, this.limits.longWindowMs, this.limits.longMax);
+    if (longRetry > 0) {
+      return { allowed: false, retryAfterSeconds: longRetry };
+    }
+
+    return { allowed: true, retryAfterSeconds: 0 };
+  }
+
+  private prune(now: number) {
+    this.lastPrune = now;
+    this.clients.forEach((entry, key) => {
+      if (entry.short.reset <= now && entry.long.reset <= now) {
+        this.clients.delete(key);
+      }
+    });
+  }
+}
+
+const globalLimiter = new RateLimiter(GLOBAL_LIMITS);
+
+const ROUTE_LIMITS: Array<{ prefix: string; limiter: RateLimiter }> = [
+  {
+    prefix: "/api/subtitle-id",
+    limiter: new RateLimiter({
+      shortMax: 10,
+      shortWindowMs: 60_000,
+      longMax: 60,
+      longWindowMs: 600_000,
+    }),
+  },
+];
+
 export function getClientIp(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0].trim();
@@ -51,32 +108,20 @@ export function checkRateLimit(ip: string): {
   allowed: boolean;
   retryAfterSeconds: number;
 } {
-  const now = Date.now();
+  return globalLimiter.check(ip);
+}
 
-  if (now - lastPrune > PRUNE_INTERVAL_MS || clients.size > MAX_TRACKED_CLIENTS) {
-    pruneExpiredClients(now);
+export function checkRouteRateLimit(
+  pathname: string,
+  ip: string
+): { matched: boolean; allowed: boolean; retryAfterSeconds: number } {
+  for (const route of ROUTE_LIMITS) {
+    if (pathname.startsWith(route.prefix)) {
+      const result = route.limiter.check(ip);
+      return { matched: true, ...result };
+    }
   }
-
-  let entry = clients.get(ip);
-  if (!entry) {
-    entry = {
-      short: { count: 0, reset: 0 },
-      long: { count: 0, reset: 0 },
-    };
-    clients.set(ip, entry);
-  }
-
-  const shortRetry = tickWindow(entry.short, now, SHORT_WINDOW_MS, SHORT_MAX);
-  if (shortRetry > 0) {
-    return { allowed: false, retryAfterSeconds: shortRetry };
-  }
-
-  const longRetry = tickWindow(entry.long, now, LONG_WINDOW_MS, LONG_MAX);
-  if (longRetry > 0) {
-    return { allowed: false, retryAfterSeconds: longRetry };
-  }
-
-  return { allowed: true, retryAfterSeconds: 0 };
+  return { matched: false, allowed: true, retryAfterSeconds: 0 };
 }
 
 const BLOCKED_REFERRERS = ["dildoe-games.pages.dev"];

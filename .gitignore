@@ -37,6 +37,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# credentials / scraping artifacts
+cookies.txt
+cookies*.txt
+
 # design workflow scratch
 .impeccable/
 

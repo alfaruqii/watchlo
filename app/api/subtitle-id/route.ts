@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 // In-memory cache for translated Indonesian WebVTT files
 const translatedVttCache = new Map<string, string>();
-const MAX_CACHE_ENTRIES = 40;
+const MAX_CACHE_ENTRIES = 200;
 
 function polishAnimeIndonesian(text: string): string {
   return text
