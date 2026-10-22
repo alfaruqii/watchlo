@@ -26,6 +26,7 @@
     "@vercel/speed-insights": "^1.0.12",
     "@vidstack/react": "^1.12.12",
     "axios": "^1.7.7",
+    "botid": "^1.5.11",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.3.0",
