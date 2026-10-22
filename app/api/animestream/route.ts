@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AnimeServiceV1, AnimeServiceV2 } from "@/services";
 import { getEnv } from "@/utils/getEnv";
+import { botDeniedResponse, isVerifiedHuman } from "@/lib/botCheck";
 
 export async function GET(request: NextRequest) {
+  if (!(await isVerifiedHuman())) {
+    return botDeniedResponse();
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("query");
   const id = searchParams.get("id");

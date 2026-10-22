@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AnimeServiceV2 } from "@/services";
+import { botDeniedResponse, isVerifiedHuman } from "@/lib/botCheck";
 
 const CACHE_HEADERS = {
   "Cache-Control":
@@ -7,6 +8,10 @@ const CACHE_HEADERS = {
 };
 
 export async function GET(request: NextRequest) {
+  if (!(await isVerifiedHuman())) {
+    return botDeniedResponse();
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("query");
   const genre = searchParams.get("genre");
