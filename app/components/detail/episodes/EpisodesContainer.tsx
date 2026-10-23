@@ -44,6 +44,7 @@ function EpisodesContainer(anime: AnimeInfo) {
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
     async function fetchEpisodes() {
       if (provider || anime.id) {
         setLoading(true);
@@ -61,7 +62,9 @@ function EpisodesContainer(anime: AnimeInfo) {
           if (isAdult) {
             params.set("isAdult", "true");
           }
-          const response = await fetch(`/api/anime-infov1?${params.toString()}`);
+          const response = await fetch(`/api/anime-infov1?${params.toString()}`, {
+            signal: controller.signal,
+          });
           if (!response.ok) {
             if (!cancelled) setEpisodes(null);
             return;
@@ -70,7 +73,8 @@ function EpisodesContainer(anime: AnimeInfo) {
           if (!cancelled) {
             setEpisodes(data);
           }
-        } catch {
+        } catch (err: unknown) {
+          if ((err as Error)?.name === "AbortError") return;
           if (!cancelled) {
             setEpisodes(null);
           }
@@ -87,6 +91,7 @@ function EpisodesContainer(anime: AnimeInfo) {
     fetchEpisodes();
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [provider, titleHint, coverImageHint, anime.id, anime.isAdult, anime.genres]);
 

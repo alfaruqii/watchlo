@@ -9,7 +9,7 @@ import { tvFixture } from "test/fixture/info/tv.fixture";
 jest.mock("next/image", () => ({
   __esModule: true,
   default: (props: any) => {
-    const { fill, ...rest } = props;
+    const { fill, priority, unoptimized, ...rest } = props;
     const style = fill
       ? {
           objectFit: "cover",
@@ -22,7 +22,6 @@ jest.mock("next/image", () => ({
       <img
         data-testid="mock-image"
         {...rest}
-        unoptimized="true"
         style={style}
       />
     );
